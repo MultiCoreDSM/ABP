@@ -30,9 +30,5 @@ Os requisitos estão organizados por área. A coluna **Prioridade** permanece va
 | BL-22 | Histórico | Histórico de certificação | Registrar os temas respondidos, as questões sorteadas, as respostas escolhidas, as respostas corretas e a data e o horário de cada resposta. | |
 | BL-23 | Interface | Responsividade | Adaptar a interface a diferentes tamanhos de tela. | |
 
-## Pontos a definir
-
-- **E-mail no certificado:** definir como será obtido, pois o cadastro informado prevê apenas CPF, nome completo e senha.
-- **Tempo esgotado:** foi adotada a regra específica de considerar a questão incorreta ao fim dos 150 segundos, mesmo quando houver uma alternativa marcada, mantendo o registro dessa alternativa.
 
 [Voltar ao README principal](../../README.md)
