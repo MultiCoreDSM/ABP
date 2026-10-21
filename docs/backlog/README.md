@@ -2,7 +2,11 @@
 
 **Grupo:** MultiCore
 
-Os requisitos estão organizados por área. A coluna **Prioridade** permanece vazia para definição pelo grupo; a ordem das linhas não representa uma priorização.
+Este backlog reúne as principais funcionalidades planejadas para a plataforma de estudos e certificação em metodologias ágeis. Os itens estão separados por área para facilitar a organização do projeto e ajudar o time a visualizar o que precisa ser desenvolvido em cada parte do sistema.
+
+Cada requisito possui uma prioridade, que indica o quanto ele é importante para o funcionamento da primeira versão da plataforma. Durante o planejamento das sprints, o time usa esta lista para escolher as próximas atividades, dividir responsabilidades e acompanhar a evolução do projeto pelo [Kanban ABP](https://github.com/users/MultiCoreDSM/projects/1).
+
+O backlog pode ser atualizado ao longo do desenvolvimento conforme novas necessidades forem identificadas ou algum requisito precisar de ajustes.
 
 | ID | Área | Funcionalidade | Requisitos / critérios de aceitação | Prioridade |
 | --- | --- | --- | --- | --- |
