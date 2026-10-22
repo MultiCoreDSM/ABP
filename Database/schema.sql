@@ -1,8 +1,4 @@
--- 1) CRIAÇÃO DO BANCO (executar conectado ao "postgres")
---    Após criar, conecte-se ao banco "abp1" e
---    execute o restante do script (passo 2).
 
--- 2) CRIAÇÃO DAS TABELAS (executar conectado ao "abp1")
 
 BEGIN;
 
