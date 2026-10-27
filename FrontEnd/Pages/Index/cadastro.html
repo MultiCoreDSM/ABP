@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <!-- Conexão com o CSS da página de cadastro -->
+    <link rel="stylesheet" href="/Pages/Style/cadastro.css">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul>
+                <!-- Link para voltar para a página inicial -->
+                <li><a href="inicial.html">Inicial</a></li>
+                <li><a href="#" class="active">Cadastro</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container-cadastro">
+        <section class="formulario-cadastro">
+            <h2>Criar Conta</h2>
+            <p>Preencha os campos abaixo para se cadastrar.</p>
+
+            <form id="form-cadastro">
+                <div class="campo">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+                </div>
+
+                <div class="campo">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+                </div>
+
+                <div class="campo">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha" placeholder="Crie uma senha" required>
+                </div>
+
+                <div class="campo">
+                    <label for="confirmar-senha">Confirmar Senha</label>
+                    <input type="password" id="confirmar-senha" name="confirmar-senha" placeholder="Repita a senha" required>
+                </div>
+
+                <button type="submit" id="btn-cadastrar">Cadastrar</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Meu Projeto Front-End</p>
+    </footer>
+
+    <!-- Conexão com o JavaScript da página de cadastro -->
+    <script src="/Pages/Script/cadastro.js"></script>
+</body>
+</html>
