@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS respostas (
     data_horario_resposta TIMESTAMPTZ NULL, 
     valida BOOLEAN GENERATED ALWAYS AS ( 
         data_horario_resposta - data_horario_inicio <= INTERVAL '150 seconds' 
-    ) VIRTUAL, 
+    ) STORED, 
     acertou BOOLEAN, 
     PRIMARY KEY(candidato_id, questao_id) 
 ); 
