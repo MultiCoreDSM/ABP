@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login do Candidato - Portal Ágil</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <form id="loginForm" class="login-form">
+            <h2>Área do Candidato</h2>
+            
+            <!-- Mensagem de sessão expirada -->
+            <div id="alert-box" class="alert error" style="display: none;">
+                Sua sessão expirou. Por favor, faça login novamente.
+            </div>
+
+            <div class="input-group">
+                <label for="cpf">CPF</label>
+                <!-- RF04: Login por CPF -->
+                <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required autocomplete="username">
+            </div>
+
+            <div class="input-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn-submit">Entrar</button>
+        </form>
+    </div>
+
+    <!-- Importação correta do JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
