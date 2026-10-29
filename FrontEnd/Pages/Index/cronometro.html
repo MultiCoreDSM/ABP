@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Certificação - Questão</title>
+  <link rel="stylesheet" href="../style/cronometro.css">
+  
+</head>
+<body>
+  <div class="container">
+    <header class="quiz-header">
+      <h2>Tema: Fundamentos da Agilidade</h2>
+      <div id="timer-box" class="timer-box">
+        Tempo restante: <span id="timer-display">--:--</span>
+      </div>
+    </header>
+
+    <main class="question-container">
+      <p class="question-text">Analise a imagem abaixo e selecione a opção correta:</p>
+      
+      <div class="image-container">
+        <img id="question-image" src="https://via.placeholder.com/600x300?text=Imagem+da+Questao" alt="Imagem da questão">
+      </div>
+
+      <form id="quiz-form">
+        <div class="options-group">
+          <label class="option-card">
+            <input type="radio" name="option" value="A">
+            <span>A) Alternativa A</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="option" value="B">
+            <span>B) Alternativa B</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="option" value="C">
+            <span>C) Alternativa C</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="option" value="D">
+            <span>D) Alternativa D</span>
+          </label>
+        </div>
+
+        <button type="submit" id="btn-submit" class="btn-primary">Enviar Resposta</button>
+      </form>
+
+      <div id="feedback" class="feedback-box hidden"></div>
+    </main>
+  </div>
+
+  <script src="../scrypt/cronometro.js"></script>
+</body>
+</html>
