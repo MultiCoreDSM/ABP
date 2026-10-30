@@ -1,0 +1,15 @@
+services:
+  datbase: 
+    image: postgres:17-alpine
+    ports:
+      - "5433 - 5432"
+    environment:
+      POSTEGRES_DB=${POSTEGRES_DB}
+      POSTEGRES_USER=${POSTEGRES_USER}
+      POSTEGRES_PASSWORD=${OSTEGRES_PASSWORD}
+    volumes:
+      - postegres_data:/var/lib/postegresql/data
+      - ./database/schemas.sql:/doker-entrypoint-initbd.d/01-schemas.sql:ro
+      - ./database/seed.sql:/doker-entrypoint-initbd.d/02-seed.sql.ro 
+volumes:
+  postgres_data: 
