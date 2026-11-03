@@ -12,7 +12,7 @@ INSERT INTO temas (nome, ordem) VALUES
     ('Kanban', 9),
     ('Planejamento Ágil', 10), 
     ('Métricas Ágeis', 11), 
-    ('Qualidade em Projetos Ágeis', 12),
+    ('Qualidade em Projetos Ágeis', 12)
     ON CONFLICT (nome) DO NOTHING;
 
 INSERT INTO questoes (tema_id, ordem, enunciado, imagem_url) VALUES
