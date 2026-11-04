@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | MultiCore</title>
+    <!-- Fonte Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Conexão com o CSS da página de login -->
+    <link rel="stylesheet" href="../Styles/login.css">
+</head>
+<body>
+
+    <!-- Decorações de fundo (circuitos e arcos luminosos) -->
+    <div class="fundo" aria-hidden="true">
+        <div class="arco arco-topo"></div>
+        <div class="arco arco-base"></div>
+
+        <svg class="circuito circuito-esquerda" viewBox="0 0 220 140" fill="none" focusable="false">
+            <path d="M0 40 H70 L100 80 H170" />
+            <path d="M0 70 H50 L75 100 H150" />
+            <path d="M0 100 H40 L60 115 H110" />
+            <circle cx="170" cy="80" r="3.5" />
+            <circle cx="113" cy="113" r="3.5" />
+        </svg>
+
+        <svg class="circuito circuito-direita" viewBox="0 0 220 160" fill="none" focusable="false">
+            <path d="M220 10 H130" />
+            <circle cx="130" cy="10" r="3.5" />
+            <path d="M220 40 H175 L145 75 H85 L60 50" />
+            <circle cx="60" cy="50" r="3.5" />
+            <path d="M220 95 H160" />
+            <circle cx="160" cy="95" r="3.5" />
+            <path d="M0 85 H105 L135 120 H220" />
+            <circle cx="0" cy="85" r="3.5" />
+            <path d="M100 110 L135 150 H200" />
+        </svg>
+    </div>
+
+    <main class="container-login">
+        <!-- Logo MultiCore -->
+        <header class="logo">
+            <img src="../../../assets/logo.jpg" alt="MultiCore">
+        </header>
+
+        <section class="formulario-login" aria-labelledby="titulo-login">
+            <hgroup>
+                <h1 id="titulo-login">Acesse sua conta</h1>
+                <p class="subtitulo">Informe seu CPF e senha para continuar</p>
+            </hgroup>
+
+            <form id="form-login" aria-labelledby="titulo-login" novalidate>
+                <fieldset>
+                    <legend class="sr-only">Credenciais de acesso</legend>
+
+                    <div class="campo">
+                        <label for="cpf">CPF</label>
+                        <div class="input-icone">
+                            <!-- Ícone de usuário -->
+                            <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false">
+                                <circle cx="12" cy="8" r="4" />
+                                <path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" />
+                            </svg>
+                            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00"
+                                   inputmode="numeric" maxlength="14" autocomplete="username"
+                                   aria-describedby="erro-cpf" required>
+                        </div>
+                        <p class="erro" id="erro-cpf" aria-live="polite"></p>
+                    </div>
+
+                    <div class="campo">
+                        <label for="senha">Senha</label>
+                        <div class="input-icone">
+                            <!-- Ícone de cadeado -->
+                            <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false">
+                                <rect x="5" y="10" width="14" height="11" rx="2.5" />
+                                <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                                <circle cx="12" cy="15.5" r="1.2" fill="currentColor" />
+                            </svg>
+                            <input type="password" id="senha" name="senha" placeholder="••••••••"
+                                   autocomplete="current-password"
+                                   aria-describedby="erro-senha" required>
+                            <!-- Botão de mostrar/ocultar senha -->
+                            <button type="button" class="btn-olho" id="btn-olho" aria-label="Mostrar senha"
+                                    aria-controls="senha" aria-pressed="false">
+                                <svg class="olho-fechado" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false">
+                                    <path d="M3 10c2.5 3 5.5 4.5 9 4.5s6.5-1.5 9-4.5" />
+                                    <path d="M6 13.5 4.5 16M10 14.5 9.5 17M14 14.5l.5 2.5M18 13.5l1.5 2.5" />
+                                </svg>
+                                <svg class="olho-aberto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false">
+                                    <path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="erro" id="erro-senha" aria-live="polite"></p>
+                        <a href="#" class="link-esqueceu">Esqueceu sua senha?</a>
+                    </div>
+
+                </fieldset>
+
+                <button type="submit" id="btn-entrar">Entrar</button>
+            </form>
+
+            <footer>
+                <p class="cadastro">
+                    Não tem uma conta? <a href="cadastro.html">Cadastre-se</a>
+                </p>
+            </footer>
+        </section>
+    </main>
+
+    <!-- Conexão com o JavaScript da página de login -->
+    <script src="../Scripts/login.js"></script>
+</body>
+</html>
