@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área de estudos | MultiCore</title>
+    <meta name="theme-color" content="#030919">
+    <!-- Fontes Sora e Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Conexão com o CSS da área de estudos -->
+    <link rel="stylesheet" href="../Styles/area-estudos.css">
+</head>
+<body>
+
+    <!-- Decoração de fundo -->
+    <div class="fundo" aria-hidden="true">
+        <div class="arco"></div>
+    </div>
+
+    <header class="topo">
+        <div class="topo-conteudo">
+            <div class="topo-marca">
+                <a class="btn-voltar" href="inicial.html" aria-label="Voltar para a página inicial">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                        <path d="M15 5l-7 7 7 7" />
+                    </svg>
+                </a>
+                <div class="logo">
+                    <img src="../../../assets/logo.jpg" alt="MultiCore">
+                </div>
+            </div>
+
+            <div class="usuario">
+                <span class="usuario-avatar" id="usuario-avatar" aria-hidden="true"></span>
+                <span class="usuario-nome" id="usuario-nome"></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="area-estudos">
+        <div class="cabecalho">
+            <hgroup>
+                <h1>Área de estudos</h1>
+                <p>Escolha um tema para iniciar ou continuar.</p>
+            </hgroup>
+
+            <div class="resumo" id="resumo" hidden>
+                <p id="resumo-texto"></p>
+                <div class="resumo-barra" id="resumo-barra" role="progressbar" aria-labelledby="resumo-texto" aria-valuemin="0">
+                    <span id="resumo-preenchimento"></span>
+                </div>
+            </div>
+        </div>
+
+        <section aria-labelledby="titulo-temas">
+            <h2 id="titulo-temas" class="sr-only">Temas de estudo</h2>
+
+            <!-- Carregamento, lista vazia e erro -->
+            <div id="estado" class="estado" role="status">
+                <div class="esqueleto" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="estado-aviso">
+                    <p id="estado-mensagem">Carregando temas...</p>
+                    <button type="button" id="btn-tentar-novamente" hidden>Tentar novamente</button>
+                </div>
+            </div>
+
+            <ul id="lista-temas" class="lista-temas" hidden></ul>
+        </section>
+    </main>
+
+    <!-- Modelo de cada tema, preenchido por Scripts/area-estudos.js -->
+    <template id="modelo-tema">
+        <li class="tema">
+            <div class="tema-topo">
+                <span class="tema-numero"></span>
+                <span class="tema-status"></span>
+            </div>
+            <h3 class="tema-nome"></h3>
+            <a class="tema-link" hidden>
+                <span class="tema-link-texto"></span>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+            </a>
+            <p class="tema-aviso" hidden>Material temporariamente indisponível.</p>
+        </li>
+    </template>
+
+    <script src="../Scripts/area-estudos.js"></script>
+</body>
+</html>

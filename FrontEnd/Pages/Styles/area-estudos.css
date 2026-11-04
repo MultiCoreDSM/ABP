@@ -1,0 +1,567 @@
+/* ===== Variáveis ===== */
+:root {
+    color-scheme: dark;
+    --fundo: #030919;
+    --brilho-topo: #0d2554;
+    --divisoria: #15233f;
+    --cartao: #0a1530;
+    --cartao-hover: #0d1b3b;
+    --cartao-borda: #1c2c4d;
+    --cartao-borda-hover: #2c4372;
+    --ativo-topo: #123a86;
+    --ativo-base: #0a1a45;
+    --ativo-borda: #2f6fe0;
+    --ciano: #22d3ee;
+    --ciano-claro: #4fe0ee;
+    --azul-claro: #4fc3ff;
+    --azul: #2570ea;
+    --texto: #ffffff;
+    --titulo: #e8eeff;
+    --texto-suave: #b4c0d8;
+    --texto-apagado: #8a99b8;
+    --escuro: #071027;
+    --margem: 64px;
+    --saida: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+html {
+    scrollbar-color: #1d3a6e var(--fundo);
+}
+
+::selection {
+    background: var(--azul);
+    color: var(--texto);
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Inter", sans-serif;
+    color: var(--texto);
+    background:
+        radial-gradient(ellipse 60% 240px at 25% 0%, var(--brilho-topo) 0%, transparent 100%),
+        var(--fundo);
+    overflow-x: hidden;
+}
+
+/* Visível apenas para leitores de tela */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ===== Decoração de fundo ===== */
+.fundo {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.arco {
+    position: absolute;
+    top: -326px;
+    right: -326px;
+    width: 552px;
+    height: 552px;
+    border: 1.5px solid rgba(59, 130, 246, 0.6);
+    border-radius: 50%;
+    background: radial-gradient(circle, transparent 62%, rgba(37, 112, 234, 0.2) 100%);
+}
+
+/* ===== Barra superior ===== */
+.topo {
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid var(--divisoria);
+}
+
+.topo-conteudo,
+.area-estudos {
+    width: min(100% - 2 * var(--margem), 1280px);
+    margin-inline: auto;
+}
+
+.topo-conteudo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 80px;
+    padding-block: 8px;
+}
+
+.topo-marca {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-voltar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--cartao-borda);
+    border-radius: 12px;
+    background: var(--cartao);
+    color: var(--titulo);
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-voltar:hover {
+    border-color: var(--cartao-borda-hover);
+    background: var(--cartao-hover);
+}
+
+.btn-voltar svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Recorte circular do logo (a imagem é quadrada com fundo preto) */
+.logo {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(30, 123, 255, 0.4);
+}
+
+.logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Amplia para o recorte ficar rente ao anel azul da imagem */
+    transform: scale(1.14);
+}
+
+.usuario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.usuario-avatar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--azul-claro) 0%, #2f8cf5 100%);
+    color: var(--escuro);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.usuario-nome {
+    overflow: hidden;
+    font-size: 15px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--titulo);
+}
+
+/* ===== Conteúdo ===== */
+.area-estudos {
+    position: relative;
+    z-index: 1;
+    padding-block: 36px 56px;
+}
+
+.cabecalho {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px 32px;
+    margin-bottom: 26px;
+}
+
+.cabecalho h1 {
+    font-family: "Sora", sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    color: var(--titulo);
+}
+
+.cabecalho hgroup p {
+    margin-top: 6px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--texto-suave);
+}
+
+.resumo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 14px;
+    line-height: 24px;
+    color: var(--texto-suave);
+}
+
+.resumo-barra {
+    width: 180px;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: #14233f;
+}
+
+.resumo-barra span {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--azul) 0%, var(--azul-claro) 100%);
+    transition: width 0.4s var(--saida);
+}
+
+/* ===== Lista de temas ===== */
+.lista-temas,
+.esqueleto {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+    grid-auto-rows: 1fr;
+    gap: 16px;
+    list-style: none;
+}
+
+.tema {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 160px;
+    padding: 16px 18px 18px;
+    border: 1px solid var(--cartao-borda);
+    border-radius: 16px;
+    background: var(--cartao);
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.tema:hover {
+    border-color: var(--cartao-borda-hover);
+    background: var(--cartao-hover);
+}
+
+.tema-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 24px;
+}
+
+.tema-numero {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--texto-apagado);
+}
+
+.tema-status {
+    font-size: 12px;
+    color: var(--texto-suave);
+}
+
+.tema-nome {
+    margin-block: auto;
+    padding-block: 12px;
+    font-family: "Sora", sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--titulo);
+    overflow-wrap: anywhere;
+}
+
+/* A área de clique do link cobre o cartão inteiro */
+.tema-link {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: var(--ciano-claro);
+    text-decoration: none;
+}
+
+.tema-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+}
+
+.tema-link svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.25s var(--saida);
+}
+
+.tema:hover .tema-link svg {
+    transform: translateX(3px);
+}
+
+.btn-voltar:focus-visible,
+#btn-tentar-novamente:focus-visible {
+    outline: 2px solid var(--ciano-claro);
+    outline-offset: 2px;
+}
+
+.tema-link:focus-visible {
+    outline: none;
+}
+
+.tema-link:focus-visible::after {
+    outline: 2px solid var(--ciano-claro);
+    outline-offset: 2px;
+}
+
+.tema-aviso {
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--texto-suave);
+}
+
+/* ----- Tema em andamento ----- */
+.tema.em-andamento {
+    border-color: var(--ativo-borda);
+    background: linear-gradient(180deg, var(--ativo-topo) 0%, var(--ativo-base) 100%);
+    box-shadow: 0 10px 30px rgba(37, 112, 234, 0.28);
+}
+
+.tema.em-andamento .tema-numero {
+    color: var(--azul-claro);
+}
+
+.tema.em-andamento .tema-status {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--ciano);
+    color: var(--escuro);
+    font-weight: 500;
+}
+
+.tema.em-andamento .tema-nome {
+    margin-block: 0 auto;
+}
+
+.tema.em-andamento .tema-link {
+    align-self: stretch;
+    justify-content: center;
+    min-height: 40px;
+    border-radius: 10px;
+    background: var(--texto);
+    color: var(--escuro);
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.tema.em-andamento .tema-link svg {
+    display: none;
+}
+
+.tema.em-andamento:hover .tema-link {
+    background: #dbe9ff;
+}
+
+/* ----- Tema indisponível ----- */
+.tema.indisponivel,
+.tema.indisponivel:hover {
+    border-style: dashed;
+    border-color: var(--cartao-borda);
+    background: rgba(10, 21, 48, 0.6);
+}
+
+.tema.indisponivel .tema-nome {
+    color: var(--texto-suave);
+}
+
+/* ===== Carregamento, lista vazia e erro ===== */
+.estado-aviso {
+    padding: 40px 24px;
+    border: 1px solid var(--cartao-borda);
+    border-radius: 16px;
+    background: var(--cartao);
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--texto-suave);
+}
+
+#btn-tentar-novamente {
+    margin-top: 16px;
+    min-height: 40px;
+    padding: 8px 22px;
+    border: none;
+    border-radius: 10px;
+    background: var(--texto);
+    color: var(--escuro);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#btn-tentar-novamente:hover {
+    background: #dbe9ff;
+}
+
+/* Enquanto carrega, os cartões de espera ocupam o lugar da lista */
+.esqueleto {
+    display: none;
+}
+
+.estado.carregando .esqueleto {
+    display: grid;
+}
+
+.estado.carregando .estado-aviso {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+}
+
+.esqueleto span {
+    display: block;
+    min-height: 160px;
+    border: 1px solid var(--divisoria);
+    border-radius: 16px;
+    background: var(--cartao);
+    animation: pulsar 1.4s ease-in-out infinite;
+}
+
+@keyframes pulsar {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* ===== Responsivo ===== */
+@media (max-width: 1100px) {
+    :root {
+        --margem: 32px;
+    }
+}
+
+@media (max-width: 640px) {
+    :root {
+        --margem: 16px;
+    }
+
+    .topo-conteudo {
+        min-height: 68px;
+    }
+
+    .topo-marca {
+        gap: 12px;
+    }
+
+    .btn-voltar {
+        width: 44px;
+        height: 44px;
+    }
+
+    .logo {
+        width: 52px;
+        height: 52px;
+    }
+
+    .area-estudos {
+        padding-block: 24px 40px;
+    }
+
+    .cabecalho {
+        margin-bottom: 20px;
+    }
+
+    .cabecalho h1 {
+        font-size: 28px;
+    }
+
+    .cabecalho hgroup p {
+        font-size: 15px;
+    }
+
+    .resumo {
+        width: 100%;
+    }
+
+    .resumo-barra {
+        flex: 1;
+        width: auto;
+    }
+
+    /* No celular, os cartões ficam mais baixos para reduzir a rolagem */
+    .tema {
+        min-height: 128px;
+    }
+
+    .esqueleto span {
+        min-height: 128px;
+    }
+
+    .arco {
+        top: -420px;
+        right: -420px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-voltar,
+    .tema,
+    .tema-link,
+    .tema-link svg,
+    .resumo-barra span,
+    #btn-tentar-novamente {
+        transition: none;
+    }
+
+    .esqueleto span {
+        animation: none;
+    }
+}
