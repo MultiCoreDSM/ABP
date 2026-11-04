@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Certificação | Questões</title>
+
+    <link rel="stylesheet" href="../style/questao.css">
+    <script src="../scripts/questao.js" defer></script>
+</head>
+
+<body>
+    <header class="topo">
+        <a href="menu.html" class="logo" aria-label="Voltar ao menu principal">
+            <span class="logo-simbolo">✦</span>
+            <span>MultiCore<span class="destaque">+</span></span>
+        </a>
+
+        <div class="status">
+            <span class="status-ponto"></span>
+            Certificação em andamento
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="cabecalho">
+            <a href="menu.html" class="voltar">← Voltar ao menu</a>
+
+            <p class="etiqueta">AVALIAÇÃO DE CONHECIMENTOS</p>
+            <h1>Hora de colocar em prática!</h1>
+            <p class="subtitulo">
+                Leia a questão com atenção e selecione uma única alternativa.
+            </p>
+        </section>
+
+        <section class="progresso-card" aria-label="Progresso da avaliação">
+            <div class="progresso-info">
+                <span id="numeroQuestao">Questão 1 de 1</span>
+                <span id="textoProgresso">0% concluído</span>
+            </div>
+
+            <div
+                class="progresso-trilho"
+                role="progressbar"
+                aria-label="Progresso da avaliação"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+                id="barraProgresso"
+            >
+                <div class="progresso-preenchimento" id="progressoPreenchimento"></div>
+            </div>
+        </section>
+
+        <section class="questao-card">
+            <div class="questao-topo">
+                <span class="tag-questao">QUESTÃO 01</span>
+                <span class="pontuacao">1 questão demonstrativa</span>
+            </div>
+
+            <h2 id="enunciado">
+                Qual é a principal função do HTML no desenvolvimento web?
+            </h2>
+
+            <div id="areaImagem" class="area-imagem" hidden>
+                <img id="imagemQuestao" src="" alt="Imagem relacionada à questão">
+            </div>
+
+            <p class="instrucao">Selecione sua resposta:</p>
+
+            <form id="formResposta">
+                <fieldset id="alternativas" class="alternativas">
+                    <legend class="visualmente-oculto">Alternativas de resposta</legend>
+
+                    <label class="alternativa">
+                        <input type="radio" name="resposta" value="a">
+                        <span class="letra">A</span>
+                        <span class="texto-alternativa">
+                            Definir a aparência e as cores de uma página.
+                        </span>
+                        <span class="marcador" aria-hidden="true"></span>
+                    </label>
+
+                    <label class="alternativa">
+                        <input type="radio" name="resposta" value="b">
+                        <span class="letra">B</span>
+                        <span class="texto-alternativa">
+                            Estruturar e organizar o conteúdo de uma página.
+                        </span>
+                        <span class="marcador" aria-hidden="true"></span>
+                    </label>
+
+                    <label class="alternativa">
+                        <input type="radio" name="resposta" value="c">
+                        <span class="letra">C</span>
+                        <span class="texto-alternativa">
+                            Armazenar permanentemente os dados em um banco de dados.
+                        </span>
+                        <span class="marcador" aria-hidden="true"></span>
+                    </label>
+
+                    <label class="alternativa">
+                        <input type="radio" name="resposta" value="d">
+                        <span class="letra">D</span>
+                        <span class="texto-alternativa">
+                            Controlar exclusivamente as requisições do servidor.
+                        </span>
+                        <span class="marcador" aria-hidden="true"></span>
+                    </label>
+                </fieldset>
+
+                <p id="mensagem" class="mensagem" role="status" aria-live="polite">
+                    Escolha uma alternativa para continuar.
+                </p>
+
+                <div class="acoes">
+                    <button type="button" id="limparResposta" class="botao-secundario">
+                        Limpar seleção
+                    </button>
+
+                    <button type="submit" id="confirmarResposta" class="botao-principal">
+                        Confirmar resposta <span aria-hidden="true">→</span>
+                    </button>
+                </div>
+            </form>
+
+            <div id="respostaRegistrada" class="resposta-registrada" hidden>
+                <span class="icone-sucesso">✓</span>
+                <div>
+                    <strong>Resposta registrada!</strong>
+                    <p>Sua resposta foi salva nesta demonstração e não pode mais ser alterada.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="rodape">
+            <span>Certificação de conhecimentos</span>
+            <span>Leia com atenção antes de confirmar.</span>
+        </footer>
+    </main>
+</body>
+</html>
