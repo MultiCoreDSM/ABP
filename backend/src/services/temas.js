@@ -1,7 +1,7 @@
 import pool from "../config/database.js";
 
 export async function listarTemasService() {
-    const { rows } = await pool.query("SELECT * FROM temas ORDER BY or-dem");
+    const { rows } = await pool.query("SELECT * FROM temas ORDER BY ordem");
     return rows;
 }
 
@@ -17,7 +17,7 @@ export async function buscarProximoTemaService(candidatoId) {
           AND respostas.data_horario_resposta IS NULL
           AND statement_timestamp() - respostas.data_horario_inicio
               <= INTERVAL '150 seconds'
-        ORDER BY respostas.data_horario_inicio DESC, respos-tas.questao_id
+        ORDER BY respostas.data_horario_inicio DESC, respostas.questao_id
         LIMIT 1
         `,
         [candidatoId],

@@ -10,7 +10,7 @@ curl -X POST http://localhost:3001/api/candidatos \
   -d '{
     "cpf": "12345678904",
     "nome": "Pedro Fonseca",
-    "email": "maria@example.com",
+    "email": "pedro@example.com",
     "senha": "123456"
   }'
 */
