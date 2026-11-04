@@ -94,3 +94,55 @@ export async function sortearQuestaoService(candidatoId) {
     data_horario_limite: tentativa.data_horario_limite,
   };
 }
+
+export async function responderQuestaoService(
+  candidatoId,
+  questaoId,
+  letraResposta,
+) {
+  const tentativa = await pool.query(
+    `
+        SELECT letra_resposta, data_horario_resposta
+        FROM respostas
+        WHERE candidato_id = $1 AND questao_id = $2
+        `,
+    [candidatoId, questaoId],
+  );
+
+  if (tentativa.rows.length == 0) {
+    return { erro: "Questão não sorteada para este candidato." };
+  }
+
+  if (
+    tentativa.rows[0].letra_resposta != null ||
+    tentativa.rows[0].data_horario_resposta != null
+  ) {
+    return { erro: "Esta questão já foi respondida." };
+  }
+
+  const { rows } = await pool.query(
+    `
+        UPDATE respostas
+        SET letra_resposta = $3,
+            data_horario_resposta = clock_timestamp(),
+            acertou = alternativas.correta
+        FROM alternativas
+        WHERE respostas.candidato_id = $1
+          AND respostas.questao_id = $2
+          AND alternativas.questao_id = respostas.questao_id
+          AND alternativas.letra = $3
+          AND respostas.data_horario_resposta IS NULL
+        RETURNING respostas.questao_id, respostas.letra_resposta,
+                  respostas.data_horario_resposta, respostas.valida,
+                  respostas.acertou
+    `,
+    [candidatoId, questaoId, letraResposta],
+  );
+  if (rows.length == 0) {
+    return {
+      erro: "Não foi possível registrar a resposta: alternativa inexistente.",
+    };
+  }
+
+  return rows[0];
+}
