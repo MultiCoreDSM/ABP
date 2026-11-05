@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Material de estudo | ABP</title>
+  <link rel="stylesheet" href="../style/material.css">
+</head>
+<body>
+  <div class="pagina-leitor">
+    <div class="leitor-coluna">
+      <main class="leitor" id="conteudo" aria-live="polite">
+        <p class="aviso">Carregando material...</p>
+      </main>
+
+      <nav class="navegacao" aria-label="Navegação entre temas">
+        <button class="botao-pilula" id="anterior" type="button">Anterior</button>
+        <a class="navegacao__voltar" id="voltar" href="estudos.html">Voltar à lista</a>
+        <button class="botao-pilula" id="proximo" type="button">Próximo</button>
+      </nav>
+    </div>
+
+    <aside class="temas" aria-label="Lista de temas">
+      <div class="cartao-azul cabecalho">
+        <h2 class="cabecalho__titulo">Área de estudos</h2>
+        <p class="cabecalho__texto">Escolha um tema para continuar</p>
+      </div>
+      <ul class="temas__lista" id="lista-temas"></ul>
+    </aside>
+  </div>
+
+  <script src="../scripts/material.js"></script>
+</body>
+</html>

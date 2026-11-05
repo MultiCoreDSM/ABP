@@ -1,0 +1,296 @@
+/* Visual baseado no Figma: "Desktop - 3" (Área de estudos) e telas do leitor.
+   Compartilhado por estudos.html e material.html */
+
+:root {
+  --fundo: #01040f;
+  --azul-claro: #1b9cf0;
+  --azul-medio: #0e6fd6;
+  --azul-escuro: #0a4a8f;
+  --linha-item: rgba(70, 150, 235, 0.45);
+  --ciano: #4fd1ff;
+  --texto: #ffffff;
+  --texto-suave: #cfe3ff;
+  --aviso: #ffd27a;
+  --brilho: 0 0 18px rgba(40, 150, 255, 0.35);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  color: var(--texto);
+  background-color: var(--fundo);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' viewBox='0 0 1440 900' fill='none'%3E%3Cg stroke='%2329b6f6' stroke-width='2' stroke-linecap='round' opacity='.75'%3E%3Cpath d='M1440 130H1310L1260 180H1120'/%3E%3Cpath d='M1440 215H1370L1340 245'/%3E%3Cpath d='M1440 330H1395'/%3E%3Cpath d='M0 690H110L160 640H300'/%3E%3Cpath d='M0 775H80L120 815'/%3E%3Cpath d='M0 150H60L95 115'/%3E%3C/g%3E%3Cg fill='%2329b6f6'%3E%3Ccircle cx='1120' cy='180' r='4'/%3E%3Ccircle cx='1340' cy='245' r='4'/%3E%3Ccircle cx='300' cy='640' r='4'/%3E%3Ccircle cx='120' cy='815' r='4'/%3E%3Ccircle cx='95' cy='115' r='4'/%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(520px 420px at 100% 8%, rgba(30, 140, 255, 0.55), transparent 70%),
+    radial-gradient(520px 420px at 0% 92%, rgba(30, 120, 255, 0.45), transparent 70%),
+    radial-gradient(420px 300px at 0% 10%, rgba(20, 100, 220, 0.3), transparent 70%);
+  background-size: cover, auto, auto, auto;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--ciano);
+  outline-offset: 2px;
+}
+
+/* ---------- elementos comuns ---------- */
+
+.cartao-azul {
+  background: linear-gradient(180deg, var(--azul-claro) 0%, var(--azul-medio) 100%);
+  border: 1px solid rgba(140, 210, 255, 0.55);
+  border-radius: 14px;
+  box-shadow: var(--brilho);
+}
+
+.cabecalho {
+  padding: 22px 24px 24px;
+  text-align: center;
+}
+
+.cabecalho__titulo {
+  margin: 0 0 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ciano);
+}
+
+.cabecalho__texto {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--texto);
+}
+
+.botao-pilula {
+  display: block;
+  width: min(230px, 100%);
+  margin: 0 auto;
+  padding: 7px 18px;
+  border: 1px solid rgba(160, 205, 255, 0.8);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #5b9be8, #3a78cf);
+  color: #fff;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.botao-pilula:hover:not(:disabled) { background: linear-gradient(180deg, #6fa9f0, #4687dc); }
+.botao-pilula:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.chevron {
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--ciano);
+  border-bottom: 2px solid var(--ciano);
+  transform: rotate(-45deg);   /* aponta para a direita */
+  flex-shrink: 0;
+}
+
+/* ---------- estudos.html (Desktop - 3) ---------- */
+
+.pagina-estudos {
+  width: min(720px, 92vw);
+  margin: 0 auto;
+  padding: 40px 0 48px;
+}
+
+.pagina-estudos .cabecalho { margin-bottom: 28px; }
+
+.acordeao { margin: 0; padding: 0; list-style: none; }
+
+.acordeao__item { margin-bottom: 8px; }
+
+.acordeao__titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 9px 16px;
+  border: 1px solid var(--linha-item);
+  border-radius: 9px;
+  background: linear-gradient(180deg, #0c5aa8, var(--azul-escuro));
+  color: var(--texto);
+  font: inherit;
+  font-size: 0.78rem;
+  text-align: left;
+  cursor: pointer;
+}
+.acordeao__titulo:hover { border-color: var(--ciano); }
+
+.acordeao__item.aberto {
+  padding: 0 0 14px;
+  background: linear-gradient(180deg, var(--azul-claro) 0%, var(--azul-medio) 100%);
+  border: 1px solid rgba(140, 210, 255, 0.55);
+  border-radius: 12px;
+  box-shadow: var(--brilho);
+}
+.acordeao__item.aberto .acordeao__titulo {
+  padding: 18px 20px 14px;
+  border: 0;
+  background: none;
+}
+.acordeao__item.aberto .chevron { transform: rotate(45deg); }  /* aponta para baixo */
+
+.acordeao__painel { display: none; padding: 0 20px; }
+.acordeao__item.aberto .acordeao__painel { display: block; }
+
+/* ---------- material.html ---------- */
+
+.pagina-leitor {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+  width: min(1120px, 94vw);
+  margin: 0 auto;
+  padding: 32px 0 20px;
+}
+
+.leitor-coluna { flex: 1; min-width: 0; }
+
+.leitor {
+  padding: 26px 30px 30px;
+  background: linear-gradient(180deg, var(--azul-claro) 0%, var(--azul-medio) 100%);
+  border: 1px solid rgba(140, 210, 255, 0.55);
+  border-radius: 14px;
+  box-shadow: var(--brilho);
+}
+
+.leitor h1 {
+  margin: 0 0 18px;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--texto);
+}
+
+.texto {
+  max-width: 70ch;
+  line-height: 1.7;
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+
+.texto h2, .texto h3, .texto h4, .texto h5 {
+  margin: 1.5em 0 0.5em;
+  line-height: 1.3;
+  color: #dff3ff;
+}
+.texto h2 { font-size: 1.15rem; }
+.texto h3 { font-size: 1.05rem; }
+.texto h4, .texto h5 { font-size: 1rem; }
+
+.texto p, .texto ul, .texto ol, .texto blockquote, .texto pre { margin: 0 0 1em; }
+.texto ul, .texto ol { padding-left: 1.4em; }
+.texto li { margin-bottom: 0.3em; }
+
+.texto a { color: #fff; text-decoration-color: var(--ciano); }
+.texto a.externo::after { content: " \2197"; font-size: 0.85em; }
+
+.texto img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1em 0;
+  border-radius: 8px;
+  background: rgba(1, 4, 15, 0.3);
+}
+
+.texto blockquote {
+  padding: 8px 16px;
+  border-left: 4px solid var(--ciano);
+  background: rgba(1, 4, 15, 0.3);
+  color: var(--texto-suave);
+}
+
+.texto code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(1, 4, 15, 0.45);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.92em;
+}
+.texto pre {
+  padding: 12px 14px;
+  overflow-x: auto;
+  border-radius: 8px;
+  background: rgba(1, 4, 15, 0.55);
+}
+.texto pre code { padding: 0; background: none; }
+.texto hr { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.3); margin: 1.5em 0; }
+
+.aviso {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(1, 4, 15, 0.45);
+  border: 1px solid rgba(140, 210, 255, 0.4);
+  color: var(--aviso);
+}
+.aviso--inline { display: inline-block; padding: 4px 8px; font-size: 0.9rem; }
+
+/* navegação abaixo do conteúdo */
+.navegacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 20px;
+}
+.navegacao .botao-pilula { width: 150px; margin: 0; }
+.navegacao__voltar { color: var(--ciano); font-size: 0.85rem; padding: 8px 6px; }
+
+/* lateral: lista de temas */
+.temas { width: 270px; flex-shrink: 0; }
+.temas .cabecalho { margin-bottom: 14px; padding: 16px 14px 18px; }
+.temas .cabecalho__titulo { margin: 0 0 6px; font-size: 0.95rem; }
+.temas .cabecalho__texto { font-size: 0.75rem; font-weight: 600; }
+
+.temas__lista { margin: 0; padding: 0; list-style: none; }
+
+.temas__lista a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 7px;
+  padding: 9px 14px;
+  border: 1px solid var(--linha-item);
+  border-radius: 9px;
+  background: linear-gradient(180deg, #0c5aa8, var(--azul-escuro));
+  color: var(--texto);
+  font-size: 0.76rem;
+  text-decoration: none;
+}
+.temas__lista a::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--ciano);
+  border-bottom: 2px solid var(--ciano);
+  transform: rotate(-45deg);
+  flex-shrink: 0;
+}
+.temas__lista a:hover { border-color: var(--ciano); }
+.temas__lista a.ativo {
+  background: linear-gradient(180deg, var(--azul-claro), var(--azul-medio));
+  border-color: rgba(140, 210, 255, 0.7);
+  font-weight: 700;
+}
+
+/* ---------- celular ---------- */
+
+@media (max-width: 760px) {
+  .pagina-leitor { flex-direction: column; padding-top: 20px; }
+  .leitor { padding: 20px 18px 24px; }
+  .temas { width: 100%; }
+  .pagina-estudos { padding-top: 24px; }
+}
