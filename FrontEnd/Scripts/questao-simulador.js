@@ -146,7 +146,7 @@ window.simuladorCertificacao = (() => {
             return {
                 id: questao.id,
                 enunciado: questao.enunciado,
-                imagem_url: `../../assets/imagens/tema_${questao.tema_id}/questão_${questao.id}.png`,
+                imagem_url: `assets/imagens/tema_${questao.tema_id}/questao_${questao.id}.png`,
                 alternativas: questao.alternativas.map(({ letra, texto }) => ({ letra, texto })),
                 segundos_restantes: Math.max(0, Math.ceil((dados.prazos[questao.id] - Date.now()) / 1000)),
                 correcao,
