@@ -9,6 +9,8 @@
 //        -> Correcao = { letra_resposta, letra_correta, acertou, tempo_esgotado }
 // O POST precisa ser idempotente: uma repetição devolve a resposta registrada na primeira vez.
 const API_URL = "";
+// imagem_url vem do banco relativo à raiz do repositório (ex.: assets/imagens/tema_1/questao_1.png)
+const RAIZ_PROJETO = "../../";
 const TEMPO_LIMITE_MS = 15000;
 const AVISO_TEMPO_SEGUNDOS = 15;
 
@@ -198,8 +200,8 @@ function criarAlternativa({ letra, texto }) {
 function renderizarQuestao(tema, questao) {
     elementos.enunciadoRotulo.textContent = `QUESTÃO ${tema.ordem}`;
     elementos.enunciadoTexto.textContent = questao.enunciado;
-    elementos.imagem.src = questao.imagem_url;
-    elementos.imagemLink.href = questao.imagem_url;
+    elementos.imagem.src = RAIZ_PROJETO + questao.imagem_url;
+    elementos.imagemLink.href = RAIZ_PROJETO + questao.imagem_url;
     elementos.imagemLink.hidden = false;
     elementos.imagemErro.hidden = true;
     elementos.alternativas.querySelectorAll(".alternativa").forEach((alternativa) => alternativa.remove());

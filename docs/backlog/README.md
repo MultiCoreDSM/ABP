@@ -34,5 +34,31 @@ O backlog pode ser atualizado ao longo do desenvolvimento conforme novas necessi
 | BL-22 | Histórico | Histórico de certificação | Registrar os temas respondidos, as questões sorteadas, as respostas escolhidas, as respostas corretas e a data e o horário de cada resposta. |Médio |
 | BL-23 | Interface | Responsividade | Adaptar a interface a diferentes tamanhos de tela. | Baixa |
 
+## Requisitos não funcionais
+
+| ID | Categoria | Requisito | Critério de verificação | Prioridade |
+| --- | --- | --- | --- | --- |
+| RNF-01 | Tecnologia | Front-end em HTML, CSS e JavaScript; back-end em Node.js com Express; banco PostgreSQL 16 | Versões declaradas no README e no `package.json` | Alto |
+| RNF-02 | Segurança | Senhas armazenadas apenas como hash (bcrypt) | Nenhuma coluna guarda a senha em texto; login compara via `bcrypt.compare` | Alto |
+| RNF-03 | Segurança | Rotas da prova exigem autenticação por token | Requisição sem token em `/api/questoes/*` retorna 401 | Alto |
+| RNF-04 | Reprodutibilidade | O projeto roda a partir de um clone limpo seguindo só o README | `docker compose up` + `npm install` + `npm start` sem passos extras | Alto |
+| RNF-05 | Integridade | O horário de início e resposta é registrado pelo servidor, não pelo navegador | Colunas de data/hora preenchidas pelo banco (`clock_timestamp()`) | Alto |
+| RNF-06 | Usabilidade | Interface legível e utilizável em celular | Telas funcionam a partir de 360 px de largura | Média |
+| RNF-07 | Privacidade | A validação pública não expõe CPF completo nem e-mail | Página de validação mostra no máximo CPF mascarado | Média |
+| RNF-08 | Execução | Aplicação executável em contêiner | Serviços sobem com `docker compose up` | Média |
+
+## Regras de negócio
+
+| ID | Regra | Requisitos relacionados |
+| --- | --- | --- |
+| RN-01 | O CPF é único: não pode haver dois candidatos com o mesmo CPF | BL-01 |
+| RN-02 | Cada tema tem exatamente 4 questões, e cada questão tem 4 alternativas com exatamente 1 correta | BL-06 |
+| RN-03 | O candidato recebe 1 questão sorteada por tema e responde cada tema uma única vez | BL-07, BL-08 |
+| RN-04 | Cada questão tem prazo de 150 segundos contados a partir da exibição | BL-09, BL-14 |
+| RN-05 | Resposta após o prazo, ou sem alternativa marcada, conta como incorreta | BL-13, BL-14 |
+| RN-06 | A nota final só é calculada após os 12 temas | BL-17 |
+| RN-07 | O certificado só é emitido com aproveitamento ≥ 65% | BL-18 |
+| RN-08 | Cada certificado tem um código único, usado no QR Code e na validação pública | BL-20, BL-21 |
+
 
 [Voltar ao README principal](../../README.md)

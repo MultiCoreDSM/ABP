@@ -1,3 +1,9 @@
+-- Schema do banco da plataforma ABP — grupo MultiCore
+-- Versão suportada: PostgreSQL 16 (testado em banco vazio, 16.x)
+-- Ordem de execução: 1) schemas.sql  2) seed.sql
+-- Observação: a coluna gerada "valida" usa STORED. PostgreSQL 16 não aceita
+-- colunas geradas VIRTUAL (só existem a partir da versão 18).
+
 BEGIN;
 
 CREATE TABLE IF NOT EXISTS candidatos ( 
