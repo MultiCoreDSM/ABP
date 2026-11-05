@@ -33,6 +33,8 @@ Montar a base do projeto para que as próximas sprints possam seguir com o desen
 
 O protótipo no Figma serve como referência para a construção das telas e ajuda o time a visualizar como o usuário vai navegar pela plataforma.
 
+🔗 [Abrir o protótipo no Figma](https://www.figma.com/design/ViL8tpfr58iVLNzIGPkpj1/abp?node-id=8-2)
+
 ### Diagrama de casos de uso
 
 O diagrama mostra quem vai usar o sistema, quais são as principais funcionalidades e como essas partes se relacionam.
@@ -59,7 +61,7 @@ Foram preparados os materiais dos 12 temas da certificação e as imagens usadas
 - [Imagens das questões](../../../assets/imagens)
 - [Kanban ABP](https://github.com/users/MultiCoreDSM/projects/1)
 - [Diagrama de casos de uso](../../../Diagrama)
-- [Protótipo (exportações)](../../../Design)
+- [Protótipo no Figma](https://www.figma.com/design/ViL8tpfr58iVLNzIGPkpj1/abp?node-id=8-2) · [exportações das telas](../../../Design)
 
 ## Próximos passos
 

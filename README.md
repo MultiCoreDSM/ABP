@@ -34,10 +34,12 @@ O andamento das atividades pode ser acompanhado pelo [Kanban ABP](https://github
 | [Review e Retrospectiva da Sprint 1](docs/sprints/sprint-1/REVIEW-RETROSPECTIVA.md) | Feedback recebido e ações de melhoria. |
 | [Issues](https://github.com/MultiCoreDSM/ABP/issues) | Atividades cadastradas e acompanhadas pelo time. |
 | [Kanban ABP](https://github.com/users/MultiCoreDSM/projects/1) | Situação das atividades em cada etapa do fluxo. |
+| [Protótipo no Figma](https://www.figma.com/design/ViL8tpfr58iVLNzIGPkpj1/abp?node-id=8-2) | Telas e fluxo de navegação da plataforma (visualização). |
 
 ## Materiais do projeto
 
 - [Materiais de estudo](assets/materiais)
+- [Protótipo no Figma](https://www.figma.com/design/ViL8tpfr58iVLNzIGPkpj1/abp?node-id=8-2)
 - [Imagens das questões](assets/imagens), no padrão `tema_T/questao_N.png`
 
 Os conteúdos estão divididos nos seguintes temas:
