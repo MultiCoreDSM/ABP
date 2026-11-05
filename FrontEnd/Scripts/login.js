@@ -2,6 +2,11 @@ const form = document.getElementById("form-login");
 const inputCpf = document.getElementById("cpf");
 const inputSenha = document.getElementById("senha");
 const btnOlho = document.getElementById("btn-olho");
+const avisoSessao = document.getElementById("aviso-sessao");
+
+if (new URLSearchParams(location.search).get("expired") === "true") {
+    avisoSessao.hidden = false;
+}
 
 // Máscara de CPF: 000.000.000-00
 inputCpf.addEventListener("input", () => {
@@ -68,6 +73,6 @@ form.addEventListener("submit", (evento) => {
 
     if (!valido) return;
 
-    // TODO: integrar com o back-end de autenticação
-    console.log("Login enviado:", { cpf: inputCpf.value });
+    // TODO: autenticar no back-end antes de avançar; por enquanto, qualquer CPF válido entra
+    location.href = "questao.html";
 });

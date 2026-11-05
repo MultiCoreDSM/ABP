@@ -4,12 +4,6 @@
 const API_TEMAS_URL = "";
 const TEMPO_LIMITE_MS = 10000;
 
-// Nome de exemplo. Trocar pelo usuário logado quando houver sessão.
-const NOME_USUARIO = "Teste";
-
-// Progresso guardado só neste navegador, até existir uma API de progresso
-const CHAVE_PROGRESSO = "multicore:temas-em-andamento";
-
 // Mesmos dados de Database/seed.sql
 const TEMAS_LOCAIS = [
     { id: 1, nome: "Fundamentos da Agilidade", ordem: 1 },
@@ -48,30 +42,6 @@ const estadoMensagem = document.getElementById("estado-mensagem");
 const btnTentarNovamente = document.getElementById("btn-tentar-novamente");
 const listaTemas = document.getElementById("lista-temas");
 const modeloTema = document.getElementById("modelo-tema");
-const resumo = document.getElementById("resumo");
-const resumoTexto = document.getElementById("resumo-texto");
-const resumoBarra = document.getElementById("resumo-barra");
-const resumoPreenchimento = document.getElementById("resumo-preenchimento");
-
-const emAndamento = lerProgresso();
-
-// O navegador pode bloquear o armazenamento; nesse caso, o progresso vale só nesta visita
-function lerProgresso() {
-    try {
-        const salvos = JSON.parse(localStorage.getItem(CHAVE_PROGRESSO));
-        return new Set(Array.isArray(salvos) ? salvos.map(String) : []);
-    } catch {
-        return new Set();
-    }
-}
-
-function salvarProgresso() {
-    try {
-        localStorage.setItem(CHAVE_PROGRESSO, JSON.stringify([...emAndamento]));
-    } catch (erro) {
-        console.warn("Não foi possível salvar o progresso:", erro);
-    }
-}
 
 async function buscarTemas() {
     if (!API_TEMAS_URL) return TEMAS_LOCAIS;
@@ -95,95 +65,83 @@ function prepararTemas(temas) {
         .sort((a, b) => (posicao(a) === posicao(b) ? 0 : posicao(a) - posicao(b)));
 }
 
-function mostrarEstado(mensagem, { carregando = false, podeTentarNovamente = false } = {}) {
+function mostrarEstado(mensagem, podeTentarNovamente = false) {
     estadoMensagem.textContent = mensagem;
-    estado.classList.toggle("carregando", carregando);
     btnTentarNovamente.hidden = !podeTentarNovamente;
     estado.hidden = false;
     listaTemas.hidden = true;
-    resumo.hidden = true;
 }
 
-function temaDisponivel(tema) {
-    return tema.disponivel !== false && Boolean(MATERIAIS[tema.id]);
-}
+function alternarTema(item) {
+    const abrir = !item.classList.contains("aberto");
 
-function atualizarProgressoDoTema(item, tema) {
-    const andamento = emAndamento.has(String(tema.id));
-    const acao = andamento ? "Continuar" : "Iniciar";
+    // Apenas um tema fica aberto por vez
+    listaTemas.querySelectorAll(".tema.aberto").forEach(definirFechado);
 
-    item.classList.toggle("em-andamento", andamento);
-    item.querySelector(".tema-status").textContent = andamento ? "Em andamento" : "Não iniciado";
-    item.querySelector(".tema-link-texto").textContent = acao;
-    item.querySelector(".tema-link").setAttribute("aria-label", `${acao} tema ${tema.id}: ${tema.nome}`);
-}
-
-function atualizarResumo(temas) {
-    const quantidade = temas.filter((tema) => temaDisponivel(tema) && emAndamento.has(String(tema.id))).length;
-
-    resumoTexto.textContent = `${quantidade} de ${temas.length} em andamento`;
-    resumoBarra.setAttribute("aria-valuemax", temas.length);
-    resumoBarra.setAttribute("aria-valuenow", quantidade);
-    resumoPreenchimento.style.width = `${(quantidade / temas.length) * 100}%`;
-}
-
-function criarTema(tema, temas) {
-    const item = modeloTema.content.cloneNode(true).querySelector(".tema");
-
-    item.querySelector(".tema-numero").textContent = `TEMA ${String(tema.id).padStart(2, "0")}`;
-    item.querySelector(".tema-nome").textContent = tema.nome;
-
-    if (!temaDisponivel(tema)) {
-        item.classList.add("indisponivel");
-        item.querySelector(".tema-status").textContent = "Indisponível";
-        item.querySelector(".tema-aviso").hidden = false;
-        return item;
+    if (abrir) {
+        item.classList.add("aberto");
+        item.querySelector(".tema-botao").setAttribute("aria-expanded", "true");
     }
+}
 
-    const link = item.querySelector(".tema-link");
-    link.href = CAMINHO_MATERIAIS + MATERIAIS[tema.id];
-    link.hidden = false;
-    link.addEventListener("click", () => {
-        emAndamento.add(String(tema.id));
-        salvarProgresso();
-        atualizarProgressoDoTema(item, tema);
-        atualizarResumo(temas);
-    });
-    atualizarProgressoDoTema(item, tema);
+function definirFechado(item) {
+    item.classList.remove("aberto");
+    item.querySelector(".tema-botao").setAttribute("aria-expanded", "false");
+}
+
+function criarTema(tema) {
+    const item = modeloTema.content.cloneNode(true).querySelector(".tema");
+    const botao = item.querySelector(".tema-botao");
+    const painel = item.querySelector(".tema-painel");
+    const titulo = `Tema ${tema.id} - ${tema.nome}`;
+    const material = MATERIAIS[tema.id];
+    const disponivel = tema.disponivel !== false && Boolean(material);
+
+    item.querySelector(".tema-nome").textContent = titulo;
+
+    botao.id = `tema-${tema.id}`;
+    botao.setAttribute("aria-controls", `painel-tema-${tema.id}`);
+    painel.id = `painel-tema-${tema.id}`;
+    painel.setAttribute("aria-labelledby", botao.id);
+    botao.addEventListener("click", () => alternarTema(item));
+
+    if (disponivel) {
+        const link = item.querySelector(".btn-iniciar");
+        link.href = CAMINHO_MATERIAIS + material;
+        link.setAttribute("aria-label", `Iniciar ${titulo}`);
+        link.hidden = false;
+    } else {
+        item.querySelector(".tema-selo").hidden = false;
+        item.querySelector(".tema-aviso").hidden = false;
+    }
 
     return item;
 }
 
 function renderizarTemas(temas) {
-    listaTemas.replaceChildren(...temas.map((tema) => criarTema(tema, temas)));
-    atualizarResumo(temas);
+    listaTemas.replaceChildren(...temas.map(criarTema));
+    alternarTema(listaTemas.firstElementChild); // No design, o primeiro tema já vem aberto
     estado.hidden = true;
     listaTemas.hidden = false;
-    resumo.hidden = false;
 }
 
 async function carregarTemas() {
-    mostrarEstado("Carregando temas...", { carregando: true });
+    mostrarEstado("Carregando temas...");
 
     try {
         const temas = prepararTemas(await buscarTemas());
 
         if (temas.length === 0) {
-            mostrarEstado("Nenhum tema disponível no momento. Volte mais tarde.");
+            mostrarEstado("Nenhum tema disponível no momento.");
             return;
         }
 
         renderizarTemas(temas);
     } catch (erro) {
         console.error("Erro ao carregar os temas:", erro);
-        mostrarEstado("Não foi possível carregar os temas. Verifique sua conexão e tente novamente.", {
-            podeTentarNovamente: true,
-        });
+        mostrarEstado("Não foi possível carregar os temas.", true);
     }
 }
-
-document.getElementById("usuario-nome").textContent = NOME_USUARIO;
-document.getElementById("usuario-avatar").textContent = NOME_USUARIO.charAt(0).toUpperCase();
 
 btnTentarNovamente.addEventListener("click", carregarTemas);
 

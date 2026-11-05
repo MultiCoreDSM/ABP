@@ -4,63 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | MultiCore</title>
-    <meta name="theme-color" content="#030919">
-    <!-- Fontes Sora e Inter -->
+    <!-- Fonte Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Conexão com o CSS da página de login -->
     <link rel="stylesheet" href="../Styles/login.css">
 </head>
 <body>
 
-    <!-- Painel da marca -->
-    <aside class="painel-marca">
-        <div class="decoracao" aria-hidden="true">
-            <svg class="circuito" viewBox="0 0 290 80" fill="none" focusable="false">
-                <path d="M0 2 H110 L150 42 H284" />
-                <path d="M0 36 H80 L115 72 H204" />
-                <path d="M0 72 H48" />
-                <circle cx="284" cy="42" r="4" />
-                <circle cx="204" cy="72" r="3" />
-            </svg>
-            <div class="arco"></div>
-        </div>
+    <!-- Decorações de fundo (circuitos e arcos luminosos) -->
+    <div class="fundo" aria-hidden="true">
+        <div class="arco arco-topo"></div>
+        <div class="arco arco-base"></div>
 
-        <div class="logo">
+        <svg class="circuito circuito-esquerda" viewBox="0 0 220 140" fill="none" focusable="false">
+            <path d="M0 40 H70 L100 80 H170" />
+            <path d="M0 70 H50 L75 100 H150" />
+            <path d="M0 100 H40 L60 115 H110" />
+            <circle cx="170" cy="80" r="3.5" />
+            <circle cx="113" cy="113" r="3.5" />
+        </svg>
+
+        <svg class="circuito circuito-direita" viewBox="0 0 220 160" fill="none" focusable="false">
+            <path d="M220 10 H130" />
+            <circle cx="130" cy="10" r="3.5" />
+            <path d="M220 40 H175 L145 75 H85 L60 50" />
+            <circle cx="60" cy="50" r="3.5" />
+            <path d="M220 95 H160" />
+            <circle cx="160" cy="95" r="3.5" />
+            <path d="M0 85 H105 L135 120 H220" />
+            <circle cx="0" cy="85" r="3.5" />
+            <path d="M100 110 L135 150 H200" />
+        </svg>
+    </div>
+
+    <main class="container-login">
+        <!-- Logo MultiCore -->
+        <header class="logo">
             <img src="../../assets/logo.jpg" alt="MultiCore">
-        </div>
+        </header>
 
-        <div class="apresentacao">
-            <p class="chamada">Bem-vindo de volta à sua <span>jornada ágil.</span></p>
-            <p class="descricao">Continue de onde parou: seus temas, histórico e certificados estão te esperando.</p>
-
-            <ul class="beneficios">
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
-                    12 temas de metodologias ágeis
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
-                    Progresso salvo automaticamente
-                </li>
-                <li>
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
-                    Certificado com validação online
-                </li>
-            </ul>
-        </div>
-
-        <p class="rodape">© MultiCore · Projeto ABP DSM</p>
-    </aside>
-
-    <!-- Formulário de login -->
-    <main class="painel-formulario">
         <section class="formulario-login" aria-labelledby="titulo-login">
             <hgroup>
                 <h1 id="titulo-login">Acesse sua conta</h1>
-                <p class="subtitulo">Informe seu CPF e senha para continuar.</p>
+                <p class="subtitulo">Informe seu CPF e senha para continuar</p>
             </hgroup>
+
+            <!-- Exibido quando a página abre com ?expired=true -->
+            <p class="aviso-sessao" id="aviso-sessao" role="alert" hidden>
+                Sua sessão expirou. Por favor, faça login novamente.
+            </p>
 
             <form id="form-login" aria-labelledby="titulo-login" novalidate>
                 <fieldset>
@@ -96,30 +90,31 @@
                             <!-- Botão de mostrar/ocultar senha -->
                             <button type="button" class="btn-olho" id="btn-olho" aria-label="Mostrar senha"
                                     aria-controls="senha" aria-pressed="false">
-                                <svg class="olho-aberto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false">
-                                    <path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z" />
-                                    <circle cx="12" cy="12" r="3" />
-                                </svg>
                                 <svg class="olho-fechado" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false">
                                     <path d="M3 10c2.5 3 5.5 4.5 9 4.5s6.5-1.5 9-4.5" />
                                     <path d="M6 13.5 4.5 16M10 14.5 9.5 17M14 14.5l.5 2.5M18 13.5l1.5 2.5" />
                                 </svg>
+                                <svg class="olho-aberto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false">
+                                    <path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
                             </button>
                         </div>
                         <p class="erro" id="erro-senha" aria-live="polite"></p>
-                        <!-- Vem depois do campo para o Tab seguir senha > olho > link > Entrar -->
                         <a href="#" class="link-esqueceu">Esqueceu sua senha?</a>
                     </div>
+
                 </fieldset>
 
                 <button type="submit" id="btn-entrar">Entrar</button>
             </form>
 
-            <div class="divisor" aria-hidden="true">ou</div>
-
             <footer>
                 <p class="cadastro">
                     Não tem uma conta? <a href="cadastro.html">Cadastre-se</a>
+                </p>
+                <p class="cadastro">
+                    <a href="inicial.html">Voltar para o início</a>
                 </p>
             </footer>
         </section>
