@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área de estudos | MultiCore</title>
+    <!-- Fonte Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Conexão com o CSS da área de estudos -->
+    <link rel="stylesheet" href="../Styles/area-estudos.css">
+</head>
+<body>
+
+    <!-- Decorações de fundo (circuitos e arcos luminosos) -->
+    <div class="fundo" aria-hidden="true">
+        <div class="arco arco-topo"></div>
+        <div class="arco arco-base"></div>
+
+        <svg class="circuito circuito-esquerda" viewBox="0 0 220 140" fill="none" focusable="false">
+            <path d="M0 40 H70 L100 80 H170" />
+            <path d="M0 70 H50 L75 100 H150" />
+            <path d="M0 100 H40 L60 115 H110" />
+            <circle cx="170" cy="80" r="3.5" />
+            <circle cx="113" cy="113" r="3.5" />
+        </svg>
+
+        <svg class="circuito circuito-direita" viewBox="0 0 220 160" fill="none" focusable="false">
+            <path d="M220 10 H130" />
+            <circle cx="130" cy="10" r="3.5" />
+            <path d="M220 40 H175 L145 75 H85 L60 50" />
+            <circle cx="60" cy="50" r="3.5" />
+            <path d="M220 95 H160" />
+            <circle cx="160" cy="95" r="3.5" />
+            <path d="M0 85 H105 L135 120 H220" />
+            <circle cx="0" cy="85" r="3.5" />
+            <path d="M100 110 L135 150 H200" />
+        </svg>
+    </div>
+
+    <main class="area-estudos">
+        <header class="cabecalho">
+            <h1>Área de estudos</h1>
+            <p>Escolha um tema para iniciar ou continuar</p>
+        </header>
+
+        <section aria-labelledby="titulo-temas">
+            <h2 id="titulo-temas" class="sr-only">Temas de estudo</h2>
+
+            <!-- Carregamento, lista vazia e erro -->
+            <div id="estado" class="estado" role="status">
+                <p id="estado-mensagem">Carregando temas...</p>
+                <button type="button" id="btn-tentar-novamente" hidden>Tentar novamente</button>
+            </div>
+
+            <ul id="lista-temas" class="lista-temas" hidden></ul>
+        </section>
+    </main>
+
+    <!-- Modelo de cada tema, preenchido por Scripts/area-estudos.js -->
+    <template id="modelo-tema">
+        <li class="tema">
+            <h3>
+                <button type="button" class="tema-botao" aria-expanded="false">
+                    <span class="tema-nome"></span>
+                    <span class="tema-selo" hidden>Indisponível</span>
+                    <svg class="tema-seta" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                        <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </h3>
+            <div class="tema-painel" role="region">
+                <div class="tema-painel-conteudo">
+                    <a class="btn-iniciar" hidden>Iniciar</a>
+                    <p class="tema-aviso" hidden>Material temporariamente indisponível.</p>
+                </div>
+            </div>
+        </li>
+    </template>
+
+    <script src="../Scripts/area-estudos.js"></script>
+</body>
+</html>
