@@ -94,7 +94,6 @@ ABP/
 ├── docs/
 │   ├── backlog/          # Backlog do produto (RF, RNF e regras de negócio)
 │   ├── banco/            # DER, modelo lógico, dicionário e roteiro do banco
-│   ├── burndown/         # Planilha de burndown
 │   ├── processo/         # Definition of Done
 │   ├── rastreabilidade.md
 │   └── sprints/
