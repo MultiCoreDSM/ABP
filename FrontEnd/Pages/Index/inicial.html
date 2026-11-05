@@ -4,28 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Inicial</title>
-    <link rel="stylesheet" href="/Pages/Style/inicial.css">
+    <link rel="stylesheet" href="../Style/inicial.css">
 </head>
 <body>
+    <div class="page">
+        <div class="glow glow-top"></div>
+        <div class="glow glow-left"></div>
+        <div class="circuit circuit-one"></div>
+        <div class="circuit circuit-two"></div>
 
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#" class="active">Início</a></li>
-                <li><a href="cadastro.html">Cadastro</a></li>
-            </ul>
-        </nav>
-    </header>
+        <header class="brand" aria-label="Marca Multicore">
+            <span class="brand-mark">∞</span>
+            <span>Multicore</span>
+        </header>
 
-    <main class="conteudo-principal">
-        <section class="boas-vindas">
-            <h1>Bem-vindo à Página Inicial</h1>
-            <p>O seu arquivo HTML está conectado com sucesso ao CSS e ao JavaScript!</p>
-            <button id="botao-teste">Clique aqui</button>
+        <main class="hero">
+            <div class="hero-copy">
+                <p class="eyebrow">PLATAFORMA DE PRODUTIVIDADE</p>
+                <h1>Organize sua rotina de estudo e <span>alcance metas reais</span>.</h1>
+                <p class="intro">Acompanhe tarefas, cronometre sessões de foco e acompanhe seu progresso com clareza.</p>
+            </div>
+
+            <div class="tech-art" aria-hidden="true">
+                <div class="float-card card-a">✓</div>
+                <div class="float-card card-b">•</div>
+                <div class="float-card card-c">⏱</div>
+                <div class="screen"><span class="infinity">∞</span></div>
+                <div class="keyboard"></div>
+            </div>
+        </main>
+
+        <section class="features" aria-label="Recursos">
+            <article class="feature">
+                <div class="feature-icon">📘</div>
+                <strong>12 temas</strong>
+                <h2>Conteúdo</h2>
+                <p>Conteúdo completo e atualizado sobre metodologias ágeis.</p>
+            </article>
+
+            <article class="feature">
+                <div class="feature-icon">⏱</div>
+                <strong>30 minutos</strong>
+                <h2>Tempo</h2>
+                <p>Tempo para realizar as tarefas.</p>
+            </article>
+
+            <article class="feature">
+                <div class="feature-icon">✅</div>
+                <strong>65%</strong>
+                <h2>Nota mínima</h2>
+                <p>Para ser aprovado na certificação.</p>
+            </article>
+
+            <article class="feature">
+                <div class="feature-icon">🏅</div>
+                <strong>Certificado</strong>
+                <h2>Conclusão</h2>
+                <p>Ao final, você receberá seu certificado de conclusão.</p>
+            </article>
         </section>
-    </main>
 
+        <div class="actions">
+            <button type="button" id="botao-teste" class="primary-button">Entrar</button>
+            <button type="button" id="botao-cadastro" class="secondary-button">Criar conta</button>
+            <p id="feedback" class="feedback" aria-live="polite">Sistema pronto para uso.</p>
+        </div>
 
-    <script src="/Pages/Script/inicial.js"></script>
+    </div>
+
+    <script src="../Script/inicial.js"></script>
 </body>
 </html>
