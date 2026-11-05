@@ -27,7 +27,7 @@ const TEMAS_LOCAIS = [
 ];
 
 // A tabela de temas não guarda o material, então o PDF é associado pelo id do tema
-const CAMINHO_MATERIAIS = "../../../assets/materiais/";
+const CAMINHO_MATERIAIS = "../../assets/materiais/";
 const MATERIAIS = {
     1: "01-fundamentos-da-agilidade.pdf",
     2: "02-manifesto-agil.pdf",
