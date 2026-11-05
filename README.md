@@ -55,11 +55,20 @@ Os conteúdos estão divididos nos seguintes temas:
 ABP/
 ├── assets/
 │   ├── imagens/          # Imagens usadas nas questões
-│   └── materiais/        # PDFs dos 12 temas de estudo
+│   ├── materiais/        # PDFs dos 12 temas de estudo
+│   └── logo.jpg          # Logo do MultiCore
+├── Database/             # Scripts de criação e carga do banco de dados
+├── Design/               # Protótipos e arquivos de design das telas
+├── Diagrama/             # Diagrama de casos de uso
 ├── docs/
 │   ├── backlog/          # Backlog geral do produto
+│   ├── burndown/         # Planilha de burndown
 │   └── sprints/
 │       └── sprint-1/     # Overview e backlog da Sprint 1
+├── FrontEnd/
+│   ├── Pages/            # Páginas HTML
+│   ├── Scripts/          # JavaScript de cada página
+│   └── Styles/           # CSS de cada página
 └── README.md
 ```
 

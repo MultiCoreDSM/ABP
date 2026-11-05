@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="../Styles/cadastro.css">
+</head>
+<body>
+    <div class="bg-glow top-right"></div>
+    <div class="bg-glow bottom-left"></div>
+
+    <main class="container">
+        <div class="logo-container">
+            <div class="logo-circle">
+                <span class="logo-cap">∞</span>
+                <span class="logo-icon">✦</span>
+            </div>
+            <div class="logo-text">Multicore</div>
+        </div>
+
+        <section id="screen-form" class="card-screen">
+            <h1>Crie sua conta</h1>
+            <p class="subtitle">Acompanhe seus estudos e <span class="highlight">alcance metas reais</span>.</p>
+
+            <form id="form-cadastro">
+                <div class="input-group">
+                    <label for="nome">Nome completo</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="cpf">CPF</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🪪</span>
+                        <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF" maxlength="14" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">E-mail</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">✉</span>
+                        <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="senha">Senha</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="senha" name="senha" placeholder="Crie uma senha" required>
+                        <span id="toggle-senha" class="toggle-password" aria-label="Mostrar senha">👁</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </form>
+
+            <p class="signup-text">
+                Já possui uma conta?
+                <button type="button" id="btn-entrar" class="link-button">Entrar</button>
+            </p>
+
+            <p class="footer-link">
+                <a href="inicial.html">Voltar para o início</a>
+            </p>
+        </section>
+
+        <section id="screen-success" class="card-screen hidden">
+            <div class="success-icon-circle">✓</div>
+            <h1>Cadastro concluído!</h1>
+            <p class="subtitle">Sua conta foi criada com sucesso.</p>
+
+            <div class="actions">
+                <button type="button" id="btn-iniciar" class="btn btn-primary">Começar</button>
+                <button type="button" id="btn-menu" class="btn btn-secondary">Voltar para o início</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="../Scripts/cadastro.js"></script>
+</body>
+</html>

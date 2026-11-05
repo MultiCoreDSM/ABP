@@ -1,0 +1,342 @@
+/* ===== Variáveis ===== */
+:root {
+    --fundo: #020817;
+    --azul-claro: #4fc3ff;
+    --azul: #1e7bff;
+    --azul-escuro: #0b4fb3;
+    --input-fundo: #111a2b;
+    --texto: #ffffff;
+    --texto-suave: #b8c2d6;
+    --erro: #ff6b6b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+    color: var(--texto);
+    background:
+        radial-gradient(ellipse at 50% 0%, #0c2a6b 0%, transparent 60%),
+        radial-gradient(ellipse at 100% 100%, #08245e 0%, transparent 50%),
+        var(--fundo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+/* ===== Decorações de fundo ===== */
+.fundo {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.arco {
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid var(--azul-claro);
+    box-shadow:
+        0 0 25px var(--azul),
+        inset 0 0 25px var(--azul);
+}
+
+.arco::after {
+    content: "";
+    position: absolute;
+    inset: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(79, 195, 255, 0.35);
+}
+
+.arco-topo {
+    width: 340px;
+    height: 340px;
+    top: -230px;
+    right: -150px;
+}
+
+.arco-base {
+    width: 380px;
+    height: 380px;
+    bottom: -230px;
+    left: -230px;
+}
+
+.circuito {
+    position: absolute;
+    stroke: var(--azul-claro);
+    stroke-width: 1.5;
+    filter: drop-shadow(0 0 4px var(--azul));
+    opacity: 0.85;
+}
+
+.circuito circle {
+    fill: var(--azul-claro);
+}
+
+.circuito-esquerda {
+    width: 240px;
+    top: 0;
+    left: 0;
+}
+
+.circuito-direita {
+    width: 240px;
+    bottom: 40px;
+    right: 0;
+}
+
+/* ===== Conteúdo ===== */
+.container-login {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 380px;
+    padding: 32px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Recorte circular do logo (a imagem é quadrada com fundo preto) */
+.logo {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 24px rgba(30, 123, 255, 0.55);
+}
+
+.logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Amplia para o recorte ficar rente ao anel azul da imagem */
+    transform: scale(1.14);
+}
+
+.formulario-login {
+    width: 100%;
+    text-align: center;
+    margin-top: 24px;
+}
+
+.formulario-login h1 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.subtitulo {
+    font-size: 14px;
+    color: var(--texto-suave);
+    margin-top: 4px;
+}
+
+.aviso-sessao {
+    margin-top: 20px;
+    padding: 10px 12px;
+    border: 1px solid var(--erro);
+    border-radius: 8px;
+    background: rgba(255, 107, 107, 0.12);
+    color: #ffd1d1;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+form {
+    margin-top: 28px;
+    text-align: left;
+}
+
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+}
+
+/* Visível apenas para leitores de tela */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.campo label {
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.input-icone {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icone .icone {
+    position: absolute;
+    left: 12px;
+    width: 20px;
+    height: 20px;
+    color: var(--texto-suave);
+    pointer-events: none;
+}
+
+.input-icone input {
+    width: 100%;
+    height: 40px;
+    padding: 0 44px 0 40px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: var(--input-fundo);
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-icone input::placeholder {
+    color: #8b95a8;
+}
+
+.input-icone input:focus {
+    border-color: var(--azul);
+    box-shadow: 0 0 0 3px rgba(30, 123, 255, 0.25);
+}
+
+.campo.invalido input {
+    border-color: var(--erro);
+}
+
+.erro {
+    min-height: 16px;
+    font-size: 12px;
+    color: var(--erro);
+    margin-top: 4px;
+}
+
+/* Botão do olho */
+.btn-olho {
+    position: absolute;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--texto);
+    cursor: pointer;
+}
+
+.btn-olho svg {
+    width: 22px;
+    height: 22px;
+}
+
+.btn-olho .olho-aberto {
+    display: none;
+}
+
+.btn-olho.visivel .olho-aberto {
+    display: block;
+}
+
+.btn-olho.visivel .olho-fechado {
+    display: none;
+}
+
+.link-esqueceu {
+    align-self: flex-end;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--azul-claro);
+    text-decoration: none;
+}
+
+.link-esqueceu:hover,
+.cadastro a:hover {
+    text-decoration: underline;
+}
+
+/* Botão Entrar */
+#btn-entrar {
+    width: 100%;
+    height: 40px;
+    margin-top: 4px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(180deg, var(--azul) 0%, var(--azul-escuro) 100%);
+    color: #fff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(30, 123, 255, 0.35);
+    transition: filter 0.2s, transform 0.1s;
+}
+
+#btn-entrar:hover {
+    filter: brightness(1.12);
+}
+
+#btn-entrar:active {
+    transform: scale(0.98);
+}
+
+.cadastro {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--texto-suave);
+}
+
+.cadastro a {
+    margin-left: 4px;
+    color: var(--azul-claro);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* ===== Responsivo ===== */
+@media (max-width: 600px) {
+    .circuito {
+        opacity: 0.4;
+    }
+
+    .arco-topo {
+        width: 240px;
+        height: 240px;
+        top: -170px;
+        right: -120px;
+    }
+
+    .arco-base {
+        width: 260px;
+        height: 260px;
+        bottom: -180px;
+        left: -170px;
+    }
+}
