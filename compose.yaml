@@ -1,0 +1,19 @@
+# Banco de dados do projeto — PostgreSQL 16
+# Uso: cp .env.example .env && docker compose up -d
+services:
+    database:
+        image: postgres:16-alpine
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+        ports:
+            - "${POSTGRES_PORT}:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./backend/database/schemas.sql:/docker-entrypoint-initdb.d/01-schemas.sql:ro
+            - ./backend/database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+            - ./backend/database/migrations/03-db08-controle-temporal.sql:/docker-entrypoint-initdb.d/03-db08-controle-temporal.sql:ro
+
+volumes:
+    postgres_data:
