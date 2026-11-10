@@ -19,3 +19,17 @@ Este caso de uso documenta o ciclo de vida completo de uma tentativa de teste de
 2. O sistema exige que o usuário clique em um botão de ação "Confirmar Resposta" antes de computar o ponto ou avançar.
 3. **Bloqueio de Reenvio:** Uma vez clicado em confirmar, a resposta para aquele tema específico é gravada. O critério de aceitação garante que **nenhum tema pode ser respondido duas vezes na mesma tentativa**.
 
+## 3. Gerenciamento de Tempo e Expiração (150 Segundos)
+A interface de execução da prova (conforme arquivos de tela mapeados em `cronometro.html`) implementa um controle rígido de tempo por questão.
+
+### 3.1 Regra de Contagem Regressiva
+*   Assim que uma questão é renderizada na tela, um temporizador regressivo de **150 segundos** inicia automaticamente via código JavaScript local.
+*   O tempo restante é exibido de forma visual e em tempo real para o candidato no componente do cronômetro.
+
+### 3.2 Comportamento na Expiração do Tempo
+*   Se o cronômetro atingir 0 segundos antes que o candidato clique em "Confirmar Resposta":
+    1. O sistema dispara um gatilho automático de expiração.
+    2. A questão atual é travada contra edições.
+    3. O sistema registra a resposta do tema atual como "Não Marcada".
+    4. A interface limpa o timer e avança o candidato automaticamente para a próxima questão do bloco.
+
