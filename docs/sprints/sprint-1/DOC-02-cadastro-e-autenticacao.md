@@ -27,4 +27,18 @@
  Detectada a duplicidade do documento, a operação de inserção é abortada.
  O sistema retorna um feedback amigável na tela: *"Este documento já está registrado em nossa base de dados. Recupere seus acessos ou faça login."*
 
+## 3. UC-02: Autenticação (Login) do Candidato
+   **Ator:** Candidato Cadastrado.
+   **Pré-condições:** Registro previamente existente e ativo no banco de dados.
+
+### 3.1 Fluxo Principal
+ O usuário acessa a interface de autenticação (`login.html`).
+ O usuário fornece suas credenciais de identificação (E-mail ou CPF) junto com a Senha.
+ O usuário clica na ação "Entrar".
+ O sistema compara os hashes de segurança na base de dados.
+ Sendo compatíveis, o sistema gera o token de sessão ativa do usuário.
+ O navegador armazena a sessão e redireciona o candidato logado para a tela `inicial.html`.
+  **Pós-condições:** Estado de sessão iniciado com token válido de navegação privada.
+
+
 
