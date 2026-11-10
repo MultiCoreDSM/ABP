@@ -45,3 +45,19 @@ Para mitigar falhas operacionais e comportamentos inesperados, o ciclo de vida d
     1. Uma camada interceptadora suspende visualmente a prova, exibindo uma mensagem de alerta de rede.
     2. O cronômetro local é pausado temporariamente para não prejudicar o tempo do aluno injustamente até que a conexão seja restabelecida e validada pelo servidor.
 
+## 5. Mapeamento de Estados e Incertezas Técnicas
+
+### 5.1 Estado de Alternativas Marcadas vs Não Marcadas
+*   O banco de dados armazena de forma explícita dois estados para fins de auditoria no final da prova:
+    *   `Respondida`: Vincula o ID da alternativa escolhida pelo candidato.
+    *   `Não Marcada`: Registra o estouro do cronômetro de 150 segundos sem nenhuma opção selecionada.
+
+### 5.2 Identificação de Incertezas Técnicas para Validação
+Identificou-se como ponto incerto a latência de rede no envio dos dados exatamente no milissegundo zero do cronômetro. Ficou definido para validação com o time que o timestamp do servidor terá prioridade sobre o relógio local do cliente web para evitar fraudes ou manipulação do código Javascript da página.
+
+## 6. Critérios de Validação da Task
+*   [X] Nenhum tema pode ser respondido duas vezes na mesma tentativa.
+*   [X] O efeito de cada interrupção sobre a questão atual está definido.
+*   [X] Fluxos alternativos convergem para um estado consistente da tentativa.
+*   [X] Pontos tecnicamente incertos são identificados para validação.
+
