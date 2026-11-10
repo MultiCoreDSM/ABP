@@ -1,53 +1,125 @@
-# Entrega DB-08 corrigida — ABP MultiCore
+# ABP DSM — Plataforma de Estudos e Certificação
 
-Esta pasta contém a migração e a documentação revisadas com base na branch
-`main` do repositório `MultiCoreDSM/ABP`.
+Projeto desenvolvido pelo grupo **MultiCore** para criar uma plataforma de estudos e certificação em metodologias ágeis.
 
-## Arquivos e destinos
+A ideia é oferecer materiais de apoio organizados por tema e, depois dos estudos, permitir que o candidato faça uma certificação, acompanhe seu resultado e receba um certificado que possa ser validado por QR Code.
 
-Copie o conteúdo mantendo os caminhos relativos a partir da raiz do repositório:
+## Sobre o projeto
 
-| Arquivo deste pacote | Destino no ABP |
-|---|---|
-| `backend/database/migrations/03-db08-controle-temporal.sql` | Mesmo caminho |
-| `compose.yaml` | Substituir `compose.yaml` atual (inclui montagem da migração como etapa 03) |
-| `docs/banco/README.md` | Substituir `docs/banco/README.md` atual |
-| `docs/banco/controle-temporal-db-08.md` | Mesmo caminho, novo arquivo |
-| `docs/banco/adendo-modelagem-db-08.md` | Mesmo caminho, novo arquivo |
+A plataforma será organizada em 12 temas relacionados à agilidade, Scrum, Kanban, planejamento, métricas e qualidade. Cada tema possui um material de estudo e quatro questões disponíveis no banco de perguntas.
 
-**Não substitua** `schemas.sql`, `seed.sql`, `modelo-conceitual.md` ou
-`modelo-logico.md` por arquivos deste pacote: eles não estão incluídos como
-substituições integrais. Inclua uma referência ao adendo DB-08 nos dois modelos
-conceitual e lógico, conforme a Definition of Done.
+Durante a certificação, uma questão de cada tema será sorteada. O candidato terá um tempo limitado para responder e poderá acompanhar seu progresso até concluir a prova.
 
-## Instalação em banco novo
+## Andamento
 
-1. Extraia/cop ie os arquivos para a raiz do clone.
-2. Confira as variáveis do `.env` conforme `.env.example`.
-3. Execute `docker compose up -d` com volume novo.
-4. Consulte os logs do serviço `database` e valide as contagens descritas em
-   `docs/banco/README.md`.
+| Sprint | Foco | Situação |
+| --- | --- | --- |
+| [Sprint 1](docs/sprints/sprint-1/README.md) | Protótipo, modelagem, banco de dados e conteúdos | ⚠️ Encerrada com pendências, corrigidas após a Review (tag `sprint-1`) |
+| Sprint 2 | Correções da Review, front-end, rotas da API e estudo da integração do QR Code | 🚧 Em andamento |
 
-A inicialização automática só executa os scripts se o volume PostgreSQL estiver
-vazio. **Não execute `docker compose down -v` em um banco com dados que deseja
-preservar.**
+O andamento das atividades pode ser acompanhado pelo [Kanban ABP](https://github.com/users/MultiCoreDSM/projects/1).
 
-## Instalação em banco existente
+## Documentação
 
-Faça backup primeiro. Depois execute manualmente:
+| Documento | Descrição |
+| --- | --- |
+| [Backlog do produto](docs/backlog/README.md) | Requisitos funcionais, não funcionais e regras de negócio. |
+| [Definition of Done](docs/processo/definition-of-done.md) | Checklist de qualidade que toda entrega precisa cumprir. |
+| [Rastreabilidade](docs/rastreabilidade.md) | Requisito → issue → artefato → commit. |
+| [Banco de dados](docs/banco/README.md) | Versão suportada, criação e carga do banco. |
+| [Modelo conceitual (DER)](docs/banco/modelo-conceitual.md) | Entidades, atributos e cardinalidades. |
+| [Modelo lógico](docs/banco/modelo-logico.md) | Relações, normalização até a 3FN e dicionário de dados. |
+| [Overview da Sprint 1](docs/sprints/sprint-1/README.md) | Resumo das entregas e dos resultados da primeira sprint. |
+| [Backlog da Sprint 1](docs/sprints/sprint-1/BACKLOG.md) | Atividades, responsáveis e critérios de aceite. |
+| [Review e Retrospectiva da Sprint 1](docs/sprints/sprint-1/REVIEW-RETROSPECTIVA.md) | Feedback recebido e ações de melhoria. |
+| [Issues](https://github.com/MultiCoreDSM/ABP/issues) | Atividades cadastradas e acompanhadas pelo time. |
+| [Kanban ABP](https://github.com/users/MultiCoreDSM/projects/1) | Situação das atividades em cada etapa do fluxo. |
+| [Protótipo no Figma](https://www.figma.com/design/ViL8tpfr58iVLNzIGPkpj1/abp?node-id=8-2) | Telas e fluxo de navegação da plataforma (visualização). |
+
+## Materiais do projeto
+
+- [Materiais de estudo](assets/materiais)
+- [Protótipo no Figma](https://www.figma.com/design/ViL8tpfr58iVLNzIGPkpj1/abp?node-id=8-2)
+- [Imagens das questões](assets/imagens), no padrão `tema_T/questao_N.png`
+
+Os conteúdos estão divididos nos seguintes temas:
+
+1. Fundamentos da Agilidade
+2. Manifesto Ágil
+3. Introdução ao Scrum
+4. Papéis do Scrum
+5. Eventos do Scrum
+6. Artefatos do Scrum
+7. User Stories
+8. Gestão do Product Backlog
+9. Kanban
+10. Planejamento Ágil
+11. Métricas Ágeis
+12. Qualidade em Projetos Ágeis
+
+## Como executar
+
+**Requisitos:** Node.js 20.11 ou superior · PostgreSQL 16 (ou Docker)
 
 ```bash
-psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 \
-  -f backend/database/migrations/03-db08-controle-temporal.sql
+# 1. Variáveis de ambiente
+cp .env.example .env            # ajuste senha, porta e JWT_SECRET
+
+# 2. Banco de dados (cria as tabelas e carrega os 12 temas e 48 questões)
+docker compose up -d
+
+# 3. Back-end
+cd backend
+npm install
+npm start                       # http://localhost:3001/api/temas
 ```
 
-Não é necessário recriar `schemas.sql` ou `seed.sql` em banco existente.
+Sem Docker, siga o [roteiro do banco de dados](docs/banco/README.md).
 
-## Estado de validação
+O front-end fica em `FrontEnd/Pages/`. Abra `inicial.html` com um servidor estático (ex.: extensão Live Server do VS Code) a partir da **raiz do repositório**, para que os caminhos de `assets/` funcionem.
 
-- Conteúdo SQL revisado estaticamente e pacote ZIP verificado.
-- Não foi possível executar a migração em PostgreSQL 16 nesta sessão.
-- O backend existente ainda precisa implementar a validação de prazo, transações,
-  autosave e endpoints de pausa/retomada; a migração não os implementa.
-- A Definition of Done exige execução em PostgreSQL 16 com banco vazio e evidência
-  de teste antes de considerar a entrega concluída.
+## Organização do repositório
+
+```text
+ABP/
+├── assets/
+│   ├── imagens/          # Imagens usadas nas questões
+│   ├── materiais/        # PDFs dos 12 temas de estudo
+│   └── logo.jpg          # Logo do MultiCore
+├── backend/
+│   ├── database/         # schemas.sql e seed.sql (PostgreSQL 16)
+│   └── src/              # API Express: rotas, serviços, middlewares
+├── Design/               # Protótipos e arquivos de design das telas
+├── Diagrama/             # Diagrama de casos de uso
+├── docs/
+│   ├── backlog/          # Backlog do produto (RF, RNF e regras de negócio)
+│   ├── banco/            # DER, modelo lógico, dicionário e roteiro do banco
+│   ├── processo/         # Definition of Done
+│   ├── rastreabilidade.md
+│   └── sprints/
+│       └── sprint-1/     # Overview, backlog, Review e Retrospectiva
+├── FrontEnd/
+│   ├── Pages/            # Páginas HTML
+│   ├── Scripts/          # JavaScript de cada página
+│   └── Styles/           # CSS de cada página
+├── .env.example          # Modelo das variáveis de ambiente
+├── compose.yaml          # Banco PostgreSQL 16 via Docker
+└── README.md
+```
+
+## Equipe
+
+**Grupo:** MultiCore
+
+- Enzo Miguel
+- Gabriel Henrique
+- Gustavo Monteiro
+- João Vitor
+- Julio Cesar Machado
+- Maria Eduarda
+- Rafael de Paula
+- Yan Rafael
+
+---
+
+Este README será atualizado conforme o projeto avançar e novas sprints forem concluídas.
