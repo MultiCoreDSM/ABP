@@ -32,4 +32,13 @@ Conforme determinado nas especificações de escopo, a trilha de aprendizado é 
 2. O candidato seleciona um dos temas ativos clicando sobre o card do conteúdo correspondente.
 3. O sistema requisita o payload de texto e mídia do tema específico e renderiza o material de leitura na tela.
 
+## 3. Diretrizes de Navegação e Proteção do Fluxo Interativo
+
+### 3.1 Tráfego Entre Módulos e Retorno à Home
+*   O candidato possui autonomia de navegação para chavear entre qualquer um dos 12 temas utilizando o menu lateral ou os botões estruturais "Avançar Material" e "Voltar".
+*   O sistema disponibiliza de forma fixa um controle de retorno rápido ("Voltar para a Dashboard") no topo da interface.
+
+### 3.2 Proteção Anti-Acidente (Critério de Aceitação)
+*   **Regra de Segurança de Fluxo:** A ação de navegar, rolar a página ou ler qualquer material didático contido nos 12 temas **não pode disparar, sob nenhuma hipótese**, o início de um teste oficial de certificação de forma automática ou por erro de clique acidental.
+*   O gatilho de início da certificação fica totalmente isolado em uma rota exclusiva de check-in e confirmação de termos.
 
