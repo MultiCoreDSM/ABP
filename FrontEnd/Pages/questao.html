@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questão | MultiCore</title>
+    <meta name="theme-color" content="#030919">
+    <!-- Fontes Sora e Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Conexão com o CSS da página de questão -->
+    <link rel="stylesheet" href="../Styles/questao.css">
+</head>
+<body>
+
+    <!-- Decoração de fundo -->
+    <div class="fundo" aria-hidden="true">
+        <div class="arco"></div>
+    </div>
+
+    <main class="area-questao">
+        <div class="questao-conteudo">
+            <header class="topo">
+                <a class="btn-voltar" href="inicial.html" aria-label="Voltar para a página inicial">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7" /></svg>
+                </a>
+                <hgroup class="topo-titulo">
+                    <p id="tema-numero"></p>
+                    <h1 id="tema-nome">Certificação</h1>
+                </hgroup>
+                <div class="cronometro" id="cronometro" hidden>
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                        <circle cx="12" cy="14" r="7.5" />
+                        <path d="M12 10v4l2.5 1.5M9.5 3h5M12 3v3" />
+                    </svg>
+                    <span class="sr-only">Tempo restante:</span>
+                    <span id="cronometro-valor" role="timer">--:--</span>
+                </div>
+            </header>
+
+            <!-- Carregamento e erro da questão -->
+            <div class="estado" id="estado" role="status">
+                <p id="estado-mensagem">Carregando questão...</p>
+                <button type="button" class="btn-secundario" id="btn-recarregar" hidden>Tentar novamente</button>
+            </div>
+
+            <div id="questao" hidden>
+                <section class="enunciado" aria-labelledby="enunciado-texto">
+                    <p class="enunciado-rotulo" id="enunciado-rotulo"></p>
+                    <h2 id="enunciado-texto" tabindex="-1"></h2>
+                    <a class="enunciado-imagem" id="imagem-link" target="_blank" rel="noopener" aria-label="Abrir imagem da questão ampliada, em nova aba">
+                        <img id="imagem" alt="Imagem da questão" width="1448" height="1086">
+                    </a>
+                    <p class="imagem-erro" id="imagem-erro" hidden>Não foi possível carregar a imagem desta questão. Recarregue a página para tentar novamente.</p>
+                </section>
+
+                <fieldset class="alternativas" id="alternativas">
+                    <legend class="sr-only">Alternativas</legend>
+                </fieldset>
+
+                <div class="rodape">
+                    <div class="aviso-erro" id="aviso-erro" role="alert" hidden>
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M12 8v5M12 16.5v.5M10.3 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" /></svg>
+                        <p>Não foi possível confirmar o registro da sua resposta. Verifique sua conexão e tente novamente.</p>
+                    </div>
+                    <button type="button" class="btn-secundario" id="btn-pular">Pular questão</button>
+                    <p class="resultado" id="resultado" role="status"></p>
+                    <button type="button" class="btn-principal" id="btn-principal">
+                        <span id="btn-principal-texto">Enviar resposta</span>
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <aside class="painel-temas" aria-labelledby="titulo-temas">
+        <h2 id="titulo-temas">Temas</h2>
+        <p>Escolha um tema para iniciar ou continuar.</p>
+        <ol id="lista-temas" class="lista-temas"></ol>
+    </aside>
+
+    <!-- Confirmação da resposta -->
+    <dialog class="confirmacao" id="confirmacao" aria-labelledby="confirmacao-titulo" aria-describedby="confirmacao-aviso">
+        <h2 id="confirmacao-titulo">Confirmar resposta?</h2>
+        <div class="confirmacao-escolha">
+            <span class="alternativa-letra" id="confirmacao-letra"></span>
+            <p id="confirmacao-texto"></p>
+        </div>
+        <p class="confirmacao-aviso" id="confirmacao-aviso">Depois de confirmada, a resposta não poderá ser alterada.</p>
+        <div class="confirmacao-acoes">
+            <button type="button" class="btn-secundario" id="btn-cancelar">Cancelar</button>
+            <button type="button" class="btn-principal" id="btn-confirmar" autofocus>Confirmar resposta</button>
+        </div>
+    </dialog>
+
+    <!-- Modelo de cada alternativa -->
+    <template id="modelo-alternativa">
+        <label class="alternativa">
+            <input type="radio" name="alternativa" class="sr-only">
+            <span class="alternativa-letra"></span>
+            <span class="alternativa-texto"></span>
+            <span class="alternativa-marca" hidden>
+                <svg class="icone-certo" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                <svg class="icone-errado" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" /></svg>
+                <span class="alternativa-marca-texto"></span>
+            </span>
+        </label>
+    </template>
+
+    <!-- Modelo de cada tema do painel -->
+    <template id="modelo-tema">
+        <li>
+            <button type="button" class="tema-item">
+                <span class="tema-item-numero"></span>
+                <span class="tema-item-nome"></span>
+                <span class="tema-item-marca" aria-hidden="true"></span>
+                <span class="sr-only tema-item-situacao"></span>
+            </button>
+        </li>
+    </template>
+
+    <!-- Temporário: simula a API-08 e a API-09. Remover quando elas existirem. -->
+    <script src="../Scripts/questao-simulador.js"></script>
+    <script src="../Scripts/questao.js"></script>
+</body>
+</html>

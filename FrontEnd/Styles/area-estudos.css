@@ -1,0 +1,348 @@
+/* ===== Variáveis ===== */
+:root {
+    --fundo: #020817;
+    --azul-claro: #4fc3ff;
+    --azul: #1e7bff;
+    --cartao-topo: #0a4a85;
+    --cartao-base: #0670e0;
+    --tema-fechado: #0a4775;
+    --tema-fechado-hover: #0d5a94;
+    --texto: #ffffff;
+    --texto-suave: #d3dcea;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Inter", sans-serif;
+    color: var(--texto);
+    background:
+        radial-gradient(ellipse at 50% 0%, #0c2a6b 0%, transparent 60%),
+        radial-gradient(ellipse at 100% 100%, #08245e 0%, transparent 50%),
+        var(--fundo);
+    overflow-x: hidden;
+}
+
+/* Visível apenas para leitores de tela */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ===== Decorações de fundo ===== */
+.fundo {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.arco {
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid var(--azul-claro);
+    box-shadow:
+        0 0 25px var(--azul),
+        inset 0 0 25px var(--azul);
+}
+
+.arco::after {
+    content: "";
+    position: absolute;
+    inset: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(79, 195, 255, 0.35);
+}
+
+.arco-topo {
+    width: 340px;
+    height: 340px;
+    top: -230px;
+    right: -150px;
+}
+
+.arco-base {
+    width: 380px;
+    height: 380px;
+    bottom: -230px;
+    left: -230px;
+}
+
+.circuito {
+    position: absolute;
+    stroke: var(--azul-claro);
+    stroke-width: 1.5;
+    filter: drop-shadow(0 0 4px var(--azul));
+    opacity: 0.85;
+}
+
+.circuito circle {
+    fill: var(--azul-claro);
+}
+
+.circuito-esquerda {
+    width: 240px;
+    top: 0;
+    left: 0;
+}
+
+.circuito-direita {
+    width: 240px;
+    bottom: 40px;
+    right: 0;
+}
+
+/* ===== Conteúdo ===== */
+.area-estudos {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 46px 32px;
+}
+
+.cabecalho {
+    padding: 20px 16px 26px;
+    border-radius: 16px;
+    text-align: center;
+    background: linear-gradient(180deg, var(--cartao-topo) 0%, var(--cartao-base) 100%);
+}
+
+.cabecalho h1 {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--azul-claro);
+}
+
+.cabecalho p {
+    margin-top: 14px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--texto-suave);
+}
+
+/* ===== Lista de temas ===== */
+.lista-temas {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 50px;
+    list-style: none;
+}
+
+.tema {
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--tema-fechado);
+    transition: background-color 0.2s;
+}
+
+.tema h3 {
+    font: inherit;
+}
+
+.tema-botao {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 12px;
+    background: none;
+    color: var(--texto-suave);
+    font-family: inherit;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tema-botao:hover {
+    background: var(--tema-fechado-hover);
+}
+
+.tema-botao:focus-visible,
+.btn-iniciar:focus-visible,
+#btn-tentar-novamente:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: -2px;
+}
+
+.tema-nome {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.tema-selo {
+    flex-shrink: 0;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(2, 8, 23, 0.45);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.tema-seta {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    color: var(--azul-claro);
+    transition: transform 0.2s ease;
+}
+
+/* ----- Tema aberto ----- */
+.tema.aberto {
+    background: linear-gradient(180deg, var(--cartao-topo) 0%, var(--cartao-base) 100%);
+}
+
+.tema.aberto .tema-botao {
+    min-height: 54px;
+    padding: 12px 18px 8px 22px;
+    color: var(--texto);
+    background: none;
+}
+
+.tema.aberto .tema-seta {
+    transform: rotate(90deg);
+}
+
+/* O painel fica fora do foco e dos leitores de tela enquanto está fechado */
+.tema-painel {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.2s ease, visibility 0.2s;
+}
+
+.tema.aberto .tema-painel {
+    grid-template-rows: 1fr;
+    visibility: visible;
+}
+
+.tema-painel-conteudo {
+    min-height: 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+.btn-iniciar {
+    display: block;
+    width: min(254px, calc(100% - 32px));
+    margin: 10px auto 10px;
+    padding: 9px 16px;
+    border: 1px solid rgba(79, 195, 255, 0.55);
+    border-radius: 999px;
+    background: #2f6fc4;
+    color: var(--texto);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.btn-iniciar:hover {
+    background: #3f83db;
+}
+
+.tema-aviso {
+    margin: 6px 16px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--texto);
+}
+
+/* ===== Carregamento, lista vazia e erro ===== */
+.estado {
+    margin-top: 50px;
+    padding: 24px 16px;
+    border-radius: 12px;
+    text-align: center;
+    background: var(--tema-fechado);
+    color: var(--texto-suave);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#btn-tentar-novamente {
+    margin-top: 14px;
+    min-height: 40px;
+    padding: 8px 22px;
+    border: 1px solid rgba(79, 195, 255, 0.55);
+    border-radius: 999px;
+    background: #2f6fc4;
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#btn-tentar-novamente:hover {
+    background: #3f83db;
+}
+
+/* ===== Responsivo ===== */
+@media (max-width: 600px) {
+    .area-estudos {
+        padding: 24px 16px;
+    }
+
+    .cabecalho p {
+        font-size: 16px;
+    }
+
+    .lista-temas,
+    .estado {
+        margin-top: 24px;
+    }
+
+    .circuito {
+        opacity: 0.4;
+    }
+
+    .arco-topo {
+        width: 240px;
+        height: 240px;
+        top: -170px;
+        right: -120px;
+    }
+
+    .arco-base {
+        width: 260px;
+        height: 260px;
+        bottom: -180px;
+        left: -170px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tema,
+    .tema-botao,
+    .tema-seta,
+    .tema-painel,
+    .btn-iniciar {
+        transition: none;
+    }
+}
