@@ -42,3 +42,17 @@ Conforme determinado nas especificações de escopo, a trilha de aprendizado é 
 *   **Regra de Segurança de Fluxo:** A ação de navegar, rolar a página ou ler qualquer material didático contido nos 12 temas **não pode disparar, sob nenhuma hipótese**, o início de um teste oficial de certificação de forma automática ou por erro de clique acidental.
 *   O gatilho de início da certificação fica totalmente isolado em uma rota exclusiva de check-in e confirmação de termos.
 
+## 4. Tratamento de Exceções: Comportamento para Material Ausente ou Indisponível
+Caso ocorra alguma inconsistência de banco de dados ou indisponibilidade de arquivo no servidor que impeça o carregamento do conteúdo de um tema, a aplicação adota uma rotina controlada:
+
+### 4.1 Fluxo Alternativo: Material Não Encontrado
+1. O candidato tenta abrir um tema técnico cujo arquivo ou id não seja localizado no servidor.
+2. O sistema intercepta a falha e bloqueia o travamento geral da interface (Crash/Tela Branca).
+3. O sistema renderiza na área de leitura um aviso visual claro: *"Conteúdo temporariamente indisponível. Nossa equipe técnica já foi notificada para restabelecer o material."*
+4. O sistema mantém os menus laterais e o cabeçalho completamente ativos, permitindo que o candidato retorne ou mude de tema sem ficar preso na tela de erro.
+
+## 5. Critérios de Validação da Task
+*   [X] Os 12 temas fazem parte do fluxo esperado de estudos.
+*   [X] O fluxo de estudos não inicia a certificação acidentalmente.
+*   [X] Exceções de carga possuem resposta legível e visível ao candidato.
+
