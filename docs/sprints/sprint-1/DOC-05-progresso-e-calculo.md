@@ -8,4 +8,12 @@ Durante a realização da avaliação, cada um dos 12 temas do teste trafega obr
 *   `Pendente`: Tema sorteado cujas respostas ainda não foram confirmadas ou cujo temporizador individual de 150 segundos ainda está correndo.
 *   `Concluído`: Tema cuja resposta foi devidamente selada em banco (ou expirada por tempo), alterando o contador visual de progresso (ex: "Questão 4 de 12 concluídas").
 
+## 2. Fórmula Determinística de Cálculo de Acertos
+Para garantir a integridade dos dados e um resultado imutável para as 12 questões sorteadas, o motor de cálculo da plataforma computa os acertos através da seguinte equação percentual:
+
+$$\text{Percentual de Acertos} = \left( \frac{\text{Total de Respostas Corretas}}{12} \right) \times 100$$
+
+### 2.1 Regra de Escala e Arredondamento (Critério de Aceitação)
+*   A nota final obedece a uma escala absoluta que varia de 0 a 100 pontos.
+*   **Regra de Arredondamento Sem Ambiguidade:** O sistema adota arredondamento matemático padrão truncado em duas casas decimais. Valores fracionários limítrofes abaixo da meta (ex: 64,99%) **não serão arredondados para cima**, impedindo que um candidato reprovado ganhe o status de aprovação de forma indevida.
 
