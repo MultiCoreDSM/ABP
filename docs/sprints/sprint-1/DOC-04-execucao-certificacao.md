@@ -33,3 +33,15 @@ A interface de execução da prova (conforme arquivos de tela mapeados em `crono
     3. O sistema registra a resposta do tema atual como "Não Marcada".
     4. A interface limpa o timer e avança o candidato automaticamente para a próxima questão do bloco.
 
+## 4. Tratamento de Interrupções e Eventos de Conexão
+Para mitigar falhas operacionais e comportamentos inesperados, o ciclo de vida da tentativa prevê estados consistentes frente a interrupções técnicas.
+
+### 4.1 Pausa Defensiva e Fechamento do Navegador
+*   O fechamento acidental da janela, comando de atualização da página (F5) ou fechamento do navegador congela o estado da tentativa atual na base de dados, prevenindo a perda total do teste.
+*   **Efeito Contido:** Ao reautenticar-se, o sistema redireciona o candidato ao início exato da questão onde ocorreu a interrupção, mantendo o histórico das questões confirmadas anteriormente intacto.
+
+### 4.2 Falha e Perda de Conexão (Offline)
+*   Caso o sistema detecte perda de pacotes ou desconexão com a internet do candidato durante a contagem:
+    1. Uma camada interceptadora suspende visualmente a prova, exibindo uma mensagem de alerta de rede.
+    2. O cronômetro local é pausado temporariamente para não prejudicar o tempo do aluno injustamente até que a conexão seja restabelecida e validada pelo servidor.
+
