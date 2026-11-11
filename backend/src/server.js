@@ -4,10 +4,13 @@ import questoes from './routes/questoes.js';
 import imagens from './routes/imagens.js';
 import candidatos from './routes/candidatos.js';
 import login from './routes/login.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Configuração do express e criação do servidor
 const app = express();
 const porta = process.env.APP_PORT || 3001;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Habilita recebimento de JSON no corpo das requisições
 app.use(express.json());
@@ -18,6 +21,9 @@ app.use("/api/v1/questoes", questoes);
 app.use("/api/v1/imagens", imagens);
 app.use("/api/v1/candidatos", candidatos);
 app.use("/api/v1/login", login);
+
+//servindo os arquivos do FrontEnd
+app.use(express.static(path.join(__dirname, '../../FrontEnd')));
 
 // Identificação de qualquer outra rota que esteja fora das configuradas
 app.use((req, res) => {
