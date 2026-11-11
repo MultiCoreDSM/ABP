@@ -13,11 +13,11 @@ const porta = process.env.APP_PORT || 3001;
 app.use(express.json());
 
 // Rotas da API
-app.use("/api/temas", temas);
-app.use("/api/questoes", questoes);
-app.use("/api/imagens", imagens);
-app.use("/api/candidatos", candidatos);
-app.use("/api/login", login);
+app.use("/api/v1/temas", temas);
+app.use("/api/v1/questoes", questoes);
+app.use("/api/v1/imagens", imagens);
+app.use("/api/v1/candidatos", candidatos);
+app.use("/api/v1/login", login);
 
 // Identificação de qualquer outra rota que esteja fora das configuradas
 app.use((req, res) => {
