@@ -308,7 +308,7 @@ body {
 
 .tema-botao:focus-visible,
 .btn-material:focus-visible,
-.btn-responder:focus-visible,
+.btn-ver-material:focus-visible,
 .btn-voltar:focus-visible,
 .marca:focus-visible {
     outline: 2px solid var(--azul-claro);
@@ -392,7 +392,7 @@ body {
 }
 
 .btn-material,
-.btn-responder {
+.btn-ver-material {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -409,7 +409,7 @@ body {
 }
 
 .btn-material svg,
-.btn-responder svg {
+.btn-ver-material svg {
     width: 18px;
     height: 18px;
 }
@@ -425,19 +425,19 @@ body {
     background: rgba(3, 9, 25, 0.7);
 }
 
-.btn-responder {
+.btn-ver-material {
     border: 1px solid rgba(147, 197, 253, 0.35);
     background: linear-gradient(180deg, var(--azul-botao) 0%, var(--azul) 100%);
     color: #fff;
     box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
 }
 
-.btn-responder:hover {
+.btn-ver-material:hover {
     filter: brightness(1.1);
 }
 
 .btn-material:active,
-.btn-responder:active {
+.btn-ver-material:active {
     transform: scale(0.98);
 }
 
@@ -541,7 +541,7 @@ body {
     .tema-seta,
     .tema-painel,
     .btn-material,
-    .btn-responder {
+    .btn-ver-material {
         transition: none;
     }
 }

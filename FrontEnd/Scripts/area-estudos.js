@@ -104,7 +104,7 @@ function criarTema(tema, indice) {
 
     item.querySelector(".tema-numero").textContent = numero;
     item.querySelector(".tema-nome").textContent = tema.nome;
-    item.querySelector(".tema-descricao").textContent = `Material didático e questões do tema ${tema.nome}.`;
+    item.querySelector(".tema-descricao").textContent = `Material didático do tema ${tema.nome}, em PDF.`;
 
     botao.id = `tema-${tema.id}`;
     botao.setAttribute("aria-controls", `painel-tema-${tema.id}`);
@@ -112,7 +112,7 @@ function criarTema(tema, indice) {
     painel.setAttribute("aria-labelledby", botao.id);
     botao.addEventListener("click", () => alternarTema(item));
 
-    const linkMaterial = item.querySelector(".btn-material");
+    const linkMaterial = item.querySelector(".btn-ver-material");
     if (material) {
         linkMaterial.href = CAMINHO_MATERIAIS + material;
         linkMaterial.setAttribute("aria-label", `Ver material do tema ${tema.nome} (abre em nova aba)`);
@@ -120,11 +120,6 @@ function criarTema(tema, indice) {
         linkMaterial.hidden = true;
         item.querySelector(".tema-aviso").hidden = false;
     }
-
-    // A prova exige login; sem sessão, "Responder" leva ao login primeiro
-    const linkResponder = item.querySelector(".btn-responder");
-    linkResponder.href = logado ? `questao.html?tema=${tema.id}` : "login.html";
-    linkResponder.setAttribute("aria-label", `Responder a questão do tema ${tema.nome}`);
 
     return item;
 }

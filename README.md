@@ -114,7 +114,7 @@ O front-end é servido pela própria aplicação, na mesma origem da API. Por is
 | `login.html` | Acesso com CPF e senha. Leva ao menu. | Não |
 | `esqueci-senha.html` | Formulário de recuperação. Por enquanto, avisa que a recuperação por e-mail ainda não está disponível. | Não |
 | `menu.html` | Saudação, Exames (começar, continuar ou ver resultado), Área de Estudos, Histórico e Certificados. | Sim |
-| `area-estudos.html` | Temas com o material em PDF e o botão "Responder", que abre a prova no tema. | Não (o "Responder" pede login) |
+| `area-estudos.html` | Só estudo: os 12 temas, cada um com o material em PDF. O exame fica separado, em Exames, no menu. | Não |
 | `questao.html` | Prova com cronômetro, confirmação da resposta, correção, pausa e retomada. | Sim |
 | `resultado.html` | Nota, aprovação, situação do certificado e o resultado de cada tema. | Sim |
 | `respostas.html` | Resposta dada e alternativa correta de cada tema, com filtro por corretas e incorretas. | Sim |
