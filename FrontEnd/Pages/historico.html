@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu histórico | MultiCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../Styles/base.css">
+    <link rel="stylesheet" href="../Styles/historico.css">
+</head>
+<body class="sem-circuitos">
+    <div class="pagina">
+        <header class="topo">
+            <a class="marca" href="menu.html"><img src="../../assets/logo-icone.svg" alt=""><span class="marca-texto">Multi<span>Core</span></span></a>
+            <a class="btn btn-secundario btn-pequeno" href="menu.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+                Voltar ao menu
+            </a>
+        </header>
+
+        <main>
+            <h1 class="titulo-pagina titulo">Meu <span class="destaque">histórico</span></h1>
+
+            <div class="estatisticas">
+                <section class="card estatistica">
+                    <span class="icone-caixa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="m9 13.5-1.5 7.5 4.5-2.5 4.5 2.5-1.5-7.5"/></svg></span>
+                    <div><strong id="est-certificacoes">0</strong><span id="est-certificacoes-rotulo">Certificações concluídas</span></div>
+                </section>
+                <section class="card estatistica">
+                    <span class="icone-caixa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17M10 6h11M10 12h11M10 18h11"/></svg></span>
+                    <div><strong id="est-temas">0</strong><span>Temas respondidos</span></div>
+                </section>
+                <section class="card estatistica">
+                    <span class="icone-caixa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 17 6-6 4 4 8-8M15 7h6v6"/></svg></span>
+                    <div><strong class="destaque" id="est-aproveitamento">—</strong><span>Aproveitamento</span></div>
+                </section>
+            </div>
+
+            <section class="card atividades" aria-labelledby="titulo-atividades">
+                <div class="atividades-topo">
+                    <h2 id="titulo-atividades">Atividades</h2>
+                    <div class="abas" role="group" aria-label="Filtrar atividades">
+                        <button type="button" class="aba" data-filtro="todos" aria-pressed="true">Todos</button>
+                        <button type="button" class="aba" data-filtro="exames" aria-pressed="false">Exames</button>
+                    </div>
+                </div>
+                <p class="estado" id="estado">Carregando atividades...</p>
+                <ol class="linha-tempo" id="linha-tempo"></ol>
+            </section>
+        </main>
+    </div>
+
+    <script src="../Scripts/comum.js"></script>
+    <script src="../Scripts/historico.js"></script>
+</body>
+</html>

@@ -4,54 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Área de estudos | MultiCore</title>
-    <!-- Fonte Inter -->
+    <!-- Fontes Inter e JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Conexão com o CSS da área de estudos -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../Styles/area-estudos.css">
 </head>
 <body>
 
-    <!-- Decorações de fundo (circuitos e arcos luminosos) -->
+    <!-- Decorações de fundo: grade, arcos luminosos e circuito -->
     <div class="fundo" aria-hidden="true">
+        <div class="grade"></div>
         <div class="arco arco-topo"></div>
         <div class="arco arco-base"></div>
-
-        <svg class="circuito circuito-esquerda" viewBox="0 0 220 140" fill="none" focusable="false">
-            <path d="M0 40 H70 L100 80 H170" />
-            <path d="M0 70 H50 L75 100 H150" />
-            <path d="M0 100 H40 L60 115 H110" />
-            <circle cx="170" cy="80" r="3.5" />
-            <circle cx="113" cy="113" r="3.5" />
-        </svg>
-
-        <svg class="circuito circuito-direita" viewBox="0 0 220 160" fill="none" focusable="false">
-            <path d="M220 10 H130" />
-            <circle cx="130" cy="10" r="3.5" />
-            <path d="M220 40 H175 L145 75 H85 L60 50" />
-            <circle cx="60" cy="50" r="3.5" />
-            <path d="M220 95 H160" />
-            <circle cx="160" cy="95" r="3.5" />
-            <path d="M0 85 H105 L135 120 H220" />
-            <circle cx="0" cy="85" r="3.5" />
-            <path d="M100 110 L135 150 H200" />
+        <svg class="circuito" viewBox="0 0 160 110" fill="none" focusable="false">
+            <path d="M0 30 H110 L130 10 H160" />
+            <path d="M40 70 H120 L140 90 H160" />
+            <circle cx="40" cy="70" r="3.5" />
         </svg>
     </div>
 
-    <main class="area-estudos">
-        <header class="cabecalho">
-            <h1>Área de estudos</h1>
-            <p>Escolha um tema para iniciar ou continuar</p>
-        </header>
+    <header class="topo">
+        <a class="marca" href="inicial.html" aria-label="MultiCore, ir para a página inicial">
+            <img src="../../assets/logo-icone.svg" alt="" class="marca-logo">
+            <span class="marca-nome">Multi<span>Core</span></span>
+        </a>
+        <a class="btn-voltar" id="btn-voltar" href="inicial.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M19 12H5M11 6l-6 6 6 6" />
+            </svg>
+            Voltar ao menu
+        </a>
+    </header>
 
-        <section aria-labelledby="titulo-temas">
+    <main class="area-estudos">
+        <section class="apresentacao" aria-labelledby="titulo">
+            <p class="sobretitulo" id="contagem-temas">Temas disponíveis</p>
+            <h1 id="titulo">Área de <span>estudos</span></h1>
+            <p class="subtitulo">Escolha um tema para iniciar ou continuar.</p>
+
+            <aside class="dica">
+                <span class="dica-icone" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z" />
+                    </svg>
+                </span>
+                <p>Cada tema reúne material didático e questões. Estude antes de responder para chegar aos 65% de aprovação.</p>
+            </aside>
+        </section>
+
+        <section class="painel" aria-labelledby="titulo-temas">
             <h2 id="titulo-temas" class="sr-only">Temas de estudo</h2>
 
             <!-- Carregamento, lista vazia e erro -->
             <div id="estado" class="estado" role="status">
                 <p id="estado-mensagem">Carregando temas...</p>
-                <button type="button" id="btn-tentar-novamente" hidden>Tentar novamente</button>
+                <button type="button" id="btn-tentar-novamente" class="btn-material" hidden>Tentar novamente</button>
             </div>
 
             <ul id="lista-temas" class="lista-temas" hidden></ul>
@@ -63,16 +71,30 @@
         <li class="tema">
             <h3>
                 <button type="button" class="tema-botao" aria-expanded="false">
+                    <span class="tema-numero"></span>
                     <span class="tema-nome"></span>
-                    <span class="tema-selo" hidden>Indisponível</span>
                     <svg class="tema-seta" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
-                        <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </button>
             </h3>
             <div class="tema-painel" role="region">
                 <div class="tema-painel-conteudo">
-                    <a class="btn-iniciar" hidden>Iniciar</a>
+                    <p class="tema-descricao"></p>
+                    <div class="tema-acoes">
+                        <a class="btn-material" target="_blank" rel="noopener">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                <path d="M12 6.5C10.5 5.3 8.3 4.5 5.5 4.5H3v13h2.5c2.8 0 5 .8 6.5 2 1.5-1.2 3.7-2 6.5-2H21v-13h-2.5c-2.8 0-5 .8-6.5 2ZM12 6.5v13" />
+                            </svg>
+                            Ver material
+                        </a>
+                        <a class="btn-responder">
+                            Responder
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                <path d="M5 12h14M13 6l6 6-6 6" />
+                            </svg>
+                        </a>
+                    </div>
                     <p class="tema-aviso" hidden>Material temporariamente indisponível.</p>
                 </div>
             </div>

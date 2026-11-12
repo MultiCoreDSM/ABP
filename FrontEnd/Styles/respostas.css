@@ -1,0 +1,167 @@
+/* Respostas e explicações. Base visual em base.css */
+
+.cabecalho {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 36px;
+}
+
+.cabecalho .titulo-pagina {
+    margin-top: 8px;
+    font-size: clamp(32px, 4vw, 44px);
+}
+
+.grade {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.estado {
+    margin-top: 24px;
+}
+
+.resposta {
+    padding: 22px 24px 24px;
+}
+
+.resposta header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tema-numero {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 30px;
+    border-radius: 8px;
+    background: rgba(56, 132, 255, 0.14);
+    color: var(--azul-claro);
+    font-family: var(--fonte-mono);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.tema-nome {
+    flex: 1;
+    min-width: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.enunciado {
+    margin-top: 16px;
+    font-family: var(--fonte-titulo);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.alternativas {
+    display: grid;
+    gap: 12px;
+    margin-top: 16px;
+    list-style: none;
+}
+
+.alternativa {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 14px 10px 10px;
+    border: 1px solid;
+    border-radius: 12px;
+}
+
+.alternativa-letra {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    font-family: var(--fonte-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: #052e16;
+}
+
+.alternativa-texto {
+    flex: 1;
+    min-width: 0;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.alternativa-rotulo {
+    font-size: 13px;
+    color: var(--texto-suave);
+    white-space: nowrap;
+}
+
+.alternativa.correta {
+    border-color: rgba(74, 222, 128, 0.4);
+    background: rgba(20, 83, 45, 0.3);
+}
+
+.alternativa.correta .alternativa-letra {
+    background: var(--verde);
+}
+
+.alternativa.errada {
+    border-color: rgba(251, 113, 133, 0.45);
+    background: rgba(136, 19, 55, 0.25);
+}
+
+.alternativa.errada .alternativa-letra {
+    background: var(--vermelho);
+    color: #4c0519;
+}
+
+.sem-resposta {
+    padding: 12px 14px;
+    border: 1px dashed var(--card-borda);
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--texto-suave);
+}
+
+@media (max-width: 860px) {
+    .grade {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .cabecalho {
+        margin-top: 24px;
+    }
+
+    .abas {
+        width: 100%;
+    }
+
+    .aba {
+        flex: 1;
+        padding: 0 8px;
+    }
+
+    .resposta {
+        padding: 18px;
+    }
+
+    .alternativa {
+        flex-wrap: wrap;
+    }
+
+    .alternativa-rotulo {
+        width: 100%;
+        padding-left: 46px;
+    }
+}

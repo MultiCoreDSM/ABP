@@ -1,23 +1,12 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const botaoTeste = document.getElementById('botao-teste');
-  const botaoCadastro = document.getElementById('botao-cadastro');
-  const feedback = document.getElementById('feedback');
+// Com sessão, a tela troca "Entrar" por "Meu menu" e "Sair", e o botão principal leva ao menu
+const logado = MultiCore.logado();
 
-  if (botaoTeste) {
-    botaoTeste.addEventListener('click', () => {
-      if (feedback) {
-        feedback.textContent = '';
-      }
-      window.location.href = 'login.html';
-    });
-  }
+document.querySelectorAll("[data-logado]").forEach((el) => { el.hidden = !logado; });
+document.querySelectorAll("[data-visitante]").forEach((el) => { el.hidden = logado; });
 
-  if (botaoCadastro) {
-    botaoCadastro.addEventListener('click', () => {
-      if (feedback) {
-        feedback.textContent = '';
-      }
-      window.location.href = 'cadastro.html';
-    });
-  }
-});
+if (logado) {
+    document.getElementById("btn-comecar").href = "menu.html";
+    document.getElementById("btn-comecar-texto").textContent = "Ir para o menu";
+}
+
+document.getElementById("btn-sair").addEventListener("click", () => MultiCore.sair());

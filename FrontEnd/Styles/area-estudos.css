@@ -1,14 +1,21 @@
 /* ===== Variáveis ===== */
 :root {
-    --fundo: #020817;
+    --fundo: #030919;
+    --painel: rgba(8, 18, 42, 0.78);
+    --painel-borda: rgba(79, 140, 255, 0.28);
+    --item: rgba(12, 24, 54, 0.85);
+    --item-hover: rgba(18, 36, 76, 0.95);
+    --item-borda: rgba(79, 140, 255, 0.16);
+    --aberto-topo: #13306e;
+    --aberto-base: #0c1d48;
+    --aberto-borda: rgba(79, 170, 255, 0.55);
     --azul-claro: #4fc3ff;
-    --azul: #1e7bff;
-    --cartao-topo: #0a4a85;
-    --cartao-base: #0670e0;
-    --tema-fechado: #0a4775;
-    --tema-fechado-hover: #0d5a94;
-    --texto: #ffffff;
-    --texto-suave: #d3dcea;
+    --ciano: #38bdf8;
+    --azul: #2563eb;
+    --azul-botao: #3b82f6;
+    --texto: #f1f5ff;
+    --texto-suave: #a9b6d3;
+    --texto-apagado: #7c8bab;
 }
 
 * {
@@ -23,11 +30,11 @@
 
 body {
     min-height: 100vh;
-    font-family: "Inter", sans-serif;
+    font-family: "Inter", system-ui, sans-serif;
     color: var(--texto);
     background:
-        radial-gradient(ellipse at 50% 0%, #0c2a6b 0%, transparent 60%),
-        radial-gradient(ellipse at 100% 100%, #08245e 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 0%, #0d2a66 0%, transparent 50%),
+        radial-gradient(ellipse at 0% 100%, #0a2257 0%, transparent 45%),
         var(--fundo);
     overflow-x: hidden;
 }
@@ -53,107 +60,225 @@ body {
     overflow: hidden;
 }
 
+.grade {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(79, 140, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79, 140, 255, 0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at 30% 40%, #000 0%, transparent 75%);
+}
+
 .arco {
     position: absolute;
     border-radius: 50%;
-    border: 3px solid var(--azul-claro);
-    box-shadow:
-        0 0 25px var(--azul),
-        inset 0 0 25px var(--azul);
+    border: 2px solid var(--azul-claro);
+    box-shadow: 0 0 22px rgba(56, 189, 248, 0.7), inset 0 0 22px rgba(56, 189, 248, 0.4);
 }
 
 .arco::after {
     content: "";
     position: absolute;
-    inset: 40px;
+    inset: 36px;
     border-radius: 50%;
-    border: 1px solid rgba(79, 195, 255, 0.35);
+    border: 1px solid rgba(79, 195, 255, 0.3);
 }
 
 .arco-topo {
-    width: 340px;
-    height: 340px;
-    top: -230px;
-    right: -150px;
+    width: 360px;
+    height: 360px;
+    top: -210px;
+    right: -100px;
 }
 
 .arco-base {
-    width: 380px;
-    height: 380px;
-    bottom: -230px;
-    left: -230px;
+    width: 340px;
+    height: 340px;
+    bottom: -200px;
+    left: -170px;
 }
 
 .circuito {
     position: absolute;
+    right: 0;
+    bottom: 60px;
+    width: 160px;
     stroke: var(--azul-claro);
     stroke-width: 1.5;
-    filter: drop-shadow(0 0 4px var(--azul));
-    opacity: 0.85;
+    filter: drop-shadow(0 0 4px var(--azul-botao));
+    opacity: 0.7;
 }
 
 .circuito circle {
-    fill: var(--azul-claro);
+    fill: var(--fundo);
 }
 
-.circuito-esquerda {
-    width: 240px;
-    top: 0;
-    left: 0;
+/* ===== Barra superior ===== */
+.topo {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 64px 0;
 }
 
-.circuito-direita {
-    width: 240px;
-    bottom: 40px;
-    right: 0;
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--texto);
+    text-decoration: none;
 }
 
-/* ===== Conteúdo ===== */
+.marca-logo {
+    width: 40px;
+    height: 40px;
+}
+
+.marca-nome {
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.marca-nome span {
+    color: var(--ciano);
+}
+
+.btn-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 18px;
+    border: 1px solid var(--painel-borda);
+    border-radius: 10px;
+    background: rgba(8, 18, 42, 0.7);
+    color: var(--texto);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.btn-voltar svg {
+    width: 18px;
+    height: 18px;
+}
+
+.btn-voltar:hover {
+    border-color: var(--aberto-borda);
+    background: var(--item-hover);
+}
+
+/* ===== Layout em duas colunas ===== */
 .area-estudos {
     position: relative;
     z-index: 1;
-    width: 100%;
-    max-width: 780px;
+    display: grid;
+    grid-template-columns: 360px minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 46px 32px;
+    padding: 36px 64px 40px;
 }
 
-.cabecalho {
-    padding: 20px 16px 26px;
-    border-radius: 16px;
-    text-align: center;
-    background: linear-gradient(180deg, var(--cartao-topo) 0%, var(--cartao-base) 100%);
+/* ===== Apresentação (coluna da esquerda) ===== */
+.sobretitulo {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ciano);
 }
 
-.cabecalho h1 {
-    font-size: 20px;
-    font-weight: 600;
+.apresentacao h1 {
+    margin-top: 10px;
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    font-size: clamp(40px, 4.4vw, 52px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+}
+
+.apresentacao h1 span {
+    display: block;
+    color: var(--ciano);
+}
+
+.subtitulo {
+    margin-top: 20px;
+    font-size: 17px;
     line-height: 1.5;
-    color: var(--azul-claro);
-}
-
-.cabecalho p {
-    margin-top: 14px;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.35;
     color: var(--texto-suave);
 }
 
-/* ===== Lista de temas ===== */
+.dica {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 32px;
+    padding: 18px;
+    border: 1px solid var(--painel-borda);
+    border-radius: 14px;
+    background: var(--painel);
+}
+
+.dica-icone {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--painel-borda);
+    border-radius: 10px;
+    background: rgba(37, 99, 235, 0.12);
+    color: var(--azul-claro);
+}
+
+.dica-icone svg {
+    width: 20px;
+    height: 20px;
+}
+
+.dica p {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--texto-suave);
+}
+
+/* ===== Painel de temas (coluna da direita) ===== */
+.painel {
+    max-height: calc(100vh - 140px);
+    padding: 12px;
+    overflow-y: auto;
+    border: 1px solid var(--painel-borda);
+    border-radius: 18px;
+    background: var(--painel);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    scrollbar-width: thin;
+    scrollbar-color: #2b4a8f transparent;
+}
+
 .lista-temas {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    margin-top: 50px;
+    gap: 10px;
     list-style: none;
 }
 
 .tema {
+    border: 1px solid var(--item-borda);
     border-radius: 12px;
+    background: var(--item);
     overflow: hidden;
-    background: var(--tema-fechado);
-    transition: background-color 0.2s;
+    transition: border-color 0.25s, background-color 0.25s;
 }
 
 .tema h3 {
@@ -163,186 +288,260 @@ body {
 .tema-botao {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     width: 100%;
-    min-height: 44px;
-    padding: 8px 14px;
+    min-height: 56px;
+    padding: 12px 18px;
     border: none;
-    border-radius: 12px;
     background: none;
-    color: var(--texto-suave);
+    color: var(--texto);
     font-family: inherit;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 600;
     text-align: left;
     cursor: pointer;
-    transition: background-color 0.2s;
 }
 
-.tema-botao:hover {
-    background: var(--tema-fechado-hover);
+.tema:not(.aberto):hover {
+    background: var(--item-hover);
 }
 
 .tema-botao:focus-visible,
-.btn-iniciar:focus-visible,
-#btn-tentar-novamente:focus-visible {
-    outline: 2px solid #ffffff;
-    outline-offset: -2px;
+.btn-material:focus-visible,
+.btn-responder:focus-visible,
+.btn-voltar:focus-visible,
+.marca:focus-visible {
+    outline: 2px solid var(--azul-claro);
+    outline-offset: 2px;
+}
+
+.tema-numero {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 28px;
+    border-radius: 7px;
+    background: rgba(56, 132, 255, 0.14);
+    color: var(--azul-claro);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 600;
 }
 
 .tema-nome {
     flex: 1;
     min-width: 0;
-    overflow-wrap: anywhere;
-}
-
-.tema-selo {
-    flex-shrink: 0;
-    padding: 2px 8px;
-    border-radius: 999px;
-    background: rgba(2, 8, 23, 0.45);
-    font-size: 12px;
-    font-weight: 600;
 }
 
 .tema-seta {
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     color: var(--azul-claro);
-    transition: transform 0.2s ease;
+    transition: transform 0.25s ease;
 }
 
-/* ----- Tema aberto ----- */
+/* Tema aberto */
 .tema.aberto {
-    background: linear-gradient(180deg, var(--cartao-topo) 0%, var(--cartao-base) 100%);
+    border-color: var(--aberto-borda);
+    background: linear-gradient(160deg, var(--aberto-topo) 0%, var(--aberto-base) 100%);
+    box-shadow: 0 0 24px rgba(37, 99, 235, 0.18);
 }
 
-.tema.aberto .tema-botao {
-    min-height: 54px;
-    padding: 12px 18px 8px 22px;
-    color: var(--texto);
-    background: none;
+.tema.aberto .tema-numero {
+    background: var(--azul);
+    color: #fff;
 }
 
 .tema.aberto .tema-seta {
     transform: rotate(90deg);
 }
 
-/* O painel fica fora do foco e dos leitores de tela enquanto está fechado */
 .tema-painel {
     display: grid;
     grid-template-rows: 0fr;
-    visibility: hidden;
-    transition: grid-template-rows 0.2s ease, visibility 0.2s;
+    transition: grid-template-rows 0.25s ease;
 }
 
 .tema.aberto .tema-painel {
     grid-template-rows: 1fr;
-    visibility: visible;
 }
 
 .tema-painel-conteudo {
     min-height: 0;
     overflow: hidden;
-    text-align: center;
+    padding: 0 18px 0 68px;
 }
 
-.btn-iniciar {
-    display: block;
-    width: min(254px, calc(100% - 32px));
-    margin: 10px auto 10px;
-    padding: 9px 16px;
-    border: 1px solid rgba(79, 195, 255, 0.55);
-    border-radius: 999px;
-    background: #2f6fc4;
-    color: var(--texto);
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background-color 0.2s;
+.tema.aberto .tema-painel-conteudo {
+    padding-bottom: 18px;
 }
 
-.btn-iniciar:hover {
-    background: #3f83db;
-}
-
-.tema-aviso {
-    margin: 6px 16px 18px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--texto);
-}
-
-/* ===== Carregamento, lista vazia e erro ===== */
-.estado {
-    margin-top: 50px;
-    padding: 24px 16px;
-    border-radius: 12px;
-    text-align: center;
-    background: var(--tema-fechado);
-    color: var(--texto-suave);
+.tema-descricao {
     font-size: 14px;
     line-height: 1.5;
+    color: var(--texto-suave);
 }
 
-#btn-tentar-novamente {
+.tema-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-top: 14px;
-    min-height: 40px;
-    padding: 8px 22px;
-    border: 1px solid rgba(79, 195, 255, 0.55);
-    border-radius: 999px;
-    background: #2f6fc4;
-    color: var(--texto);
+}
+
+.btn-material,
+.btn-responder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 10px;
     font-family: inherit;
     font-size: 14px;
     font-weight: 600;
+    text-decoration: none;
     cursor: pointer;
+    transition: filter 0.2s, border-color 0.2s, background-color 0.2s, transform 0.1s;
 }
 
-#btn-tentar-novamente:hover {
-    background: #3f83db;
+.btn-material svg,
+.btn-responder svg {
+    width: 18px;
+    height: 18px;
+}
+
+.btn-material {
+    border: 1px solid rgba(148, 178, 230, 0.35);
+    background: rgba(3, 9, 25, 0.45);
+    color: var(--texto);
+}
+
+.btn-material:hover {
+    border-color: var(--azul-claro);
+    background: rgba(3, 9, 25, 0.7);
+}
+
+.btn-responder {
+    border: 1px solid rgba(147, 197, 253, 0.35);
+    background: linear-gradient(180deg, var(--azul-botao) 0%, var(--azul) 100%);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+}
+
+.btn-responder:hover {
+    filter: brightness(1.1);
+}
+
+.btn-material:active,
+.btn-responder:active {
+    transform: scale(0.98);
+}
+
+.tema-aviso {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--texto-apagado);
+}
+
+/* ===== Carregamento e erro ===== */
+.estado {
+    padding: 48px 24px;
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--texto-suave);
+}
+
+.estado .btn-material {
+    margin-top: 16px;
 }
 
 /* ===== Responsivo ===== */
-@media (max-width: 600px) {
-    .area-estudos {
-        padding: 24px 16px;
+@media (max-width: 960px) {
+    .topo {
+        padding: 20px 24px 0;
     }
 
-    .cabecalho p {
+    .area-estudos {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+        padding: 28px 24px 40px;
+    }
+
+    /* Em uma coluna, a lista rola com a página */
+    .painel {
+        max-height: none;
+        overflow: visible;
+    }
+}
+
+@media (max-width: 600px) {
+    .topo {
+        padding: 16px 16px 0;
+    }
+
+    .marca-nome {
+        display: none;
+    }
+
+    .btn-voltar {
+        padding: 9px 14px;
+    }
+
+    .area-estudos {
+        padding: 24px 16px 32px;
+    }
+
+    .apresentacao h1 {
+        font-size: 38px;
+    }
+
+    .subtitulo {
         font-size: 16px;
     }
 
-    .lista-temas,
-    .estado {
-        margin-top: 24px;
+    .painel {
+        padding: 8px;
     }
 
-    .circuito {
-        opacity: 0.4;
+    .tema-botao {
+        gap: 12px;
+        padding: 12px 14px;
+        font-size: 15px;
+    }
+
+    .tema-painel-conteudo {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .tema-acoes > * {
+        flex: 1 1 140px;
     }
 
     .arco-topo {
         width: 240px;
         height: 240px;
-        top: -170px;
-        right: -120px;
+        top: -150px;
+        right: -110px;
     }
 
-    .arco-base {
-        width: 260px;
-        height: 260px;
-        bottom: -180px;
-        left: -170px;
+    .arco-base,
+    .circuito {
+        display: none;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .tema,
-    .tema-botao,
     .tema-seta,
     .tema-painel,
-    .btn-iniciar {
+    .btn-material,
+    .btn-responder {
         transition: none;
     }
 }

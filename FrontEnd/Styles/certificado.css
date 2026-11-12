@@ -1,0 +1,303 @@
+/* Certificado. Base visual em base.css */
+
+.estado {
+    margin-top: 32px;
+}
+
+.certificado-area {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    align-items: center;
+    gap: 28px;
+    margin-top: 40px;
+}
+
+/* ===== Folha do certificado ===== */
+.folha {
+    padding: 22px;
+    border-radius: 12px;
+    background: linear-gradient(160deg, #ffffff 0%, #eef3ff 100%);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+    color: #0f172a;
+}
+
+.folha-moldura {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    padding: 28px 40px 22px;
+    border: 2px solid #3b5bdb;
+    border-radius: 6px;
+    outline: 1px solid #c7d2fe;
+    outline-offset: -8px;
+    text-align: center;
+}
+
+.folha-circuito {
+    position: absolute;
+    width: 150px;
+    stroke: #7dd3fc;
+    stroke-width: 1.5;
+}
+
+.folha-circuito circle {
+    fill: #7dd3fc;
+}
+
+.folha-circuito-1 {
+    top: 10px;
+    left: 4px;
+}
+
+.folha-circuito-2 {
+    top: 10px;
+    right: 4px;
+}
+
+.folha-marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--fonte-titulo);
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.folha-marca img {
+    width: 32px;
+    height: 32px;
+}
+
+.folha-marca .marca-texto span {
+    color: #2563eb;
+}
+
+.folha-sobretitulo {
+    margin-top: 22px;
+    font-family: var(--fonte-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: #2563eb;
+}
+
+.folha-titulo {
+    margin-top: 4px;
+    font-family: var(--fonte-titulo);
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.folha-certificamos {
+    font-size: 15px;
+    color: #475569;
+}
+
+.folha-nome {
+    width: 100%;
+    max-width: 480px;
+    margin-top: 4px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #cbd5e1;
+    font-family: var(--fonte-titulo);
+    font-size: clamp(26px, 3.4vw, 38px);
+    font-weight: 700;
+    color: #1d4ed8;
+    overflow-wrap: anywhere;
+}
+
+.folha-identificacao {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #475569;
+    overflow-wrap: anywhere;
+}
+
+.folha-identificacao strong {
+    font-family: var(--fonte-mono);
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.folha-texto {
+    max-width: 460px;
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #334155;
+}
+
+.folha-texto strong {
+    color: #0f172a;
+}
+
+.folha-rodape {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: end;
+    gap: 20px;
+    width: 100%;
+    margin-top: 48px;
+}
+
+.folha-campo strong {
+    display: block;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #94a3b8;
+    font-family: var(--fonte-mono);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.folha-campo span {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.folha-codigo {
+    font-size: 10px !important;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.folha-selo {
+    display: grid;
+    place-items: center;
+    width: 92px;
+    height: 92px;
+    border: 7px solid #c7d7fe;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #3b82f6, #1e3a8a);
+    color: #fff;
+    box-shadow: 0 0 0 6px #e0e7ff;
+}
+
+.folha-selo svg {
+    width: 38px;
+    height: 38px;
+}
+
+/* ===== Painel lateral ===== */
+.painel {
+    padding: 26px 24px;
+}
+
+.painel h2 {
+    font-family: var(--fonte-titulo);
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.painel dl {
+    margin-top: 16px;
+}
+
+.painel dl div {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(86, 132, 230, 0.16);
+}
+
+.painel dt {
+    font-size: 13px;
+    color: var(--texto-suave);
+}
+
+.painel dd {
+    margin-top: 2px;
+    font-weight: 700;
+}
+
+.painel-codigo {
+    font-family: var(--fonte-mono);
+    font-size: 14px;
+}
+
+.painel-email {
+    overflow-wrap: anywhere;
+}
+
+.painel-acoes {
+    display: grid;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+@media (max-width: 960px) {
+    .certificado-area {
+        grid-template-columns: minmax(0, 1fr);
+        margin-top: 24px;
+    }
+}
+
+@media (max-width: 600px) {
+    .folha {
+        padding: 10px;
+    }
+
+    .folha-moldura {
+        padding: 22px 16px 18px;
+    }
+
+    .folha-circuito {
+        display: none;
+    }
+
+    .folha-sobretitulo {
+        letter-spacing: 0.3em;
+    }
+
+    .folha-rodape {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+        margin-top: 28px;
+    }
+
+    .folha-selo {
+        order: -1;
+        justify-self: center;
+        width: 72px;
+        height: 72px;
+    }
+}
+
+/* ===== Impressão / PDF: só a folha, em uma página A4 deitada ===== */
+@page {
+    size: A4 landscape;
+    margin: 12mm;
+}
+
+@media print {
+    body {
+        background: #fff;
+    }
+
+    .fundo,
+    .topo,
+    .painel,
+    .estado {
+        display: none !important;
+    }
+
+    .pagina {
+        max-width: none;
+        padding: 0;
+    }
+
+    .certificado-area {
+        display: block;
+        margin: 0;
+    }
+
+    .folha {
+        box-shadow: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}

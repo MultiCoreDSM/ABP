@@ -1,0 +1,43 @@
+/* Validação pública do certificado. Usa base.css e acesso.css */
+
+.resultado-validacao {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(86, 132, 230, 0.2);
+}
+
+.resultado-validacao .etiqueta {
+    font-size: 14px;
+}
+
+.resultado-validacao dl {
+    margin-top: 14px;
+}
+
+.resultado-validacao dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(86, 132, 230, 0.14);
+}
+
+.resultado-validacao dt {
+    color: var(--texto-suave);
+    font-size: 14px;
+}
+
+.resultado-validacao dd {
+    font-weight: 600;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+#nao-encontrado {
+    margin-top: 20px;
+}
+
+#codigo {
+    font-family: var(--fonte-mono);
+    font-size: 13px;
+}

@@ -24,7 +24,7 @@ Critérios de aceitação são diferentes: são específicos de cada item e fica
 ## Código (front-end e back-end)
 
 - [ ] Roda a partir de um clone limpo seguindo apenas o README (`npm install` + `npm start`, sem passos ocultos)
-- [ ] Nenhum segredo versionado (`.env` fica fora do Git; variáveis novas entram no `.env.example`)
+- [ ] Nenhum segredo versionado (`.env` fica fora do Git; variáveis novas entram na lista do README)
 - [ ] Testado manualmente o fluxo principal afetado, com o resultado registrado no PR
 - [ ] Sem erros no console do navegador nem do servidor no fluxo testado
 - [ ] Telas funcionam em desktop e mobile (largura de 360 px)

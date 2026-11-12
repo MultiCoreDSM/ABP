@@ -1,10 +1,9 @@
-// Endereço da listagem de temas (API-04). Enquanto estiver vazio, a tela usa TEMAS_LOCAIS.
-// Resposta esperada: um array de { id, nome, ordem, disponivel }. O campo "disponivel"
-// é opcional: se não vier, o tema é considerado disponível.
-const API_TEMAS_URL = "";
+// Lista pública de temas (backend/src/routes/temas.js): [{ id, nome, ordem }].
+// Se a API não responder, a tela usa TEMAS_LOCAIS, com os mesmos dados do seed.sql.
+const API_TEMAS_URL = "/api/temas";
 const TEMPO_LIMITE_MS = 10000;
+const CHAVE_TOKEN = "multicore:token";
 
-// Mesmos dados de Database/seed.sql
 const TEMAS_LOCAIS = [
     { id: 1, nome: "Fundamentos da Agilidade", ordem: 1 },
     { id: 2, nome: "Manifesto Ágil", ordem: 2 },
@@ -42,18 +41,25 @@ const estadoMensagem = document.getElementById("estado-mensagem");
 const btnTentarNovamente = document.getElementById("btn-tentar-novamente");
 const listaTemas = document.getElementById("lista-temas");
 const modeloTema = document.getElementById("modelo-tema");
+const contagemTemas = document.getElementById("contagem-temas");
+
+const logado = Boolean(sessionStorage.getItem(CHAVE_TOKEN));
+
+// "Voltar ao menu": com sessão vai ao menu; sem sessão, à tela inicial
+if (logado) document.getElementById("btn-voltar").href = "menu.html";
+const formatarNumero = (valor) => String(valor).padStart(2, "0");
 
 async function buscarTemas() {
-    if (!API_TEMAS_URL) return TEMAS_LOCAIS;
-
-    const resposta = await fetch(API_TEMAS_URL, {
-        signal: AbortSignal.timeout(TEMPO_LIMITE_MS),
-    });
-    if (!resposta.ok) throw new Error(`A API respondeu com status ${resposta.status}`);
-
-    const dados = await resposta.json();
-    if (!Array.isArray(dados)) throw new Error("A API não retornou uma lista de temas");
-    return dados;
+    try {
+        const resposta = await fetch(API_TEMAS_URL, { signal: AbortSignal.timeout(TEMPO_LIMITE_MS) });
+        if (!resposta.ok) throw new Error(`A API respondeu com status ${resposta.status}`);
+        const dados = await resposta.json();
+        if (!Array.isArray(dados)) throw new Error("A API não retornou uma lista de temas");
+        return dados;
+    } catch (erro) {
+        console.error("Erro ao buscar os temas na API; usando a lista local:", erro.message);
+        return TEMAS_LOCAIS;
+    }
 }
 
 // Ignora registros incompletos e mantém a ordem documentada no campo "ordem"
@@ -89,15 +95,16 @@ function definirFechado(item) {
     item.querySelector(".tema-botao").setAttribute("aria-expanded", "false");
 }
 
-function criarTema(tema) {
+function criarTema(tema, indice) {
     const item = modeloTema.content.cloneNode(true).querySelector(".tema");
     const botao = item.querySelector(".tema-botao");
     const painel = item.querySelector(".tema-painel");
-    const titulo = `Tema ${tema.id} - ${tema.nome}`;
+    const numero = formatarNumero(Number.isFinite(tema.ordem) ? tema.ordem : indice + 1);
     const material = MATERIAIS[tema.id];
-    const disponivel = tema.disponivel !== false && Boolean(material);
 
-    item.querySelector(".tema-nome").textContent = titulo;
+    item.querySelector(".tema-numero").textContent = numero;
+    item.querySelector(".tema-nome").textContent = tema.nome;
+    item.querySelector(".tema-descricao").textContent = `Material didático e questões do tema ${tema.nome}.`;
 
     botao.id = `tema-${tema.id}`;
     botao.setAttribute("aria-controls", `painel-tema-${tema.id}`);
@@ -105,20 +112,25 @@ function criarTema(tema) {
     painel.setAttribute("aria-labelledby", botao.id);
     botao.addEventListener("click", () => alternarTema(item));
 
-    if (disponivel) {
-        const link = item.querySelector(".btn-iniciar");
-        link.href = CAMINHO_MATERIAIS + material;
-        link.setAttribute("aria-label", `Iniciar ${titulo}`);
-        link.hidden = false;
+    const linkMaterial = item.querySelector(".btn-material");
+    if (material) {
+        linkMaterial.href = CAMINHO_MATERIAIS + material;
+        linkMaterial.setAttribute("aria-label", `Ver material do tema ${tema.nome} (abre em nova aba)`);
     } else {
-        item.querySelector(".tema-selo").hidden = false;
+        linkMaterial.hidden = true;
         item.querySelector(".tema-aviso").hidden = false;
     }
+
+    // A prova exige login; sem sessão, "Responder" leva ao login primeiro
+    const linkResponder = item.querySelector(".btn-responder");
+    linkResponder.href = logado ? `questao.html?tema=${tema.id}` : "login.html";
+    linkResponder.setAttribute("aria-label", `Responder a questão do tema ${tema.nome}`);
 
     return item;
 }
 
 function renderizarTemas(temas) {
+    contagemTemas.textContent = `${temas.length} temas disponíveis`;
     listaTemas.replaceChildren(...temas.map(criarTema));
     alternarTema(listaTemas.firstElementChild); // No design, o primeiro tema já vem aberto
     estado.hidden = true;
@@ -128,19 +140,12 @@ function renderizarTemas(temas) {
 async function carregarTemas() {
     mostrarEstado("Carregando temas...");
 
-    try {
-        const temas = prepararTemas(await buscarTemas());
-
-        if (temas.length === 0) {
-            mostrarEstado("Nenhum tema disponível no momento.");
-            return;
-        }
-
-        renderizarTemas(temas);
-    } catch (erro) {
-        console.error("Erro ao carregar os temas:", erro);
-        mostrarEstado("Não foi possível carregar os temas.", true);
+    const temas = prepararTemas(await buscarTemas());
+    if (temas.length === 0) {
+        mostrarEstado("Nenhum tema disponível no momento.", true);
+        return;
     }
+    renderizarTemas(temas);
 }
 
 btnTentarNovamente.addEventListener("click", carregarTemas);
