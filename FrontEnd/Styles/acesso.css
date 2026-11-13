@@ -1,0 +1,367 @@
+/* Telas de acesso: login e cadastro (painel + formulário),
+   esqueci a senha e cadastro concluído (card centralizado). */
+
+/* ===== Layout dividido: painel à esquerda, formulário à direita ===== */
+.acesso {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 520px) minmax(0, 1fr);
+    gap: 48px;
+    min-height: 100vh;
+    padding: 24px;
+}
+
+.acesso-painel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: 40px 44px;
+}
+
+.acesso-painel h2 {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(28px, 2.8vw, 36px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+
+.acesso-painel h2 .destaque {
+    display: block;
+}
+
+.acesso-painel h2 .destaque-inline {
+    display: inline;
+}
+
+/* Símbolo do infinito em marca-d'água no painel do login */
+.acesso-marca-dagua {
+    position: absolute;
+    right: -40px;
+    bottom: -30px;
+    width: 380px;
+    color: rgba(56, 132, 255, 0.16);
+    pointer-events: none;
+}
+
+.lista-icones {
+    display: grid;
+    gap: 14px;
+    margin-top: 28px;
+    list-style: none;
+}
+
+.lista-icones li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.lista-icones strong {
+    display: block;
+    font-size: 16px;
+}
+
+.lista-icones span {
+    font-size: 14px;
+    color: var(--texto-suave);
+}
+
+/* Passos numerados do painel do cadastro */
+.passos {
+    position: relative;
+    display: grid;
+    gap: 22px;
+    margin-top: 28px;
+    list-style: none;
+}
+
+.passos li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Linha que liga os círculos */
+.passos li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 21px;
+    top: 46px;
+    width: 2px;
+    height: 20px;
+    background: var(--card-borda-forte);
+}
+
+.passo-numero {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--card-borda);
+    border-radius: 50%;
+    background: rgba(37, 99, 235, 0.12);
+    color: var(--azul-claro);
+    font-family: var(--fonte-mono);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.passos li.atual .passo-numero {
+    border-color: rgba(147, 197, 253, 0.5);
+    background: linear-gradient(180deg, var(--azul-2), var(--azul));
+    color: #fff;
+    box-shadow: 0 0 18px rgba(59, 130, 246, 0.55);
+}
+
+.passos strong {
+    display: block;
+    font-size: 16px;
+}
+
+.passos span {
+    font-size: 14px;
+    color: var(--texto-suave);
+}
+
+/* ===== Formulário ===== */
+.acesso-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 0;
+}
+
+.formulario {
+    width: 100%;
+    max-width: 420px;
+}
+
+.formulario h1 {
+    font-family: var(--fonte-titulo);
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.formulario .subtitulo {
+    margin-top: 6px;
+    font-size: 15px;
+    color: var(--texto-suave);
+}
+
+.formulario form {
+    display: grid;
+    gap: 16px;
+    margin-top: 26px;
+}
+
+.formulario fieldset {
+    display: grid;
+    gap: 16px;
+    border: none;
+    min-width: 0;
+}
+
+.formulario .aviso {
+    margin-top: 18px;
+}
+
+.link-esqueceu {
+    justify-self: end;
+    margin-top: -6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ciano);
+    text-decoration: none;
+}
+
+.link-esqueceu:hover,
+.rodape-form a:hover {
+    text-decoration: underline;
+}
+
+.rodape-form {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--texto-suave);
+}
+
+.rodape-form a {
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* ===== Card centralizado (esqueci a senha, cadastro concluído) ===== */
+.acesso-centro {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 28px 16px 40px;
+}
+
+.cartao-centro {
+    width: 100%;
+    max-width: 480px;
+    margin-top: 40px;
+    padding: 40px;
+}
+
+.voltar-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #cfe3ff;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.voltar-link svg {
+    width: 16px;
+    height: 16px;
+}
+
+.voltar-link:hover {
+    color: #fff;
+}
+
+.cartao-centro .icone-caixa {
+    width: 64px;
+    height: 64px;
+    margin-top: 28px;
+    border-radius: 18px;
+    box-shadow: 0 0 24px rgba(56, 189, 248, 0.2);
+}
+
+.cartao-centro .icone-caixa svg {
+    width: 28px;
+    height: 28px;
+}
+
+.cartao-centro h1 {
+    margin-top: 20px;
+    font-family: var(--fonte-titulo);
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.cartao-centro .subtitulo {
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--texto-suave);
+}
+
+/* Cadastro concluído */
+.sucesso {
+    text-align: center;
+}
+
+.sucesso-icone {
+    display: grid;
+    place-items: center;
+    width: 104px;
+    height: 104px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%);
+}
+
+.sucesso-icone span {
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    border: 2px solid var(--ciano);
+    border-radius: 50%;
+    background: linear-gradient(160deg, #2b6cf0, #1d3fb8);
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.45);
+}
+
+.sucesso-icone svg {
+    width: 36px;
+    height: 36px;
+    color: #fff;
+}
+
+.sucesso h1 {
+    font-size: 36px;
+    line-height: 1.15;
+}
+
+.sucesso h1 .destaque {
+    display: block;
+}
+
+.sucesso .subtitulo {
+    max-width: 300px;
+    margin: 14px auto 0;
+}
+
+.sucesso-chips {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 22px;
+}
+
+.sucesso-acoes {
+    display: grid;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+/* ===== Responsivo ===== */
+@media (max-width: 960px) {
+    .acesso {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto 1fr;
+        align-content: start;
+        gap: 0;
+        padding: 16px;
+    }
+
+    /* No celular o painel vira só a barra com a marca */
+    .acesso-painel {
+        padding: 4px 4px 0;
+        border: none;
+        background: none;
+        box-shadow: none;
+        backdrop-filter: none;
+    }
+
+    .acesso-painel > :not(.marca) {
+        display: none;
+    }
+
+    .acesso-form {
+        align-items: flex-start;
+        padding-top: 32px;
+    }
+}
+
+@media (max-width: 600px) {
+    .formulario h1 {
+        font-size: 28px;
+    }
+
+    .cartao-centro {
+        margin-top: 24px;
+        padding: 28px 22px;
+    }
+
+    .sucesso h1 {
+        font-size: 30px;
+    }
+}

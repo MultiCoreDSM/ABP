@@ -1,0 +1,593 @@
+/* =========================================================
+   Base visual comum a todas as telas (tokens, fundo, marca,
+   botões, cards e campos). Cada página tem o seu CSS só com
+   o que é exclusivo dela.
+   ========================================================= */
+
+:root {
+    --fundo: #040817;
+    --fundo-2: #070d22;
+    --card: rgba(12, 24, 58, 0.72);
+    --card-forte: rgba(15, 31, 74, 0.85);
+    --card-borda: rgba(86, 132, 230, 0.24);
+    --card-borda-forte: rgba(96, 165, 250, 0.5);
+    --campo: rgba(4, 9, 26, 0.75);
+    --campo-borda: rgba(86, 132, 230, 0.22);
+
+    --azul: #2563eb;
+    --azul-2: #3b82f6;
+    --azul-claro: #60a5fa;
+    --ciano: #38bdf8;
+    --verde: #4ade80;
+    --verde-fundo: rgba(34, 197, 94, 0.14);
+    --vermelho: #fb7185;
+    --vermelho-fundo: rgba(244, 63, 94, 0.14);
+    --dourado: #facc15;
+
+    --texto: #eef3ff;
+    --texto-suave: #a7b4d0;
+    --texto-apagado: #7484a6;
+
+    --fonte-titulo: "Space Grotesk", "Inter", system-ui, sans-serif;
+    --fonte: "Inter", system-ui, sans-serif;
+    --fonte-mono: "JetBrains Mono", ui-monospace, monospace;
+
+    --raio: 16px;
+    --sombra: 0 24px 60px rgba(0, 0, 0, 0.4);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+html {
+    color-scheme: dark;
+}
+
+body {
+    min-height: 100vh;
+    font-family: var(--fonte);
+    color: var(--texto);
+    background:
+        radial-gradient(ellipse at 85% -10%, #10276a 0%, transparent 50%),
+        radial-gradient(ellipse at -10% 110%, #0b2560 0%, transparent 45%),
+        var(--fundo);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--ciano);
+}
+
+img,
+svg {
+    display: block;
+}
+
+button {
+    font: inherit;
+}
+
+/* Visível apenas para leitores de tela */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ===== Fundo: grade, arcos luminosos e circuitos (inserido por comum.js) ===== */
+.fundo {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.fundo-grade {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(86, 132, 230, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(86, 132, 230, 0.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at 50% 40%, #000 10%, transparent 75%);
+}
+
+.fundo-arco {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid var(--ciano);
+    box-shadow: 0 0 26px rgba(56, 189, 248, 0.65), inset 0 0 26px rgba(56, 189, 248, 0.35);
+}
+
+.fundo-arco::after {
+    content: "";
+    position: absolute;
+    inset: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(96, 165, 250, 0.28);
+}
+
+.fundo-arco-topo {
+    width: 380px;
+    height: 380px;
+    top: -190px;
+    right: -130px;
+}
+
+.fundo-arco-base {
+    width: 360px;
+    height: 360px;
+    bottom: -210px;
+    left: -170px;
+}
+
+.fundo-circuito {
+    position: absolute;
+    width: 250px;
+    stroke: var(--ciano);
+    stroke-width: 1.5;
+    filter: drop-shadow(0 0 4px var(--azul-2));
+    opacity: 0.8;
+}
+
+.fundo-circuito circle {
+    fill: var(--ciano);
+    stroke: none;
+}
+
+.fundo-circuito-esquerda {
+    top: 60px;
+    left: 0;
+}
+
+.fundo-circuito-direita {
+    right: 0;
+    bottom: 70px;
+}
+
+/* Telas que pedem só parte da decoração */
+.sem-circuitos .fundo-circuito,
+.sem-circuito-esquerda .fundo-circuito-esquerda {
+    display: none;
+}
+
+/* ===== Estrutura ===== */
+.pagina {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 48px 48px;
+}
+
+.topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 52px;
+}
+
+.topo-acoes {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Marca: ícone + MultiCore */
+.marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--texto);
+    text-decoration: none;
+    font-family: var(--fonte-titulo);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.marca img {
+    width: 40px;
+    height: 40px;
+}
+
+.marca-texto span {
+    color: var(--ciano);
+}
+
+/* ===== Tipografia ===== */
+.titulo-pagina {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(34px, 4.6vw, 52px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+}
+
+.destaque {
+    color: var(--ciano);
+}
+
+.sobretitulo {
+    font-family: var(--fonte-mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ciano);
+}
+
+.texto-suave {
+    color: var(--texto-suave);
+}
+
+/* ===== Botões ===== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 22px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    font-family: var(--fonte);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: filter 0.2s, background-color 0.2s, border-color 0.2s, transform 0.1s;
+}
+
+.btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.btn:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+    filter: grayscale(0.5) brightness(0.75);
+}
+
+.btn-primario {
+    border-color: rgba(147, 197, 253, 0.35);
+    background: linear-gradient(180deg, var(--azul-2) 0%, var(--azul) 100%);
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.42);
+}
+
+.btn-primario:hover:not(:disabled) {
+    filter: brightness(1.1);
+}
+
+.btn-secundario {
+    border-color: var(--card-borda);
+    background: rgba(5, 11, 30, 0.7);
+    color: var(--texto);
+}
+
+.btn-secundario:hover:not(:disabled) {
+    border-color: var(--card-borda-forte);
+    background: var(--card-forte);
+}
+
+.btn-bloco {
+    width: 100%;
+}
+
+.btn-pequeno {
+    min-height: 42px;
+    padding: 0 16px;
+    font-size: 14px;
+}
+
+.link-seta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ciano);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.link-seta svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s;
+}
+
+.link-seta:hover svg {
+    transform: translateX(3px);
+}
+
+:is(.btn, .link-seta, .marca, a, button, input):focus-visible {
+    outline: 2px solid var(--ciano);
+    outline-offset: 3px;
+}
+
+/* ===== Cards ===== */
+.card {
+    position: relative;
+    border: 1px solid var(--card-borda);
+    border-radius: var(--raio);
+    background: linear-gradient(160deg, rgba(16, 33, 80, 0.75) 0%, rgba(8, 17, 44, 0.75) 100%);
+    box-shadow: var(--sombra);
+    backdrop-filter: blur(6px);
+}
+
+/* Caixinha de ícone usada em cards e listas */
+.icone-caixa {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--card-borda);
+    border-radius: 12px;
+    background: rgba(37, 99, 235, 0.12);
+    color: var(--azul-claro);
+}
+
+.icone-caixa svg {
+    width: 22px;
+    height: 22px;
+}
+
+/* Etiquetas (Correta, Incorreta, Aprovado...) */
+.etiqueta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.etiqueta svg {
+    width: 14px;
+    height: 14px;
+}
+
+.etiqueta-sucesso {
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    background: var(--verde-fundo);
+    color: #86efac;
+}
+
+.etiqueta-erro {
+    border: 1px solid rgba(251, 113, 133, 0.3);
+    background: var(--vermelho-fundo);
+    color: #fda4af;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border: 1px solid var(--card-borda);
+    border-radius: 8px;
+    background: rgba(37, 99, 235, 0.1);
+    font-family: var(--fonte-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: #bfdbfe;
+}
+
+/* Abas de filtro (Todos / Exames ...) */
+.abas {
+    display: inline-flex;
+    gap: 4px;
+    padding: 5px;
+    border: 1px solid var(--card-borda);
+    border-radius: 14px;
+    background: rgba(4, 9, 26, 0.6);
+}
+
+.aba {
+    min-height: 40px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 10px;
+    background: none;
+    color: var(--texto-suave);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.aba:hover {
+    color: var(--texto);
+}
+
+.aba[aria-pressed="true"] {
+    background: linear-gradient(180deg, var(--azul-2) 0%, var(--azul) 100%);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+/* ===== Campos de formulário ===== */
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.campo label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #cfd9ee;
+}
+
+.campo-entrada {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.campo-entrada > svg {
+    position: absolute;
+    left: 16px;
+    width: 20px;
+    height: 20px;
+    color: var(--texto-suave);
+    pointer-events: none;
+}
+
+.campo-entrada input {
+    width: 100%;
+    height: 50px;
+    padding: 0 48px 0 50px;
+    border: 1px solid var(--campo-borda);
+    border-radius: 12px;
+    background: var(--campo);
+    color: var(--texto);
+    font-family: var(--fonte);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campo-entrada input::placeholder {
+    color: var(--texto-apagado);
+}
+
+.campo-entrada input:focus {
+    border-color: var(--azul-2);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.campo.invalido input {
+    border-color: var(--vermelho);
+}
+
+.campo-erro {
+    min-height: 16px;
+    font-size: 13px;
+    color: var(--vermelho);
+}
+
+.campo-erro:empty {
+    min-height: 0;
+}
+
+/* Botão de mostrar/ocultar senha */
+.btn-olho {
+    position: absolute;
+    right: 12px;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    background: none;
+    color: var(--texto-suave);
+    cursor: pointer;
+}
+
+.btn-olho svg {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-olho .olho-aberto,
+.btn-olho.visivel .olho-fechado {
+    display: none;
+}
+
+.btn-olho.visivel .olho-aberto {
+    display: block;
+}
+
+/* Avisos (erro da API, sessão expirada...) */
+.aviso {
+    padding: 12px 14px;
+    border: 1px solid rgba(251, 113, 133, 0.45);
+    border-radius: 12px;
+    background: var(--vermelho-fundo);
+    color: #ffe0e5;
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.aviso-info {
+    border-color: var(--card-borda-forte);
+    background: rgba(37, 99, 235, 0.14);
+    color: #dbeafe;
+}
+
+/* Estado de carregamento / vazio / erro dentro de um card */
+.estado {
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--texto-suave);
+    line-height: 1.5;
+}
+
+.estado .btn {
+    margin-top: 18px;
+}
+
+/* ===== Responsivo ===== */
+@media (max-width: 900px) {
+    .pagina {
+        padding: 22px 24px 40px;
+    }
+}
+
+@media (max-width: 600px) {
+    .pagina {
+        padding: 16px 16px 32px;
+    }
+
+    .fundo-circuito {
+        opacity: 0.35;
+    }
+
+    .fundo-arco-topo {
+        width: 250px;
+        height: 250px;
+        top: -140px;
+        right: -120px;
+    }
+
+    .fundo-arco-base {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}

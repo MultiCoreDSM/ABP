@@ -28,9 +28,9 @@ O backlog pode ser atualizado ao longo do desenvolvimento conforme novas necessi
 | BL-16 | Resultado | Percentual de acertos | Calcular a porcentagem de acertos da prova. |Alto|
 | BL-17 | Resultado | Nota final | Calcular a nota final da certificação após a conclusão dos 12 temas. |Alto |
 | BL-18 | Certificado | Critério de emissão | Emitir o certificado somente para candidatos com aproveitamento igual ou superior a 65%. |Alto |
-| BL-19 | Certificado | Modelo e informações | Projetar o certificado com nome completo, CPF, e-mail, data e hora da emissão, nota final obtida e percentual de acertos. |Alto |
+| BL-19 | Certificado | Modelo e informações | Projetar o certificado com nome completo, CPF, e-mail, data e hora da emissão, nota final obtida, percentual de acertos e QR Code (RF18 do documento oficial). |Alto |
 | BL-20 | Certificado | QR Code de autenticação | Incluir no certificado um QR Code para acessar sua validação pública. |Alto |
-| BL-21 | Certificado | Validação pública | Disponibilizar um sistema público de validação do certificado acessível pelo QR Code. |Alto |
+| BL-21 | Certificado | Validação pública | Disponibilizar um sistema público de validação do certificado acessível pelo QR Code, exibindo somente os dados aprovados em DP-01 (RN-09). | Alto |
 | BL-22 | Histórico | Histórico de certificação | Registrar os temas respondidos, as questões sorteadas, as respostas escolhidas, as respostas corretas e a data e o horário de cada resposta. |Médio |
 | BL-23 | Interface | Responsividade | Adaptar a interface a diferentes tamanhos de tela. | Baixa |
 
@@ -59,6 +59,15 @@ O backlog pode ser atualizado ao longo do desenvolvimento conforme novas necessi
 | RN-06 | A nota final só é calculada após os 12 temas | BL-17 |
 | RN-07 | O certificado só é emitido com aproveitamento ≥ 65% | BL-18 |
 | RN-08 | Cada certificado tem um código único, usado no QR Code e na validação pública | BL-20, BL-21 |
+| RN-09 | A validação pública busca só pelo código do certificado e exibe somente nome completo, CPF mascarado (`***.456.789-**`), data de emissão, situação e percentual de acertos. Nunca exibe e-mail nem CPF completo | BL-21 |
+
+## Decisões do PO
+
+| ID | Decisão | Definição | Origem | Situação |
+| --- | --- | --- | --- | --- |
+| DP-01 | Dados exibidos na validação pública (BL-21) | Nome completo, CPF mascarado (`***.456.789-**`), data de emissão, situação ("válido") e percentual de acertos. O e-mail e o CPF completo nunca aparecem. A busca é feita só pelo código do certificado, nunca por CPF ou nome (RN-09). | QA-08 / R1 (RNF03, RNF04) | ✅ Aprovada pelo PO em 11/11/2026 |
+| DP-02 | E-mail no certificado (BL-19) | **Revista em 12/11/2026:** o RF18 do documento oficial exige nome completo, CPF e e-mail no certificado, então eles voltaram. O certificado só é exibido ao próprio candidato, com login. A validação pública continua com os dados da RN-09, sem e-mail e com o CPF mascarado. (Decisão original de 11/11: retirar o e-mail.) | QA-08 / R1 | ✅ Aprovada pelo PO em 11/11/2026 |
+| DP-03 | Gabarito no repositório público | O `backend/database/seed.sql` traz a alternativa correta das 48 questões, e o repositório é público. Risco aceito: o projeto é acadêmico e o seed fica como está. Se o portal for usado numa certificação real, o banco de questões precisa ser trocado e mantido fora do repositório público. | QA-08 / R3 | ✅ Risco aceito pelo PO em 11/11/2026 |
 
 
 [Voltar ao README principal](../../README.md)

@@ -1,0 +1,206 @@
+/* Meu histórico. Base visual em base.css */
+
+.titulo {
+    margin-top: 36px;
+}
+
+.estatisticas {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 32px;
+}
+
+.estatistica {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 24px;
+}
+
+.estatistica .icone-caixa {
+    width: 52px;
+    height: 52px;
+}
+
+.estatistica strong {
+    display: block;
+    font-family: var(--fonte-titulo);
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.estatistica span {
+    font-size: 15px;
+    color: var(--texto-suave);
+}
+
+.atividades {
+    margin-top: 24px;
+    padding: 26px 28px;
+}
+
+.atividades-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.atividades h2 {
+    font-family: var(--fonte-titulo);
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.atividades .estado {
+    padding: 32px 0 8px;
+}
+
+/* ===== Linha do tempo ===== */
+.linha-tempo {
+    margin-top: 22px;
+    list-style: none;
+}
+
+.evento {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 12px 0;
+}
+
+/* Traço que liga os círculos */
+.evento:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 25px;
+    top: 64px;
+    bottom: -12px;
+    width: 2px;
+    background: rgba(86, 132, 230, 0.28);
+}
+
+.evento-icone {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border: 1px solid var(--card-borda);
+    border-radius: 50%;
+    background: rgba(4, 9, 26, 0.6);
+    color: var(--azul-claro);
+}
+
+.evento-icone svg {
+    width: 22px;
+    height: 22px;
+}
+
+.evento-certificado .evento-icone {
+    border-color: rgba(250, 204, 21, 0.45);
+    color: var(--dourado);
+    box-shadow: 0 0 18px rgba(250, 204, 21, 0.15);
+}
+
+.evento-correta .evento-icone {
+    border-color: rgba(74, 222, 128, 0.45);
+    color: var(--verde);
+}
+
+.evento-incorreta .evento-icone {
+    border-color: rgba(251, 113, 133, 0.45);
+    color: var(--vermelho);
+}
+
+.evento-texto {
+    flex: 1;
+    min-width: 0;
+}
+
+.evento-texto strong {
+    display: block;
+    font-size: 17px;
+}
+
+.evento-texto span {
+    font-size: 15px;
+    color: var(--texto-suave);
+}
+
+.evento-data {
+    flex-shrink: 0;
+    font-size: 15px;
+    color: var(--texto-suave);
+}
+
+.evento-link {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    color: var(--ciano);
+}
+
+.evento-link:hover {
+    background: var(--card-forte);
+}
+
+.evento-link svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Alinha a data dos itens sem link com a dos itens com link */
+.evento-sem-link {
+    width: 36px;
+}
+
+@media (max-width: 860px) {
+    .estatisticas {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .estatistica {
+        padding: 16px 18px;
+    }
+}
+
+@media (max-width: 600px) {
+    .titulo {
+        margin-top: 24px;
+    }
+
+    .atividades {
+        padding: 20px 16px;
+    }
+
+    .evento {
+        gap: 12px;
+    }
+
+    .evento-icone {
+        width: 44px;
+        height: 44px;
+    }
+
+    .evento:not(:last-child)::before {
+        left: 21px;
+        top: 56px;
+    }
+
+    .evento-texto strong {
+        font-size: 15px;
+    }
+
+    .evento-texto span,
+    .evento-data {
+        font-size: 13px;
+    }
+}

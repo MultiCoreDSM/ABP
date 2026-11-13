@@ -22,7 +22,8 @@
     <main class="area-questao">
         <div class="questao-conteudo">
             <header class="topo">
-                <a class="btn-voltar" href="inicial.html" aria-label="Voltar para a página inicial">
+                <!-- questao.js pergunta antes de sair (pausa entre questões; no meio de uma, encerra a atual) -->
+                <a class="btn-voltar" id="btn-voltar" href="menu.html" aria-label="Sair da certificação e voltar ao menu">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7" /></svg>
                 </a>
                 <hgroup class="topo-titulo">
@@ -64,7 +65,7 @@
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M12 8v5M12 16.5v.5M10.3 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" /></svg>
                         <p>Não foi possível confirmar o registro da sua resposta. Verifique sua conexão e tente novamente.</p>
                     </div>
-                    <button type="button" class="btn-secundario" id="btn-pular">Pular questão</button>
+                    <button type="button" class="btn-secundario" id="btn-pausar" hidden>Pausar certificação</button>
                     <p class="resultado" id="resultado" role="status"></p>
                     <button type="button" class="btn-principal" id="btn-principal">
                         <span id="btn-principal-texto">Enviar resposta</span>
@@ -77,7 +78,7 @@
 
     <aside class="painel-temas" aria-labelledby="titulo-temas">
         <h2 id="titulo-temas">Temas</h2>
-        <p>Escolha um tema para iniciar ou continuar.</p>
+        <p id="temas-dica">Escolha um tema para iniciar ou continuar.</p>
         <ol id="lista-temas" class="lista-temas"></ol>
     </aside>
 
@@ -92,6 +93,27 @@
         <div class="confirmacao-acoes">
             <button type="button" class="btn-secundario" id="btn-cancelar">Cancelar</button>
             <button type="button" class="btn-principal" id="btn-confirmar" autofocus>Confirmar resposta</button>
+        </div>
+    </dialog>
+
+    <!-- Sair / pausar a certificação (textos preenchidos por questao.js) -->
+    <dialog class="confirmacao" id="dialogo-sair" aria-labelledby="sair-titulo" aria-describedby="sair-texto">
+        <h2 id="sair-titulo">Pausar certificação?</h2>
+        <p class="confirmacao-aviso" id="sair-texto"></p>
+        <p class="aviso-erro-texto" id="sair-erro" role="alert" hidden>Não foi possível registrar a questão. Verifique sua conexão e tente novamente.</p>
+        <div class="confirmacao-acoes">
+            <button type="button" class="btn-secundario" id="btn-sair-cancelar" autofocus>Continuar na prova</button>
+            <button type="button" class="btn-principal" id="btn-sair-confirmar">Pausar e sair</button>
+        </div>
+    </dialog>
+
+    <!-- Retomada: aparece ao voltar para uma certificação já começada -->
+    <dialog class="confirmacao" id="dialogo-retomar" aria-labelledby="retomar-titulo" aria-describedby="retomar-texto">
+        <h2 id="retomar-titulo">Continuar de onde parou?</h2>
+        <p class="confirmacao-aviso" id="retomar-texto"></p>
+        <div class="confirmacao-acoes">
+            <a class="btn-secundario" href="menu.html">Voltar ao menu</a>
+            <button type="button" class="btn-principal" id="btn-retomar" autofocus>Continuar</button>
         </div>
     </dialog>
 
@@ -121,8 +143,6 @@
         </li>
     </template>
 
-    <!-- Temporário: simula a API-08 e a API-09. Remover quando elas existirem. -->
-    <script src="../Scripts/questao-simulador.js"></script>
     <script src="../Scripts/questao.js"></script>
 </body>
 </html>

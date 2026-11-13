@@ -1,5 +1,7 @@
-# Banco de dados do projeto — versão suportada: PostgreSQL 16
-# Uso: cp .env.example .env && docker compose up -d
+# Aplicação completa em containers (RNF07, RP05): banco PostgreSQL 16 + API/front-end.
+# Uso: crie o .env na raiz (variáveis no README) e rode:
+#   docker compose up -d --build
+# Depois abra http://localhost:3001 (ou a porta definida em APP_PORT).
 services:
     database:
         image: postgres:16-alpine
@@ -13,6 +15,33 @@ services:
             - postgres_data:/var/lib/postgresql/data
             - ./backend/database/schemas.sql:/docker-entrypoint-initdb.d/01-schemas.sql:ro
             - ./backend/database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+        # A aplicação só sobe quando o banco aceita conexões
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+            interval: 5s
+            timeout: 5s
+            retries: 12
+        restart: unless-stopped
+
+    app:
+        build:
+            context: .
+            dockerfile: backend/Dockerfile
+        environment:
+            # Dentro da rede do compose o banco é o serviço "database", na porta 5432
+            POSTGRES_HOST: database
+            POSTGRES_PORT: "5432"
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET no .env}
+            APP_PORT: "3001"
+        ports:
+            - "${APP_PORT:-3001}:3001"
+        depends_on:
+            database:
+                condition: service_healthy
+        restart: unless-stopped
 
 volumes:
     postgres_data:

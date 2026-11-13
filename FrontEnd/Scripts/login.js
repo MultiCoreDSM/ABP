@@ -2,10 +2,10 @@ const form = document.getElementById("form-login");
 const inputCpf = document.getElementById("cpf");
 const inputSenha = document.getElementById("senha");
 const btnOlho = document.getElementById("btn-olho");
-const avisoSessao = document.getElementById("aviso-sessao");
+const btnEntrar = document.getElementById("btn-entrar");
 
 if (new URLSearchParams(location.search).get("expired") === "true") {
-    avisoSessao.hidden = false;
+    document.getElementById("aviso-sessao").hidden = false;
 }
 
 // Máscara de CPF: 000.000.000-00
@@ -57,7 +57,7 @@ function limparErro(input) {
     document.getElementById(`erro-${input.id}`).textContent = "";
 }
 
-form.addEventListener("submit", (evento) => {
+form.addEventListener("submit", async (evento) => {
     evento.preventDefault();
     let valido = true;
 
@@ -65,14 +65,30 @@ form.addEventListener("submit", (evento) => {
         mostrarErro(inputCpf, "Informe um CPF válido.");
         valido = false;
     }
-
     if (inputSenha.value.trim() === "") {
         mostrarErro(inputSenha, "Informe sua senha.");
         valido = false;
     }
-
     if (!valido) return;
 
-    // TODO: autenticar no back-end antes de avançar; por enquanto, qualquer CPF válido entra
-    location.href = "questao.html";
+    btnEntrar.disabled = true;
+    try {
+        const sessao = await MultiCore.api("/login", {
+            corpo: { cpf: inputCpf.value.replace(/\D/g, ""), senha: inputSenha.value },
+            semRedirecionar: true,
+        });
+        // A senha não é guardada: só o token, no sessionStorage
+        MultiCore.salvarToken(sessao.token);
+        location.href = "menu.html";
+    } catch (erro) {
+        if (erro.status === 401) mostrarErro(inputSenha, "CPF ou senha incorretos.");
+        // 429: muitas tentativas erradas; a API manda uma mensagem pensada para o usuário
+        else if (erro.status === 429) mostrarErro(inputSenha, erro.message);
+        else {
+            console.error("Erro ao autenticar:", erro.message);
+            mostrarErro(inputSenha, "Não foi possível entrar agora. Tente novamente.");
+        }
+    } finally {
+        btnEntrar.disabled = false;
+    }
 });
