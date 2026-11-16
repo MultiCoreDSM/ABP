@@ -16,6 +16,9 @@ Notação: **sublinhado = chave primária**, *itálico = chave estrangeira*.
 
 ```mermaid
 erDiagram
+    candidatos ||--o{ tentativas : "candidato_id"
+    tentativas ||--o{ tentativa_questoes : "tentativa_id"
+    questoes   ||--o{ tentativa_questoes : "questao_id"
     candidatos ||--o{ respostas : "candidato_id"
     questoes   ||--o{ respostas : "questao_id"
     temas      ||--|{ questoes  : "tema_id"
@@ -29,6 +32,27 @@ erDiagram
         TEXT senha_hash
         TIMESTAMPTZ criado_em
         VARCHAR(96) certificado_hash
+    }
+    tentativas {
+        SERIAL id PK
+        INT candidato_id FK
+        VARCHAR(20) estado "CHECK em_andamento|pausada|concluida|expirada|cancelada"
+        TIMESTAMPTZ iniciado_em
+        TIMESTAMPTZ atualizado_em
+        TIMESTAMPTZ pausado_em
+        TIMESTAMPTZ concluido_em
+        INT total_questoes
+        INT acertos
+        NUMERIC nota
+    }
+    tentativa_questoes {
+        INT tentativa_id PK,FK
+        INT questao_id PK,FK
+        INT ordem_tema "1 a 12"
+        CHAR(1) letra_resposta
+        TIMESTAMPTZ data_horario_inicio
+        TIMESTAMPTZ data_horario_resposta
+        BOOLEAN acertou
     }
     temas {
         SERIAL id PK
@@ -133,9 +157,34 @@ erDiagram
 | valida | BOOLEAN | — | GENERATED STORED | `true` se respondida em até 150 s (BL-09, BL-14) |
 | acertou | BOOLEAN | sim | | Resultado da resposta (BL-11, BL-16) |
 
-## Limitação conhecida
+### tentativas
+| Coluna | Tipo | Nulo | Restrições | Descrição |
+|---|---|---|---|---|
+| id | SERIAL | não | PK | Identificador interno da tentativa de certificação |
+| candidato_id | INT | não | FK → candidatos.id | Candidato que realiza a tentativa |
+| estado | VARCHAR(20) | não | CHECK em_andamento, pausada, concluida, expirada, cancelada | Estado atual no ciclo de vida da tentativa |
+| iniciado_em | TIMESTAMPTZ | não | DEFAULT now() | Momento de início da tentativa |
+| atualizado_em | TIMESTAMPTZ | não | DEFAULT now() | Última atualização ou interação |
+| pausado_em | TIMESTAMPTZ | sim | | Momento em que a tentativa foi pausada |
+| concluido_em | TIMESTAMPTZ | sim | | Momento de conclusão ou encerramento final |
+| total_questoes | INT | não | CHECK = 12, DEFAULT 12 | Total de questões do exame (12 temas) |
+| acertos | INT | sim | CHECK 0..12 | Quantidade de acertos obtidos |
+| nota | NUMERIC(5,2) | sim | CHECK 0..100 | Percentual final de aproveitamento |
 
-A estrutura atual não separa **tentativa** e **certificado**. Com a chave (candidato_id, questao_id), um candidato só pode fazer a prova uma vez e o histórico não distingue tentativas. A proposta de evolução está no [modelo conceitual](modelo-conceitual.md#evolução-prevista).
+### tentativa_questoes
+| Coluna | Tipo | Nulo | Restrições | Descrição |
+|---|---|---|---|---|
+| tentativa_id | INT | não | PK, FK → tentativas.id | Tentativa à qual a questão pertence |
+| questao_id | INT | não | PK, FK → questoes.id | Questão sorteada vinculada à tentativa |
+| ordem_tema | INT | não | CHECK 1..12, UNIQUE (tentativa_id, ordem_tema) | Posição sequencial do tema no exame |
+| letra_resposta | CHAR(1) | sim | CHECK A–D | Resposta do candidato para a questão nesta tentativa |
+| data_horario_inicio | TIMESTAMPTZ | sim | | Horário de abertura da questão |
+| data_horario_resposta | TIMESTAMPTZ | sim | | Horário de submissão da resposta |
+| acertou | BOOLEAN | sim | | Indicador de acerto |
+
+## Evolução e suporte a múltiplas tentativas
+
+A partir da Sprint 2 (tarefa **DB-05**), a modelagem de `tentativas` e `tentativa_questoes` permite registrar múltiplos ciclos de avaliação por candidato, garantindo histórico completo de tentativas anteriores e impedindo concorrência simultânea via índice condicional (`idx_tentativa_ativa_candidato`). A tabela `respostas` é mantida para compatibilidade direta com a primeira versão da API.
 
 ---
 

@@ -76,7 +76,7 @@ cd backend
 npm test
 ```
 
-O comando executará todas as suítes (`api.test.js` e `db05-tentativas.test.js`) e invocará o `MarkdownReporter`, gerando o próximo arquivo sequencial consolidado em `backend/tests/relatorios/`.
+O comando executará todas as suítes (`api.test.js` e `db.test.js`) e invocará o `MarkdownReporter`, gerando o próximo arquivo sequencial consolidado em `backend/tests/relatorios/`.
 
 ---
 
