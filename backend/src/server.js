@@ -49,7 +49,14 @@ app.use((req, res) => {
 app.use(tratarErros);
 
 // Inicialização do servidor
-app.listen(porta, () => {
+if (import.meta.url === `file://${process.argv[1]}`) {
+  app.listen(porta, () => {
+    console.log(`Servidor rodando na porta ${porta}`);
+    console.log(`Servidor rodando em http://localhost:${porta}`);
+  });
+}
+
+export default app;
     console.log(`Servidor rodando na porta ${porta}`);
     console.log(`Servidor rodando em http://localhost:${porta}`);
 });
