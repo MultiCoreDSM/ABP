@@ -1,28 +1,37 @@
 // Jest + Supertest integration tests for ABP-1 backend API
 import request from 'supertest';
 import app from '../src/server.js';
-import { Pool } from 'pg';
+import pool from '../src/config/database.js';
 import bcrypt from 'bcryptjs';
-import { v4 as uuidv4 } from 'uuid';
 
-// Helper to generate a random valid CPF (simple placeholder, not checksum)
-function randomCpf() {
-  const digits = Array.from({ length: 11 }, () => Math.floor(Math.random() * 10));
-  return digits.join('');
+// Gerador de CPF válido matematicamente
+function gerarCpfValido() {
+  const n = Array.from({ length: 9 }, () => Math.floor(Math.random() * 10));
+  
+  let d1 = 0;
+  for (let i = 0; i < 9; i++) d1 += n[i] * (10 - i);
+  d1 = ((d1 * 10) % 11) % 10;
+  n.push(d1);
+
+  let d2 = 0;
+  for (let i = 0; i < 10; i++) d2 += n[i] * (11 - i);
+  d2 = ((d2 * 10) % 11) % 10;
+  n.push(d2);
+
+  return n.join('');
 }
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-let testCpf = randomCpf();
+const testCpf = gerarCpfValido();
 const testSenha = 'SenhaSegura123';
 let token = '';
 
 describe('Sprint 2 end‑to‑end flow', () => {
   afterAll(async () => {
-    // Clean up: delete created candidate
-    await pool.query('DELETE FROM candidatos WHERE cpf = $1', [testCpf]);
+    try {
+      await pool.query('DELETE FROM candidatos WHERE cpf = $1', [testCpf]);
+    } catch (e) {
+      // ignore
+    }
     await pool.end();
   });
 

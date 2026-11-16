@@ -9,7 +9,7 @@
     "node": ">=20.11"
   },
   "scripts": {
-    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+    "test": "node --env-file=../.env --experimental-vm-modules ./node_modules/jest/bin/jest.js --reporters=default --reporters=./tests/markdown-reporter.js",
     "start": "node --env-file=../.env src/server.js",
     "dev": "node --watch --env-file=../.env src/server.js"
   },

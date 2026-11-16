@@ -57,6 +57,3 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 }
 
 export default app;
-    console.log(`Servidor rodando na porta ${porta}`);
-    console.log(`Servidor rodando em http://localhost:${porta}`);
-});
