@@ -11,6 +11,8 @@ Notação: **sublinhado = chave primária**, *itálico = chave estrangeira*.
 - **questoes** (<u>id</u>, *tema_id* → temas.id, ordem, enunciado, imagem_url)
 - **alternativas** (<u>id</u>, *questao_id* → questoes.id, letra, texto, correta)
 - **respostas** (<u>*candidato_id*</u> → candidatos.id, <u>*questao_id*</u> → questoes.id, letra_resposta, data_horario_inicio, data_horario_resposta, valida, acertou)
+- **tentativas** (<u>id</u>, *candidato_id* → candidatos.id, estado, iniciado_em, atualizado_em, pausado_em, concluido_em, total_questoes, acertos, nota)
+- **tentativa_questoes** (<u>*tentativa_id*</u> → tentativas.id, <u>*questao_id*</u> → questoes.id, ordem_tema, letra_resposta, data_horario_inicio, data_horario_resposta, acertou)
 
 ```mermaid
 erDiagram
