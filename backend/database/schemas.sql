@@ -49,8 +49,14 @@ CREATE TABLE IF NOT EXISTS respostas (
     valida BOOLEAN GENERATED ALWAYS AS ( 
         data_horario_resposta - data_horario_inicio <= INTERVAL '150 seconds' 
     ) STORED, 
-    acertou BOOLEAN, 
-    PRIMARY KEY(candidato_id, questao_id) 
-); 
+    acertou BOOLEAN,
+    PRIMARY KEY(candidato_id, questao_id)
+);
+
+-- Dados da emissão do certificado, gravados uma única vez (BL-19, BL-21, RN-09).
+-- ADD COLUMN IF NOT EXISTS permite rodar este script de novo num banco já criado.
+ALTER TABLE candidatos ADD COLUMN IF NOT EXISTS certificado_emitido_em TIMESTAMPTZ;
+ALTER TABLE candidatos ADD COLUMN IF NOT EXISTS certificado_acertos INT;
+ALTER TABLE candidatos ADD COLUMN IF NOT EXISTS certificado_total INT;
 
 COMMIT; 

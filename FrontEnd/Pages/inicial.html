@@ -3,75 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Inicial</title>
+    <title>Certificação em Metodologias Ágeis | MultiCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../Styles/base.css">
     <link rel="stylesheet" href="../Styles/inicial.css">
 </head>
-<body>
-    <div class="page">
-        <div class="glow glow-top"></div>
-        <div class="glow glow-left"></div>
-        <div class="circuit circuit-one"></div>
-        <div class="circuit circuit-two"></div>
-
-        <header class="brand" aria-label="Marca Multicore">
-            <span class="brand-mark">∞</span>
-            <span>Multicore</span>
+<body class="sem-circuito-esquerda">
+    <div class="pagina">
+        <header class="topo">
+            <a class="marca" href="inicial.html"><img src="../../assets/logo-icone.svg" alt=""><span class="marca-texto">Multi<span>Core</span></span></a>
+            <nav class="topo-acoes" aria-label="Principal">
+                <a class="nav-link" href="#como-funciona">Como funciona</a>
+                <!-- Visitante -->
+                <a class="nav-link" href="cadastro.html" data-visitante>Criar conta</a>
+                <a class="btn btn-secundario btn-pequeno" href="login.html" data-visitante>Entrar</a>
+                <!-- Logado (inicial.js troca quando há sessão) -->
+                <a class="nav-link" href="menu.html" data-logado hidden>Meu menu</a>
+                <button type="button" class="btn btn-secundario btn-pequeno" id="btn-sair" data-logado hidden>Sair</button>
+            </nav>
         </header>
 
-        <main class="hero">
-            <div class="hero-copy">
-                <p class="eyebrow">PLATAFORMA DE PRODUTIVIDADE</p>
-                <h1>Organize sua rotina de estudo e <span>alcance metas reais</span>.</h1>
-                <p class="intro">Acompanhe tarefas, cronometre sessões de foco e acompanhe seu progresso com clareza.</p>
-            </div>
+        <main>
+            <section class="hero" aria-labelledby="titulo">
+                <div class="hero-texto">
+                    <p class="selo"><span aria-hidden="true"></span>Certificação online · ABP DSM</p>
+                    <h1 class="titulo-pagina" id="titulo">Certificação em <span class="destaque">Metodologias Ágeis</span></h1>
+                    <p class="intro">Avalie seus conhecimentos em 12 temas e obtenha seu certificado.</p>
+                    <div class="hero-acoes">
+                        <a class="btn btn-primario" href="login.html" id="btn-comecar">
+                            <span id="btn-comecar-texto">Entrar e começar</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                        </a>
+                        <a class="btn btn-secundario" href="#como-funciona">Saiba mais sobre a certificação</a>
+                    </div>
+                </div>
 
-            <div class="tech-art" aria-hidden="true">
-                <div class="float-card card-a">✓</div>
-                <div class="float-card card-b">•</div>
-                <div class="float-card card-c">⏱</div>
-                <div class="screen"><span class="infinity">∞</span></div>
-                <div class="keyboard"></div>
-            </div>
+                <!-- Ilustração: janela com o símbolo do infinito -->
+                <div class="ilustracao" aria-hidden="true">
+                    <div class="flutuante flutuante-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17M10 6h11M10 12h11M10 18h11"/></svg></div>
+                    <div class="flutuante flutuante-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></div>
+                    <div class="flutuante flutuante-3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14.5c2.3.2 3.8 2 4.2 4.5"/></svg></div>
+                    <div class="janela">
+                        <div class="janela-pontos"><span></span><span></span><span></span></div>
+                        <svg class="infinito" viewBox="0 0 120 60" fill="none">
+                            <defs>
+                                <linearGradient id="grad-infinito" x1="0" x2="1">
+                                    <stop offset="0" stop-color="#3b82f6"/>
+                                    <stop offset="0.5" stop-color="#22d3ee"/>
+                                    <stop offset="1" stop-color="#3b82f6"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M60 30C49 16 41 10 30 10a20 20 0 0 0 0 40c11 0 19-6 30-20s19-20 30-20a20 20 0 0 1 0 40c-11 0-19-6-30-20Z" stroke="url(#grad-infinito)" stroke-width="10" stroke-linecap="round"/>
+                        </svg>
+                        <div class="janela-chips"><span>Sprint</span><span>Review</span><span>Retro</span></div>
+                    </div>
+                    <div class="pedestal"></div>
+                </div>
+            </section>
+
+            <section class="recursos" aria-label="Como é a certificação">
+                <article class="card recurso">
+                    <div class="icone-caixa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17M10 6h11M10 12h11M10 18h11"/></svg></div>
+                    <strong>12</strong>
+                    <h2>Temas</h2>
+                    <p>Conteúdo completo e atualizado sobre metodologias ágeis.</p>
+                </article>
+                <article class="card recurso">
+                    <div class="icone-caixa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M5 3 2 6M19 3l3 3"/></svg></div>
+                    <strong>30</strong>
+                    <h2>Minutos</h2>
+                    <p>Tempo para realizar as questões.</p>
+                </article>
+                <article class="card recurso">
+                    <div class="icone-caixa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg></div>
+                    <strong>65%</strong>
+                    <h2>Nota mínima</h2>
+                    <p>Para ser aprovado na certificação.</p>
+                </article>
+                <article class="card recurso">
+                    <div class="icone-caixa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M7 9h6M7 12h4"/><circle cx="16.5" cy="13" r="2.2"/><path d="m15.3 15-.8 4 2-1 2 1-.8-4"/></svg></div>
+                    <strong>Digital</strong>
+                    <h2>Certificado</h2>
+                    <p>Ao final, você recebe seu certificado de conclusão.</p>
+                </article>
+            </section>
+
+            <section class="card como-funciona" id="como-funciona" aria-labelledby="titulo-como">
+                <h2 id="titulo-como">Como funciona</h2>
+                <ol>
+                    <li><span class="chip">01</span><div><strong>Crie sua conta</strong><p>Com CPF, nome, e-mail e senha.</p></div></li>
+                    <li><span class="chip">02</span><div><strong>Estude os temas</strong><p>Cada tema tem um material didático na <a href="area-estudos.html">Área de Estudos</a>.</p></div></li>
+                    <li><span class="chip">03</span><div><strong>Responda uma questão por tema</strong><p>São 2 min 30 s por questão, sorteada entre 4. Depois de confirmada, a resposta não muda. Dá para pausar entre uma questão e outra.</p></div></li>
+                    <li><span class="chip">04</span><div><strong>Receba o certificado</strong><p>Com 65% de acertos ou mais. Ele tem um código que qualquer pessoa pode validar.</p></div></li>
+                </ol>
+            </section>
         </main>
-
-        <section class="features" aria-label="Recursos">
-            <article class="feature">
-                <div class="feature-icon">📘</div>
-                <strong>12 temas</strong>
-                <h2>Conteúdo</h2>
-                <p>Conteúdo completo e atualizado sobre metodologias ágeis.</p>
-            </article>
-
-            <article class="feature">
-                <div class="feature-icon">⏱</div>
-                <strong>30 minutos</strong>
-                <h2>Tempo</h2>
-                <p>Tempo para realizar as tarefas.</p>
-            </article>
-
-            <article class="feature">
-                <div class="feature-icon">✅</div>
-                <strong>65%</strong>
-                <h2>Nota mínima</h2>
-                <p>Para ser aprovado na certificação.</p>
-            </article>
-
-            <article class="feature">
-                <div class="feature-icon">🏅</div>
-                <strong>Certificado</strong>
-                <h2>Conclusão</h2>
-                <p>Ao final, você receberá seu certificado de conclusão.</p>
-            </article>
-        </section>
-
-        <div class="actions">
-            <button type="button" id="botao-teste" class="primary-button">Entrar</button>
-            <button type="button" id="botao-cadastro" class="secondary-button">Criar conta</button>
-            <p id="feedback" class="feedback" aria-live="polite">Sistema pronto para uso.</p>
-        </div>
-
     </div>
 
+    <script src="../Scripts/comum.js"></script>
     <script src="../Scripts/inicial.js"></script>
 </body>
 </html>

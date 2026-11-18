@@ -1,40 +1,58 @@
-// Endereço base da API de certificação (API-08 e API-09). Enquanto estiver vazio, a tela
-// usa o simulador de questao-simulador.js. Contrato esperado:
-//   GET  {API_URL}/certificacao/temas
-//        -> [{ id, nome, ordem, respondido }]
-//   GET  {API_URL}/certificacao/temas/{id}/questao
+// API de certificação (backend/src/routes/certificacao.js), servida na mesma origem do front-end:
+//   GET  /api/certificacao/temas
+//        -> [{ id, nome, ordem, respondido, em_andamento }]
+//   GET  /api/certificacao/temas/{id}/questao
 //        -> { id, enunciado, imagem_url, alternativas: [{ letra, texto }],
 //             segundos_restantes, correcao: Correcao | null }
-//   POST {API_URL}/certificacao/questoes/{id}/resposta   corpo: { letra: "A" | ... | null }
+//        -> 409 { tema_id } se outra questão ainda está aberta (só abre outro tema depois de concluir)
+//   POST /api/certificacao/questoes/{id}/resposta   corpo: { letra: "A" | ... | null }
 //        -> Correcao = { letra_resposta, letra_correta, acertou, tempo_esgotado }
-// O POST precisa ser idempotente: uma repetição devolve a resposta registrada na primeira vez.
-const API_URL = "";
+// O gabarito não fica no navegador: a alternativa correta só chega depois que a resposta
+// foi registrada no servidor, e o servidor decide acerto e prazo.
+const API_URL = "/api";
+const CHAVE_TOKEN = "multicore:token";
 // imagem_url vem do banco relativo à raiz do repositório (ex.: assets/imagens/tema_1/questao_1.png)
 const RAIZ_PROJETO = "../../";
 const TEMPO_LIMITE_MS = 15000;
 const AVISO_TEMPO_SEGUNDOS = 15;
 
+function irParaLogin() {
+    sessionStorage.removeItem(CHAVE_TOKEN);
+    location.replace("login.html?expired=true");
+}
+
+const token = sessionStorage.getItem(CHAVE_TOKEN);
+if (!token) irParaLogin();
+
 async function requisitar(caminho, opcoes = {}) {
     const resposta = await fetch(API_URL + caminho, {
         ...opcoes,
+        headers: { ...opcoes.headers, Authorization: `Bearer ${token}` },
         signal: AbortSignal.timeout(TEMPO_LIMITE_MS),
     });
-    if (!resposta.ok) throw new Error(`A API respondeu com status ${resposta.status}`);
+    if (resposta.status === 401) {
+        irParaLogin();
+        throw new Error("Sessão expirada");
+    }
+    if (!resposta.ok) {
+        const erro = new Error(`A API respondeu com status ${resposta.status}`);
+        erro.status = resposta.status;
+        erro.corpo = await resposta.json().catch(() => ({}));
+        throw erro;
+    }
     return resposta.json();
 }
 
-const api = API_URL
-    ? {
-          listarTemas: () => requisitar("/certificacao/temas"),
-          abrirQuestao: (temaId) => requisitar(`/certificacao/temas/${temaId}/questao`),
-          responder: (questaoId, letra) =>
-              requisitar(`/certificacao/questoes/${questaoId}/resposta`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ letra }),
-              }),
-      }
-    : window.simuladorCertificacao;
+const api = {
+    listarTemas: () => requisitar("/certificacao/temas"),
+    abrirQuestao: (temaId) => requisitar(`/certificacao/temas/${temaId}/questao`),
+    responder: (questaoId, letra) =>
+        requisitar(`/certificacao/questoes/${questaoId}/resposta`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ letra }),
+        }),
+};
 
 const $ = (id) => document.getElementById(id);
 
@@ -54,7 +72,18 @@ const elementos = {
     imagemErro: $("imagem-erro"),
     alternativas: $("alternativas"),
     avisoErro: $("aviso-erro"),
-    btnPular: $("btn-pular"),
+    btnPausar: $("btn-pausar"),
+    btnVoltar: $("btn-voltar"),
+    temasDica: $("temas-dica"),
+    dialogoSair: $("dialogo-sair"),
+    sairTitulo: $("sair-titulo"),
+    sairTexto: $("sair-texto"),
+    sairErro: $("sair-erro"),
+    btnSairCancelar: $("btn-sair-cancelar"),
+    btnSairConfirmar: $("btn-sair-confirmar"),
+    dialogoRetomar: $("dialogo-retomar"),
+    retomarTexto: $("retomar-texto"),
+    btnRetomar: $("btn-retomar"),
     resultado: $("resultado"),
     btnPrincipal: $("btn-principal"),
     btnPrincipalTexto: $("btn-principal-texto"),
@@ -91,8 +120,18 @@ function proximoTema() {
     return emOrdem.find((tema) => !tema.respondido) || null;
 }
 
+// Questão exibida e ainda sem resposta registrada: enquanto isso, nenhum outro tema abre
+function questaoAberta() {
+    return tela.questao !== null && tela.etapa !== "corrigida";
+}
+
 function renderizarTemas() {
     const enviando = tela.etapa === "enviando";
+    const travado = questaoAberta();
+
+    elementos.temasDica.textContent = travado
+        ? "Conclua a questão atual para escolher outro tema."
+        : "Escolha um tema para iniciar ou continuar.";
 
     elementos.listaTemas.replaceChildren(
         ...tela.temas.map((tema) => {
@@ -105,7 +144,7 @@ function renderizarTemas() {
             item.querySelector(".tema-item-situacao").textContent = tema.respondido ? "(respondido)" : "";
             botao.classList.toggle("atual", atual);
             botao.classList.toggle("respondido", tema.respondido);
-            botao.disabled = enviando;
+            botao.disabled = enviando || (travado && !atual);
             if (atual) botao.setAttribute("aria-current", "true");
             botao.addEventListener("click", () => {
                 if (!atual) abrirTema(tema);
@@ -144,6 +183,7 @@ function encerrarPorTempo() {
     pararCronometro();
     tela.tempoEsgotado = true;
     if (elementos.confirmacao.open) elementos.confirmacao.close();
+    if (elementos.dialogoSair.open) elementos.dialogoSair.close();
 
     // Se um envio já está em andamento, o servidor decide com base nele
     if (tela.etapa === "enviando") return;
@@ -159,8 +199,9 @@ function atualizarControles() {
     elementos.alternativas.disabled =
         etapa === "enviando" || etapa === "corrigida" || (etapa === "erro" && tempoEsgotado);
     elementos.avisoErro.hidden = etapa !== "erro";
-    elementos.btnPular.hidden = etapa === "corrigida" || !proximo;
-    elementos.btnPular.disabled = etapa === "enviando";
+    // A pausa só existe entre questões; depois do último tema, o botão leva ao resultado
+    elementos.btnPausar.hidden = etapa !== "corrigida";
+    elementos.btnPausar.textContent = proximo ? "Pausar certificação" : "Ver resultado";
 
     const textos = {
         respondendo: "Enviar resposta",
@@ -258,6 +299,12 @@ async function abrirTema(tema) {
         }
     } catch (erro) {
         if (carregamento !== tela.carregamento) return;
+        // Outra questão está aberta (ex.: tema pedido pela URL): o servidor manda concluir aquela primeiro
+        const aberto = erro.status === 409 && tela.temas.find((t) => t.id === erro.corpo?.tema_id);
+        if (aberto && aberto !== tema) {
+            abrirTema(aberto);
+            return;
+        }
         console.error("Erro ao carregar a questão:", erro);
         mostrarEstado("Não foi possível carregar a questão. Verifique sua conexão e tente novamente.", true);
     }
@@ -351,10 +398,67 @@ elementos.btnPrincipal.addEventListener("click", () => {
     else if (tela.etapa === "corrigida") abrirTema(proximoTema());
 });
 
-elementos.btnPular.addEventListener("click", () => {
-    const proximo = proximoTema();
-    if (proximo) abrirTema(proximo);
+/* ===== Pausa e saída (BL-12, BL-13) ===== */
+// O prazo de cada questão corre no servidor, então não dá para pausar no meio de uma:
+// a pausa acontece entre questões. Sair com uma questão aberta encerra essa questão,
+// registrando a alternativa marcada (sem alternativa, conta como incorreta).
+
+function irParaInicio() {
+    location.href = "menu.html";
+}
+
+function pedirSaida() {
+    // Sem questão na tela (carregando, erro ou prova concluída) não há o que pausar
+    if (!tela.questao) {
+        irParaInicio();
+        return;
+    }
+
+    const aberta = questaoAberta();
+    const marcada = tela.selecionada
+        ? `a alternativa <strong>${tela.selecionada}</strong>, que está marcada, será registrada como sua resposta`
+        : "como nenhuma alternativa está marcada, ela contará como <strong>incorreta</strong>";
+
+    elementos.sairTitulo.textContent = aberta ? "Sair e encerrar esta questão?" : "Pausar certificação?";
+    elementos.sairTexto.innerHTML = aberta
+        ? `O tempo desta questão continua contando, por isso ela não pode ficar pausada. Se sair agora, ${marcada}. Os outros temas ficam salvos para você continuar depois.`
+        : "Seu progresso fica salvo. Quando voltar, você continua do próximo tema.";
+    elementos.btnSairConfirmar.textContent = aberta ? "Encerrar questão e sair" : "Pausar e sair";
+    elementos.sairErro.hidden = true;
+    elementos.dialogoSair.showModal();
+}
+
+async function confirmarSaida() {
+    // O tempo pode ter acabado com a janela aberta: aí a questão já foi encerrada
+    if (questaoAberta() && tela.etapa !== "enviando") {
+        elementos.btnSairConfirmar.disabled = true;
+        try {
+            await api.responder(tela.questao.id, tela.selecionada);
+        } catch (erro) {
+            console.error("Erro ao encerrar a questão:", erro);
+            elementos.sairErro.hidden = false;
+            elementos.btnSairConfirmar.disabled = false;
+            return;
+        }
+    }
+    irParaInicio();
+}
+
+elementos.btnVoltar.addEventListener("click", (evento) => {
+    evento.preventDefault();
+    pedirSaida();
 });
+
+elementos.btnPausar.addEventListener("click", () => {
+    if (proximoTema()) pedirSaida();
+    else location.href = "resultado.html";
+});
+
+elementos.btnSairCancelar.addEventListener("click", () => elementos.dialogoSair.close());
+elementos.btnSairConfirmar.addEventListener("click", confirmarSaida);
+
+// Clicar fora da janela de retomada equivale a escolher: a pessoa decide pelos botões
+elementos.dialogoRetomar.addEventListener("cancel", (evento) => evento.preventDefault());
 
 // Cancelar apenas fecha a janela: a alternativa selecionada continua marcada
 elementos.btnCancelar.addEventListener("click", () => elementos.confirmacao.close());
@@ -389,13 +493,38 @@ async function iniciar() {
 
         tela.temas = [...temas].sort((a, b) => a.ordem - b.ordem);
 
-        const pedido = new URLSearchParams(location.search).get("tema");
-        const temaInicial =
-            tela.temas.find((tema) => String(tema.id) === pedido) ||
-            tela.temas.find((tema) => !tema.respondido) ||
-            tela.temas[0];
+        const emAndamento = tela.temas.find((tema) => tema.em_andamento);
+        const pendente = tela.temas.find((tema) => !tema.respondido);
+        const concluidos = tela.temas.filter((tema) => tema.respondido).length;
 
-        abrirTema(temaInicial);
+        // Todos os temas respondidos: a prova acabou, o próximo passo é o resultado
+        if (!pendente) {
+            location.replace("resultado.html");
+            return;
+        }
+
+        // Com ?tema= na URL (recarregou a página), segue direto; o servidor redireciona se outra questão estiver aberta
+        const pedido = new URLSearchParams(location.search).get("tema");
+        const temaPedido = tela.temas.find((tema) => String(tema.id) === pedido);
+        const temaInicial = temaPedido || emAndamento || pendente;
+
+        if (temaPedido || (concluidos === 0 && !emAndamento)) {
+            abrirTema(temaInicial);
+            return;
+        }
+
+        // Certificação já começada: pergunta se quer continuar de onde parou
+        const progresso = `Você já concluiu ${concluidos} de ${tela.temas.length} temas.`;
+        elementos.retomarTexto.textContent = emAndamento
+            ? `${progresso} A questão do tema ${formatarNumero(emAndamento.ordem)} (${emAndamento.nome}) ficou aberta e o tempo dela continua contando.`
+            : `${progresso} O próximo é o tema ${formatarNumero(temaInicial.ordem)}: ${temaInicial.nome}.`;
+        mostrarEstado("Certificação pausada.");
+        renderizarTemas();
+        elementos.btnRetomar.onclick = () => {
+            elementos.dialogoRetomar.close();
+            abrirTema(temaInicial);
+        };
+        elementos.dialogoRetomar.showModal();
     } catch (erro) {
         console.error("Erro ao carregar os temas:", erro);
         mostrarEstado("Não foi possível carregar a certificação. Verifique sua conexão e tente novamente.", true);

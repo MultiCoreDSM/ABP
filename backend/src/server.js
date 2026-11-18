@@ -4,30 +4,25 @@ import questoes from './routes/questoes.js';
 import imagens from './routes/imagens.js';
 import candidatos from './routes/candidatos.js';
 import login from './routes/login.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 // Configuração do express e criação do servidor
 const app = express();
 const porta = process.env.APP_PORT || 3001;
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Habilita recebimento de JSON no corpo das requisições
 app.use(express.json());
 
-// Rotas da API
-app.use("/api/v1/temas", temas);
-app.use("/api/v1/questoes", questoes);
-app.use("/api/v1/imagens", imagens);
-app.use("/api/v1/candidatos", candidatos);
-app.use("/api/v1/login", login);
 
-//servindo os arquivos do FrontEnd
-app.use(express.static(path.join(__dirname, '../../FrontEnd')));
+// Rotas da API
+app.use("/api/temas", temas);
+app.use("/api/questoes", questoes);
+app.use("/api/imagens", imagens);
+app.use("/api/candidatos", candidatos);
+app.use("/api/login", login);
 
 // Identificação de qualquer outra rota que esteja fora das configuradas
 app.use((req, res) => {
-    res.status(404).send("Rota não encontrada");
+    res.status(404).json({ erro: "Rota não encontrada" });
 });
 
 // Inicialização do servidor

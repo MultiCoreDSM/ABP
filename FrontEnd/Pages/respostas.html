@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respostas e explicações | MultiCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../Styles/base.css">
+    <link rel="stylesheet" href="../Styles/respostas.css">
+</head>
+<body class="sem-circuitos">
+    <div class="pagina">
+        <header class="topo">
+            <a class="marca" href="menu.html"><img src="../../assets/logo-icone.svg" alt=""><span class="marca-texto">Multi<span>Core</span></span></a>
+            <a class="btn btn-secundario btn-pequeno" href="resultado.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+                Voltar ao resultado
+            </a>
+        </header>
+
+        <main>
+            <div class="cabecalho">
+                <div>
+                    <p class="sobretitulo" id="contagem">Carregando...</p>
+                    <h1 class="titulo-pagina">Respostas e <span class="destaque">explicações</span></h1>
+                </div>
+                <div class="abas" role="group" aria-label="Filtrar respostas">
+                    <button type="button" class="aba" data-filtro="todas" aria-pressed="true">Todas</button>
+                    <button type="button" class="aba" data-filtro="corretas" aria-pressed="false">Corretas</button>
+                    <button type="button" class="aba" data-filtro="incorretas" aria-pressed="false">Incorretas</button>
+                </div>
+            </div>
+
+            <div class="card estado" id="estado" role="status" hidden></div>
+            <div class="grade" id="grade"></div>
+        </main>
+    </div>
+
+    <template id="modelo-resposta">
+        <article class="card resposta">
+            <header>
+                <span class="tema-numero"></span>
+                <h2 class="tema-nome"></h2>
+                <span class="etiqueta"></span>
+            </header>
+            <p class="enunciado"></p>
+            <ul class="alternativas"></ul>
+        </article>
+    </template>
+
+    <script src="../Scripts/comum.js"></script>
+    <script src="../Scripts/respostas.js"></script>
+</body>
+</html>
