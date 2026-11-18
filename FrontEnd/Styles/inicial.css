@@ -1,0 +1,298 @@
+/* Tela inicial (landing). Base visual em base.css */
+
+.nav-link {
+    padding: 8px 6px;
+    color: var(--texto-suave);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: var(--texto);
+}
+
+/* ===== Hero ===== */
+.hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 40px;
+    margin-top: 36px;
+}
+
+.selo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid var(--card-borda);
+    border-radius: 999px;
+    background: rgba(37, 99, 235, 0.12);
+    color: #bfe3ff;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.selo span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ciano);
+    box-shadow: 0 0 8px var(--ciano);
+}
+
+.hero .titulo-pagina {
+    margin-top: 20px;
+    font-size: clamp(40px, 4.4vw, 58px);
+}
+
+.hero .titulo-pagina .destaque {
+    display: block;
+    white-space: nowrap;
+}
+
+.intro {
+    max-width: 440px;
+    margin-top: 20px;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--texto-suave);
+}
+
+.hero-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 32px;
+}
+
+/* ===== Ilustração ===== */
+.ilustracao {
+    position: relative;
+    height: 360px;
+}
+
+.janela {
+    position: absolute;
+    top: 30px;
+    left: 70px;
+    right: 30px;
+    height: 260px;
+    border: 1px solid var(--card-borda-forte);
+    border-radius: 20px;
+    background: linear-gradient(160deg, rgba(20, 38, 88, 0.9) 0%, rgba(9, 18, 46, 0.9) 100%);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(56, 189, 248, 0.08);
+    transform: perspective(900px) rotateY(-8deg) rotateX(3deg);
+}
+
+.janela-pontos {
+    display: flex;
+    gap: 7px;
+    padding: 18px 20px;
+}
+
+.janela-pontos span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(167, 180, 208, 0.45);
+}
+
+.infinito {
+    width: 62%;
+    margin: 8px auto 0;
+    filter: drop-shadow(0 0 16px rgba(34, 211, 238, 0.65));
+}
+
+.janela-chips {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.janela-chips span {
+    padding: 6px 12px;
+    border: 1px solid var(--card-borda);
+    border-radius: 8px;
+    background: rgba(4, 9, 26, 0.6);
+    color: var(--texto-suave);
+    font-size: 13px;
+}
+
+.pedestal {
+    position: absolute;
+    left: 90px;
+    right: 50px;
+    bottom: 10px;
+    height: 56px;
+    border: 2px solid rgba(56, 189, 248, 0.6);
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.35), inset 0 0 24px rgba(56, 189, 248, 0.25);
+}
+
+.flutuante {
+    position: absolute;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border: 1px solid var(--card-borda-forte);
+    border-radius: 16px;
+    background: rgba(10, 22, 56, 0.92);
+    color: var(--azul-claro);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.flutuante svg {
+    width: 28px;
+    height: 28px;
+}
+
+.flutuante-1 { top: 0; left: 20px; }
+.flutuante-2 { top: 220px; left: 0; }
+.flutuante-3 { top: 110px; right: 0; }
+
+/* ===== Cards de recursos ===== */
+.recursos {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 48px;
+}
+
+.recurso {
+    padding: 22px 22px 24px;
+}
+
+.recurso strong {
+    display: block;
+    margin-top: 18px;
+    font-family: var(--fonte-titulo);
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ciano);
+}
+
+.recurso h2 {
+    margin-top: 6px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.recurso p {
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--texto-suave);
+}
+
+/* ===== Como funciona ===== */
+.como-funciona {
+    margin-top: 32px;
+    padding: 28px;
+    scroll-margin-top: 24px;
+}
+
+.como-funciona h2 {
+    font-family: var(--fonte-titulo);
+    font-size: 24px;
+}
+
+.como-funciona ol {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 32px;
+    margin-top: 20px;
+    list-style: none;
+}
+
+.como-funciona li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.como-funciona li strong {
+    font-size: 16px;
+}
+
+.como-funciona li p {
+    margin-top: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--texto-suave);
+}
+
+/* ===== Responsivo ===== */
+@media (max-width: 960px) {
+    .hero {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ilustracao {
+        max-width: 520px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .recursos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .nav-link[href="#como-funciona"],
+    .nav-link[data-visitante] {
+        display: none;
+    }
+
+    .hero {
+        margin-top: 24px;
+    }
+
+    .hero .titulo-pagina {
+        font-size: 36px;
+    }
+
+    .hero .titulo-pagina .destaque {
+        white-space: normal;
+    }
+
+    .intro {
+        font-size: 16px;
+    }
+
+    .hero-acoes .btn {
+        flex: 1 1 100%;
+    }
+
+    .ilustracao {
+        display: none;
+    }
+
+    .recursos {
+        gap: 12px;
+        margin-top: 32px;
+    }
+
+    .recurso {
+        padding: 16px;
+    }
+
+    .recurso strong {
+        font-size: 24px;
+    }
+
+    .como-funciona {
+        padding: 20px;
+    }
+
+    .como-funciona ol {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validar certificado | MultiCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../Styles/base.css">
+    <link rel="stylesheet" href="../Styles/acesso.css">
+    <link rel="stylesheet" href="../Styles/validacao.css">
+</head>
+<body>
+    <div class="acesso-centro">
+        <a class="marca" href="inicial.html"><img src="../../assets/logo-icone.svg" alt=""><span class="marca-texto">Multi<span>Core</span></span></a>
+
+        <main class="card cartao-centro formulario" aria-labelledby="titulo">
+            <div class="icone-caixa" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <h1 id="titulo">Validar certificado</h1>
+            <p class="subtitulo">Informe o código de validação que aparece no certificado.</p>
+
+            <form id="form-validar" novalidate>
+                <div class="campo">
+                    <label for="codigo">Código de validação</label>
+                    <div class="campo-entrada">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/></svg>
+                        <input type="text" id="codigo" name="codigo" placeholder="64 caracteres (letras e números)" autocomplete="off" spellcheck="false" aria-describedby="erro-codigo" required>
+                    </div>
+                    <p class="campo-erro" id="erro-codigo" aria-live="polite"></p>
+                </div>
+                <button type="submit" class="btn btn-primario btn-bloco" id="btn-validar">Validar</button>
+            </form>
+
+            <!-- Resultado: só os dados aprovados pelo PO (RN-09) -->
+            <section class="resultado-validacao" id="resultado" aria-live="polite" hidden>
+                <p class="etiqueta etiqueta-sucesso">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+                    <span>Certificado <span id="situacao">válido</span></span>
+                </p>
+                <dl>
+                    <div><dt>Titular</dt><dd id="nome"></dd></div>
+                    <div><dt>CPF</dt><dd id="cpf"></dd></div>
+                    <div><dt>Certificação</dt><dd>Metodologias Ágeis</dd></div>
+                    <div><dt>Aproveitamento</dt><dd id="percentual"></dd></div>
+                    <div><dt>Emitido em</dt><dd id="emitido"></dd></div>
+                </dl>
+            </section>
+
+            <p class="aviso" id="nao-encontrado" role="alert" hidden>Nenhum certificado encontrado com este código. Confira se ele foi digitado completo.</p>
+        </main>
+    </div>
+
+    <script src="../Scripts/comum.js"></script>
+    <script src="../Scripts/validacao.js"></script>
+</body>
+</html>

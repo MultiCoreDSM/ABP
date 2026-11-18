@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado | MultiCore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../Styles/base.css">
+    <link rel="stylesheet" href="../Styles/resultado.css">
+</head>
+<body>
+    <div class="pagina estreita">
+        <!-- Carregamento, prova incompleta ou erro -->
+        <div class="card estado" id="estado" role="status">
+            <p id="estado-mensagem">Carregando resultado...</p>
+            <div class="estado-acoes" id="estado-acoes" hidden>
+                <a class="btn btn-secundario" href="menu.html">Voltar ao menu</a>
+                <a class="btn btn-primario" href="questao.html">Continuar exame</a>
+            </div>
+        </div>
+
+        <main id="conteudo" hidden>
+            <header class="cabecalho">
+                <span class="icone-caixa trofeu" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4ZM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M10 17h4"/></svg></span>
+                <div>
+                    <h1 class="titulo-pagina" id="titulo">Certificação <span class="destaque">concluída!</span></h1>
+                    <p class="texto-suave" id="subtitulo">Parabéns! Confira seu desempenho.</p>
+                </div>
+            </header>
+
+            <div class="resumo">
+                <section class="card nota" aria-labelledby="titulo-nota">
+                    <div class="anel" id="anel" style="--valor: 0">
+                        <svg viewBox="0 0 120 120" aria-hidden="true">
+                            <circle class="anel-fundo" cx="60" cy="60" r="50"/>
+                            <circle class="anel-valor" cx="60" cy="60" r="50" pathLength="100"/>
+                        </svg>
+                        <div class="anel-texto"><strong id="anel-percentual">0%</strong><span>acertos</span></div>
+                    </div>
+                    <div>
+                        <h2 class="rotulo" id="titulo-nota">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>
+                            Resultado final
+                        </h2>
+                        <p class="placar"><strong id="acertos">0</strong><span>/<span id="total">12</span></span></p>
+                        <p class="percentual" id="percentual-texto">0% de acertos</p>
+                        <span class="etiqueta" id="situacao"></span>
+                    </div>
+                </section>
+
+                <section class="card certificado-card" aria-labelledby="titulo-certificado">
+                    <svg class="certificado-marca" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="12" cy="9" r="5.5"/><path d="m8.6 13.4-1.6 7.6 5-2.8 5 2.8-1.6-7.6"/></svg>
+                    <h2 class="rotulo" id="titulo-certificado">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="m9 13.5-1.5 7.5 4.5-2.5 4.5 2.5-1.5-7.5"/></svg>
+                        Certificado
+                    </h2>
+                    <p class="certificado-status" id="certificado-status">—</p>
+                    <p class="texto-suave" id="certificado-descricao">Certificação em Metodologias Ágeis</p>
+                    <a class="link-seta" href="certificado.html" id="link-certificado" hidden>Visualizar e baixar<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                </section>
+            </div>
+
+            <section class="card detalhamento" aria-labelledby="titulo-detalhes">
+                <h2 class="rotulo-forte" id="titulo-detalhes">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>
+                    Detalhamento do resultado
+                </h2>
+                <ol class="lista-temas" id="lista-temas"></ol>
+                <a class="btn btn-secundario" href="respostas.html">Ver respostas e explicações</a>
+            </section>
+
+            <div class="acoes">
+                <a class="btn btn-secundario" href="menu.html">Voltar ao menu</a>
+                <a class="btn btn-primario" href="certificado.html" id="btn-baixar" hidden>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+                    Baixar certificado
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <template id="modelo-tema">
+        <li><span class="tema-numero"></span><span class="tema-nome"></span><span class="etiqueta"></span></li>
+    </template>
+
+    <script src="../Scripts/comum.js"></script>
+    <script src="../Scripts/resultado.js"></script>
+</body>
+</html>
