@@ -64,10 +64,10 @@ async function situacaoResposta(candidatoId, questaoId) {
     correcao: encerrada
       ? {
           letra_resposta: linha.letra_resposta ? linha.letra_resposta.trim() : null,
-          letra_correta: linha.letra_correta.trim(),
+          letra_correta: linha.letra_correta.trim() ?? null,
           // Só conta como acerto se a resposta chegou dentro do prazo
           acertou: linha.acertou === true && linha.valida === true,
-          tempo_esgotado: linha.valida !== true,
+          tempo_esgotado: linha.valida !== true || linha.valida !== true,
         }
       : null,
   };
@@ -255,7 +255,7 @@ export async function respostasCandidatoService(candidatoId) {
       questao_id: linha.questao_id,
       enunciado: linha.enunciado,
       letra_resposta: linha.letra_resposta ? linha.letra_resposta.trim() : null,
-      letra_correta: alternativas.find((a) => a.correta).letra,
+      letra_correta: alternativas.find((a) => a.correta)?.letra ?? null,
       acertou: linha.acertou,
       tempo_esgotado: linha.tempo_esgotado,
       alternativas: alternativas.map(({ letra, texto }) => ({ letra, texto })),

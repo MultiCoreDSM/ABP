@@ -7,6 +7,7 @@ import {
 } from "../services/candidatos.js";
 import autenticacao from "../middlewares/autenticacao.js";
 import { capturar } from "../middlewares/erros.js";
+import { gerarPdfCertificado } from "../services/pdfCertificado.js";
 
 import { cpfValido, emailValido, senhaValida, SENHA_MINIMA, SENHA_MAXIMA } from "../utils/validacao.js";
 
@@ -91,5 +92,49 @@ rotas.post("/certificado", autenticacao, capturar(async function (req, res) {
   }
   res.json(certificado);
 }));
+
+
+/*
+ GET /api/candidatos/certificado/pdf
+
+ Emite o certificado, se necessário, e disponibiliza o PDF.
+*/
+rotas.get("/certificado/pdf", autenticacao, capturar(async function (req, res) {
+    // Tenta emitir o certificado.
+    const emissao = await emitirCertificadoService(req.candidatoId);
+
+    if (emissao?.erro) {
+        return res.status(400).json(emissao);
+    }
+
+    // Busca os dados completos do certificado.
+    const certificado = await buscarCertificadoCandidatoService(
+        req.candidatoId
+    );
+
+    if (!certificado) {
+        return res.status(404).json({
+            erro: "Certificado não encontrado."
+        });
+    }
+
+    // Endereço público do sistema.
+    const baseUrl = (
+        process.env.APP_URL || `${req.protocol}://${req.get("host")}`
+    ).replace(/\/+$/, "");
+
+    // Gera o PDF com QR Code.
+    const pdf = await gerarPdfCertificado(certificado, baseUrl);
+
+    res.setHeader("Content-Type", "application/pdf");
+
+    res.setHeader(
+        "Content-Disposition",
+        'attachment; filename="certificado-abp.pdf"'
+    );
+
+    res.send(pdf);
+}));
+
 
 export default rotas;
