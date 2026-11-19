@@ -2,6 +2,7 @@ import pool from "../config/database.js";
 import bcrypt from "bcryptjs";
 import { randomBytes } from "node:crypto";
 import { buscarProximoTemaService } from "./temas.js";
+import { resultadoCandidatoService } from "./certificacao.js";
 
 export const PERCENTUAL_MINIMO = 65;
 
@@ -63,46 +64,65 @@ export async function buscarCertificadoCandidatoService(candidatoId) {
 
 // Emite o certificado uma única vez; se já existe, devolve o mesmo (idempotente).
 // A nota e a data ficam gravadas na emissão: a validação pública lê esses valores (RN-09).
+
 export async function emitirCertificadoService(candidatoId) {
+  // Verifica se o candidato já possui um certificado.
+  // Se possuir, devolve o mesmo certificado.
   const existente = await buscarCertificadoCandidatoService(candidatoId);
+
   if (existente) return existente;
 
+  // Verifica se ainda existem temas pendentes.
   const tema = await buscarProximoTemaService(candidatoId);
-  if (tema != null) {
-    return { erro: "Conclua todos os temas antes de emitir o certificado." };
-  }
 
-  const resultado = await pool.query(
-    `SELECT COUNT(*) AS total,
-            COUNT(CASE WHEN acertou = true AND valida = true THEN 1 END) AS acertos
-     FROM respostas
-     WHERE candidato_id = $1`,
-    [candidatoId]
-  );
-  const total = Number(resultado.rows[0].total);
-  const acertos = Number(resultado.rows[0].acertos);
-  const percentual = total > 0 ? (acertos / total) * 100 : 0;
-  if (total === 0 || percentual < PERCENTUAL_MINIMO) {
+  if (tema != null) {
     return {
-      erro: `Sua nota foi ${Math.round(percentual)}%. É necessário acertar pelo menos ${PERCENTUAL_MINIMO}% das questões dentro do prazo.`,
+      erro: "Conclua todos os temas antes de emitir o certificado."
     };
   }
 
+  // Obtém o resultado oficial da prova.
+  const resultado = await resultadoCandidatoService(candidatoId);
+
+  const total = Number(resultado.total);
+  const acertos = Number(resultado.acertos);
+
+  const percentual = total > 0
+    ? (acertos / total) * 100
+    : 0;
+
+  // Verifica se o candidato atingiu a nota mínima.
+  if (
+    !resultado.concluida ||
+    total === 0 ||
+    percentual < PERCENTUAL_MINIMO
+  ) {
+    return {
+      erro: `Sua nota foi ${Math.round(percentual)}%. É necessário acertar pelo menos ${PERCENTUAL_MINIMO}% das questões dentro do prazo.`
+    };
+  }
+
+  // Gera um código único para validação do certificado.
   const codigo = randomBytes(32).toString("hex");
+
+  // Salva os dados do certificado no banco.
   await pool.query(
     `
-    UPDATE candidatos
-    SET certificado_hash = $2,
-        certificado_emitido_em = now(),
-        certificado_acertos = $3,
-        certificado_total = $4
-    WHERE id = $1 AND certificado_hash IS NULL
+      UPDATE candidatos
+      SET certificado_hash = $2,
+          certificado_emitido_em = now(),
+          certificado_acertos = $3,
+          certificado_total = $4
+      WHERE id = $1 AND certificado_hash IS NULL
     `,
     [candidatoId, codigo, acertos, total]
   );
-  // Se duas emissões correrem juntas, só uma grava; as duas devolvem o mesmo certificado
+
+  // Retorna o certificado salvo.
+  // Também funciona caso duas solicitações ocorram simultaneamente.
   return buscarCertificadoCandidatoService(candidatoId);
 }
+
 
 // Mascara o CPF no formato aprovado pelo PO (RN-09): ***.456.789-**
 function mascararCpf(cpf) {
