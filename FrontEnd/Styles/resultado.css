@@ -1,0 +1,275 @@
+/* Resultado da certificação. Base visual em base.css */
+
+.estreita {
+    max-width: 1010px;
+}
+
+.estado-acoes {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 8px;
+}
+
+.trofeu {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: linear-gradient(160deg, #1e40af, #172554);
+    color: var(--dourado);
+}
+
+.trofeu svg {
+    width: 28px;
+    height: 28px;
+}
+
+.cabecalho .titulo-pagina {
+    font-size: clamp(30px, 4vw, 40px);
+}
+
+.cabecalho p {
+    margin-top: 4px;
+    font-size: 16px;
+}
+
+.resumo {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.rotulo,
+.rotulo-forte {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--texto-suave);
+}
+
+.rotulo svg,
+.rotulo-forte svg {
+    width: 20px;
+    height: 20px;
+}
+
+.rotulo-forte {
+    font-family: var(--fonte-titulo);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--texto);
+}
+
+.rotulo-forte svg {
+    color: var(--azul-claro);
+}
+
+/* ===== Nota com anel de progresso ===== */
+.nota {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 26px 30px;
+}
+
+.anel {
+    position: relative;
+    flex-shrink: 0;
+    width: 136px;
+    height: 136px;
+}
+
+.anel svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.anel circle {
+    fill: none;
+    stroke-width: 11;
+}
+
+.anel-fundo {
+    stroke: rgba(56, 132, 255, 0.16);
+}
+
+.anel-valor {
+    stroke: var(--ciano);
+    stroke-linecap: round;
+    stroke-dasharray: var(--valor) 100;
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.7));
+    transition: stroke-dasharray 0.8s ease;
+}
+
+.anel.reprovado .anel-valor {
+    stroke: var(--vermelho);
+    filter: drop-shadow(0 0 6px rgba(251, 113, 133, 0.6));
+}
+
+.anel-texto {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    text-align: center;
+}
+
+.anel-texto strong {
+    font-family: var(--fonte-titulo);
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.anel-texto span {
+    font-size: 12px;
+    color: var(--texto-suave);
+}
+
+.placar {
+    margin-top: 8px;
+    font-family: var(--fonte-titulo);
+    line-height: 1;
+}
+
+.placar strong {
+    font-size: 50px;
+    font-weight: 700;
+}
+
+.placar > span {
+    font-size: 24px;
+    color: var(--texto-suave);
+}
+
+.percentual {
+    margin-top: 8px;
+    font-weight: 600;
+    color: var(--ciano);
+}
+
+.nota .etiqueta {
+    margin-top: 12px;
+}
+
+/* ===== Card do certificado ===== */
+.certificado-card {
+    overflow: hidden;
+    padding: 26px 30px;
+}
+
+.certificado-marca {
+    position: absolute;
+    top: -6px;
+    right: 6px;
+    width: 120px;
+    height: 120px;
+    color: rgba(96, 165, 250, 0.16);
+}
+
+.certificado-status {
+    margin-top: 22px;
+    font-family: var(--fonte-titulo);
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.certificado-card .texto-suave {
+    margin-top: 4px;
+    font-size: 14px;
+}
+
+.certificado-card .link-seta {
+    margin-top: 26px;
+}
+
+/* ===== Detalhamento por tema ===== */
+.detalhamento {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    padding: 24px 28px;
+}
+
+.lista-temas {
+    margin-top: 10px;
+    list-style: none;
+}
+
+.lista-temas li {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 13px 0;
+    border-bottom: 1px solid rgba(86, 132, 230, 0.16);
+}
+
+.tema-numero {
+    width: 26px;
+    font-family: var(--fonte-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--azul-claro);
+}
+
+.tema-nome {
+    flex: 1;
+    min-width: 0;
+    font-size: 16px;
+}
+
+.lista-temas .etiqueta-pendente {
+    border: 1px solid var(--card-borda);
+    color: var(--texto-suave);
+}
+
+.detalhamento .btn {
+    align-self: center;
+    margin-top: 20px;
+}
+
+.acoes {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 28px;
+}
+
+@media (max-width: 760px) {
+    .resumo {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .nota {
+        gap: 20px;
+        padding: 22px;
+    }
+
+    .anel {
+        width: 110px;
+        height: 110px;
+    }
+
+    .placar strong {
+        font-size: 40px;
+    }
+
+    .detalhamento {
+        padding: 20px;
+    }
+
+    .acoes .btn {
+        flex: 1 1 100%;
+    }
+}

@@ -1,58 +1,136 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const formCadastro = document.getElementById("form-cadastro");
-    const screenForm = document.getElementById("screen-form");
-    const screenSuccess = document.getElementById("screen-success");
-    const toggleSenha = document.getElementById("toggle-senha");
-    const senhaInput = document.getElementById("senha");
-    const cpfInput = document.getElementById("cpf");
-    const btnIniciar = document.getElementById("btn-iniciar");
-    const btnMenu = document.getElementById("btn-menu");
-    const btnEntrar = document.getElementById("btn-entrar");
+const form = document.getElementById("form-cadastro");
+const telaFormulario = document.getElementById("screen-form");
+const telaSucesso = document.getElementById("screen-success");
+const inputCpf = document.getElementById("cpf");
+const inputNome = document.getElementById("nome");
+const inputEmail = document.getElementById("email");
+const inputSenha = document.getElementById("senha");
+const btnOlho = document.getElementById("btn-olho");
+const btnCadastrar = document.getElementById("btn-cadastrar");
+const btnIniciar = document.getElementById("btn-iniciar");
+const erroCadastro = document.getElementById("erro-cadastro");
 
-    if (cpfInput) {
-        cpfInput.addEventListener("input", (e) => {
-            let value = e.target.value.replace(/\D/g, "");
-            if (value.length > 11) value = value.slice(0, 11);
+const SENHA_MINIMA = 8;
 
-            value = value.replace(/(\d{3})(\d)/, "$1.$2");
-            value = value.replace(/(\d{3})(\d)/, "$1.$2");
-            value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+// Máscara de CPF: 000.000.000-00
+inputCpf.addEventListener("input", () => {
+    const numeros = inputCpf.value.replace(/\D/g, "").slice(0, 11);
+    inputCpf.value = numeros
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+});
 
-            e.target.value = value;
-        });
+for (const input of [inputCpf, inputNome, inputEmail, inputSenha]) {
+    input.addEventListener("input", () => limparErro(input));
+}
+
+// Mostrar / ocultar senha
+btnOlho.addEventListener("click", () => {
+    const visivel = inputSenha.type === "password";
+    inputSenha.type = visivel ? "text" : "password";
+    btnOlho.classList.toggle("visivel", visivel);
+    btnOlho.setAttribute("aria-pressed", visivel);
+    btnOlho.setAttribute("aria-label", visivel ? "Ocultar senha" : "Mostrar senha");
+});
+
+// Validação dos dígitos verificadores do CPF (a mesma do login e do servidor)
+function cpfValido(cpf) {
+    const numeros = cpf.replace(/\D/g, "");
+    if (numeros.length !== 11 || /^(\d)\1+$/.test(numeros)) return false;
+
+    for (let t = 9; t < 11; t++) {
+        let soma = 0;
+        for (let i = 0; i < t; i++) {
+            soma += Number(numeros[i]) * (t + 1 - i);
+        }
+        const digito = ((soma * 10) % 11) % 10;
+        if (digito !== Number(numeros[t])) return false;
     }
+    return true;
+}
 
-    if (toggleSenha && senhaInput) {
-        toggleSenha.addEventListener("click", () => {
-            const isPassword = senhaInput.type === "password";
-            senhaInput.type = isPassword ? "text" : "password";
-            toggleSenha.textContent = isPassword ? "🙈" : "👁";
-        });
-    }
+function mostrarErro(input, mensagem) {
+    input.closest(".campo").classList.add("invalido");
+    input.setAttribute("aria-invalid", "true");
+    document.getElementById(`erro-${input.id}`).textContent = mensagem;
+}
 
-    if (formCadastro && screenForm && screenSuccess) {
-        formCadastro.addEventListener("submit", (e) => {
-            e.preventDefault();
-            screenForm.classList.add("hidden");
-            screenSuccess.classList.remove("hidden");
-        });
-    }
+function limparErro(input) {
+    input.closest(".campo").classList.remove("invalido");
+    input.removeAttribute("aria-invalid");
+    document.getElementById(`erro-${input.id}`).textContent = "";
+}
 
-    if (btnIniciar) {
-        btnIniciar.addEventListener("click", () => {
-            window.location.href = "inicial.html";
-        });
+function validar() {
+    let valido = true;
+    if (!cpfValido(inputCpf.value)) {
+        mostrarErro(inputCpf, "Informe um CPF válido.");
+        valido = false;
     }
+    if (inputNome.value.trim() === "") {
+        mostrarErro(inputNome, "Informe seu nome completo.");
+        valido = false;
+    }
+    if (!inputEmail.checkValidity() || inputEmail.value.trim() === "") {
+        mostrarErro(inputEmail, "Informe um e-mail válido.");
+        valido = false;
+    }
+    if (inputSenha.value.length < SENHA_MINIMA) {
+        mostrarErro(inputSenha, `A senha deve ter pelo menos ${SENHA_MINIMA} caracteres.`);
+        valido = false;
+    }
+    return valido;
+}
 
-    if (btnMenu) {
-        btnMenu.addEventListener("click", () => {
-            window.location.href = "inicial.html";
-        });
-    }
+function mostrarErroCadastro(mensagem) {
+    erroCadastro.textContent = mensagem;
+    erroCadastro.hidden = false;
+}
 
-    if (btnEntrar) {
-        btnEntrar.addEventListener("click", () => {
-            window.location.href = "login.html";
-        });
+// Entra logo após o cadastro para o "Sim, iniciar agora" não pedir a senha de novo.
+// A senha não fica guardada: só o token, no sessionStorage (como no login).
+async function entrarAutomaticamente(cpf, senha) {
+    try {
+        const sessao = await MultiCore.api("/login", { corpo: { cpf, senha }, semRedirecionar: true });
+        MultiCore.salvarToken(sessao.token);
+    } catch (erro) {
+        console.error("Erro ao entrar após o cadastro:", erro.message);
     }
+}
+
+form.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    erroCadastro.hidden = true;
+    if (!validar()) return;
+
+    const cpf = inputCpf.value.replace(/\D/g, "");
+    const senha = inputSenha.value;
+
+    btnCadastrar.disabled = true;
+    try {
+        await MultiCore.api("/candidatos", {
+            corpo: { cpf, nome: inputNome.value.trim(), email: inputEmail.value.trim(), senha },
+            semRedirecionar: true,
+        });
+        await entrarAutomaticamente(cpf, senha);
+        form.reset();
+        telaFormulario.hidden = true;
+        telaSucesso.hidden = false;
+        btnIniciar.focus();
+    } catch (erro) {
+        // 400 traz uma mensagem pensada para o usuário (ex.: "CPF já cadastrado.")
+        if (erro.status === 400) mostrarErroCadastro(erro.message);
+        else {
+            console.error("Erro ao cadastrar:", erro.message);
+            mostrarErroCadastro("Não foi possível concluir o cadastro agora. Tente novamente.");
+        }
+    } finally {
+        btnCadastrar.disabled = false;
+    }
+});
+
+// Se o login automático falhou, a prova mandaria para o login de qualquer forma
+btnIniciar.addEventListener("click", () => {
+    location.href = MultiCore.logado() ? "questao.html" : "login.html";
 });

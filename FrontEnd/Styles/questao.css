@@ -727,6 +727,26 @@ svg {
     margin-left: 0;
 }
 
+/* "Voltar ao início" é um link com o visual do botão secundário */
+a.btn-secundario {
+    text-decoration: none;
+}
+
+.aviso-erro-texto {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--vermelho);
+}
+
+.aviso-erro-texto[hidden] {
+    display: none;
+}
+
+.confirmacao-aviso strong {
+    color: var(--texto);
+}
+
 /* ===== Responsivo ===== */
 @media (max-width: 1200px) {
     :root {

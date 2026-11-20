@@ -1,0 +1,159 @@
+/* Menu principal. Base visual em base.css */
+
+.usuario {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.avatar {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 2px solid rgba(147, 197, 253, 0.45);
+    border-radius: 50%;
+    background: linear-gradient(160deg, var(--ciano), var(--azul-2));
+    color: #fff;
+    font-family: var(--fonte-titulo);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.avatar:empty {
+    display: none;
+}
+
+.saudacao {
+    margin-top: 40px;
+}
+
+.subtitulo {
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+/* Grade: dois cards grandes em cima, dois atalhos embaixo */
+.opcoes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.opcao {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 250px;
+    padding: 28px;
+    color: var(--texto);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.opcao .icone-caixa,
+.atalho .icone-caixa {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+}
+
+.opcao h2 {
+    margin-top: auto;
+    font-family: var(--fonte-titulo);
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.opcao p {
+    margin-top: 6px;
+    font-size: 15px;
+    color: var(--texto-suave);
+}
+
+.opcao .link-seta {
+    margin-top: 16px;
+}
+
+/* Ícone grande em marca-d'água no canto do card */
+.opcao-marca {
+    position: absolute;
+    right: -14px;
+    bottom: -18px;
+    width: 160px;
+    height: 160px;
+    color: rgba(96, 165, 250, 0.1);
+    pointer-events: none;
+}
+
+.opcao:hover,
+.atalho:hover {
+    border-color: var(--card-borda-forte);
+}
+
+.opcao:hover {
+    transform: translateY(-2px);
+}
+
+.opcao:hover .link-seta svg {
+    transform: translateX(3px);
+}
+
+.atalho {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    color: var(--texto);
+    text-decoration: none;
+    transition: border-color 0.2s;
+}
+
+.atalho .icone-caixa {
+    width: 44px;
+    height: 44px;
+}
+
+.atalho-texto {
+    flex: 1;
+    min-width: 0;
+}
+
+.atalho-texto strong {
+    display: block;
+    font-size: 16px;
+}
+
+.atalho-texto span {
+    font-size: 14px;
+    color: var(--texto-suave);
+}
+
+.atalho-seta {
+    width: 20px;
+    height: 20px;
+    color: var(--ciano);
+}
+
+@media (max-width: 760px) {
+    .opcoes {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+        margin-top: 28px;
+    }
+
+    .opcao {
+        min-height: 200px;
+        padding: 22px;
+    }
+
+    .saudacao {
+        margin-top: 28px;
+    }
+
+    #usuario-nome {
+        display: none;
+    }
+}

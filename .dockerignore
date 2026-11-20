@@ -1,0 +1,18 @@
+# Só backend/, FrontEnd/ e assets/ entram na imagem (ver backend/Dockerfile).
+# O resto fica de fora: segredos, dependências locais e arquivos que não são servidos.
+.env
+.env.*
+.git
+.gitignore
+**/node_modules
+**/npm-debug.log
+backend/database
+docs
+Design
+Diagrama
+README.md
+compose.yaml
+**/Dockerfile
+.dockerignore
+.vscode
+.claude
