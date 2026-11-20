@@ -17,17 +17,21 @@ function linkValidacao(codigo) {
 async function gerarQrCode(link) {
     const imagem = $("folha-qr");
 
-    if (!window.QRCode || typeof QRCode.toDataURL !== "function") {
-        throw new Error("Biblioteca de QR Code não encontrada ou incompatível.");
+    if (!window.QRLocal || typeof QRLocal.desenhar !== "function") {
+        throw new Error("Biblioteca local de QR Code não encontrada.");
     }
 
-    const imagemQr = await QRCode.toDataURL(link, {
-        width: 180,
-        margin: 2,
-        errorCorrectionLevel: "H"
+    // Cria um container temporário para gerar o QR Code
+    const container = document.createElement("div");
+
+    const canvas = QRLocal.desenhar(container, link, {
+        tamanho: 180,
+        margem: 2,
+        nivel: "H"
     });
 
-    imagem.src = imagemQr;
+    // Converte o canvas em imagem
+    imagem.src = canvas.toDataURL("image/png");
 }
 
 function mostrarEstado(mensagem, comAcao = false) {
