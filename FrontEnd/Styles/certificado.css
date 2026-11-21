@@ -14,6 +14,8 @@
 
 /* ===== Folha do certificado ===== */
 .folha {
+    display: flex;
+    aspect-ratio: 297 / 210;
     padding: 22px;
     border-radius: 12px;
     background: linear-gradient(160deg, #ffffff 0%, #eef3ff 100%);
@@ -26,8 +28,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
+    flex: 1;
     overflow: hidden;
-    padding: 28px 40px 22px;
+    padding: 22px 40px 18px;
     border: 2px solid #3b5bdb;
     border-radius: 6px;
     outline: 1px solid #c7d2fe;
@@ -75,7 +79,7 @@
 }
 
 .folha-sobretitulo {
-    margin-top: 22px;
+    margin-top: 14px;
     font-family: var(--fonte-mono);
     font-size: 13px;
     font-weight: 600;
@@ -100,7 +104,7 @@
 
 .folha-nome {
     width: 100%;
-    max-width: 480px;
+    max-width: 520px;
     margin-top: 4px;
     padding-bottom: 8px;
     border-bottom: 1px solid #cbd5e1;
@@ -125,7 +129,7 @@
 }
 
 .folha-texto {
-    max-width: 460px;
+    max-width: 580px;
     margin-top: 12px;
     font-size: 15px;
     line-height: 1.6;
@@ -142,7 +146,26 @@
     align-items: end;
     gap: 20px;
     width: 100%;
-    margin-top: 48px;
+    margin-top: 20px;
+}
+
+/* QR Code no centro do rodapé */
+.folha-qr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.folha-qr img {
+    display: block;
+    width: 108px;
+    height: 108px;
+}
+
+.folha-qr span {
+    font-size: 11px;
+    color: #64748b;
 }
 
 .folha-campo strong {
@@ -168,20 +191,23 @@
 }
 
 .folha-selo {
+    position: absolute;
+    top: 56px;
+    right: 30px;
     display: grid;
     place-items: center;
-    width: 92px;
-    height: 92px;
-    border: 7px solid #c7d7fe;
+    width: 68px;
+    height: 68px;
+    border: 5px solid #c7d7fe;
     border-radius: 50%;
     background: radial-gradient(circle at 35% 30%, #3b82f6, #1e3a8a);
     color: #fff;
-    box-shadow: 0 0 0 6px #e0e7ff;
+    box-shadow: 0 0 0 5px #e0e7ff;
 }
 
 .folha-selo svg {
-    width: 38px;
-    height: 38px;
+    width: 28px;
+    height: 28px;
 }
 
 /* ===== Painel lateral ===== */
@@ -238,6 +264,7 @@
 
 @media (max-width: 600px) {
     .folha {
+        aspect-ratio: auto;
         padding: 10px;
     }
 
@@ -260,10 +287,11 @@
     }
 
     .folha-selo {
+        display: none;
+    }
+
+    .folha-qr {
         order: -1;
-        justify-self: center;
-        width: 72px;
-        height: 72px;
     }
 }
 
@@ -296,6 +324,8 @@
     }
 
     .folha {
+        aspect-ratio: auto;
+        height: 184mm;
         box-shadow: none;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;

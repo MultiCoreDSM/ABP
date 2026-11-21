@@ -1,0 +1,152 @@
+/* Meus dados (direitos do titular, LGPD art. 18). Base visual em base.css */
+
+.conteudo {
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.titulo {
+    margin-top: 36px;
+}
+
+.subtitulo {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+#estado,
+#secoes {
+    margin-top: 32px;
+}
+
+#secoes {
+    display: grid;
+    gap: 20px;
+}
+
+.secao {
+    padding: 28px;
+}
+
+.secao h2 {
+    font-family: var(--fonte-titulo);
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.form-dados {
+    display: grid;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.form-dados .btn {
+    justify-self: start;
+}
+
+.campo-entrada input[readonly] {
+    color: var(--texto-suave);
+    cursor: default;
+}
+
+.campo-ajuda {
+    font-size: 13px;
+    color: var(--texto-apagado);
+}
+
+.aviso-sucesso {
+    border-color: rgba(74, 222, 128, 0.4);
+    background: var(--verde-fundo);
+    color: #dcfce7;
+}
+
+/* Registros guardados pelo portal */
+.registros {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 24px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--card-borda);
+}
+
+.registros dt {
+    font-size: 13px;
+    color: var(--texto-apagado);
+}
+
+.registros dd {
+    margin-top: 4px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* Seções com ícone, texto e botão na mesma linha */
+.secao-linha {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.secao-texto {
+    flex: 1;
+    min-width: 0;
+}
+
+.secao-texto p {
+    margin-top: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--texto-suave);
+}
+
+.secao-perigo {
+    border-color: rgba(251, 113, 133, 0.35);
+}
+
+.secao-perigo .icone-caixa {
+    border-color: rgba(251, 113, 133, 0.35);
+    background: var(--vermelho-fundo);
+    color: var(--vermelho);
+}
+
+.btn-perigo {
+    border-color: rgba(251, 113, 133, 0.5);
+    background: linear-gradient(180deg, #e11d48 0%, #be123c 100%);
+    color: #fff;
+}
+
+.btn-perigo:hover:not(:disabled) {
+    filter: brightness(1.1);
+}
+
+.campo-dialogo {
+    margin-top: 20px;
+}
+
+.rodape-legal {
+    margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+    .titulo {
+        margin-top: 24px;
+    }
+
+    .secao {
+        padding: 22px 18px;
+    }
+
+    .registros {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .secao-linha {
+        flex-wrap: wrap;
+    }
+
+    .secao-linha .btn {
+        width: 100%;
+    }
+}

@@ -54,6 +54,20 @@ export function registrarSucessoLogin(req) {
   falhas.delete(chaves(req).cpf);
 }
 
+// Confirmação de senha em ações sensíveis (excluir a conta): mesmo limite do CPF no login,
+// contado por candidato. Impede que um token roubado sirva para testar senhas.
+export function confirmacaoBloqueada(candidatoId) {
+  return Boolean(bloqueadoPor(`conta:${candidatoId}`, MAX_FALHAS_CPF, Date.now()));
+}
+
+export function registrarFalhaConfirmacao(candidatoId) {
+  const agora = Date.now();
+  const chave = `conta:${candidatoId}`;
+  const atual = registro(chave, agora);
+  if (atual) atual.quantidade++;
+  else falhas.set(chave, { quantidade: 1, inicio: agora });
+}
+
 // Remove janelas vencidas para o Map não crescer sem limite
 setInterval(() => {
   const agora = Date.now();

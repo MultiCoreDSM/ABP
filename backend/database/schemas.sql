@@ -59,4 +59,9 @@ ALTER TABLE candidatos ADD COLUMN IF NOT EXISTS certificado_emitido_em TIMESTAMP
 ALTER TABLE candidatos ADD COLUMN IF NOT EXISTS certificado_acertos INT;
 ALTER TABLE candidatos ADD COLUMN IF NOT EXISTS certificado_total INT;
 
+-- Aceite dos Termos de Uso e da Política de Privacidade (LGPD, art. 8º e art. 9º).
+-- Guarda só a versão aceita e o horário do servidor: sem IP nem navegador (art. 6º, III).
+ALTER TABLE candidatos ADD COLUMN IF NOT EXISTS termos_versao VARCHAR(20);
+ALTER TABLE candidatos ADD COLUMN IF NOT EXISTS termos_aceitos_em TIMESTAMPTZ;
+
 COMMIT; 

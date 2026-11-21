@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Questão | MultiCore</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo-icone.svg">
     <meta name="theme-color" content="#030919">
     <!-- Fontes Sora e Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,12 +66,26 @@
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M12 8v5M12 16.5v.5M10.3 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" /></svg>
                         <p>Não foi possível confirmar o registro da sua resposta. Verifique sua conexão e tente novamente.</p>
                     </div>
-                    <button type="button" class="btn-secundario" id="btn-pausar" hidden>Pausar certificação</button>
                     <p class="resultado" id="resultado" role="status"></p>
                     <button type="button" class="btn-principal" id="btn-principal">
                         <span id="btn-principal-texto">Enviar resposta</span>
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
                     </button>
+
+                    <!-- Depois de cada resposta: prosseguir para o próximo tema ou encerrar a sessão -->
+                    <section class="decisao" id="decisao" aria-labelledby="decisao-pergunta" hidden>
+                        <div class="decisao-texto">
+                            <h3 id="decisao-pergunta" tabindex="-1">Deseja prosseguir para o próximo tema ou encerrar a sessão?</h3>
+                            <p id="decisao-detalhe"></p>
+                        </div>
+                        <div class="decisao-acoes">
+                            <button type="button" class="btn-secundario" id="btn-encerrar">Encerrar sessão</button>
+                            <button type="button" class="btn-principal" id="btn-prosseguir">
+                                <span id="btn-prosseguir-texto">Prosseguir para o próximo tema</span>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                            </button>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>

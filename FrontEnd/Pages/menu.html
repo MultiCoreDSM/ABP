@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu | MultiCore</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo-icone.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -15,7 +16,10 @@
         <header class="topo">
             <a class="marca" href="menu.html"><img src="../../assets/logo-icone.svg" alt=""><span class="marca-texto">Multi<span>Core</span></span></a>
             <div class="topo-acoes">
-                <span class="usuario"><span class="avatar" id="avatar" aria-hidden="true"></span><span id="usuario-nome"></span></span>
+                <a class="usuario" href="meus-dados.html">
+                    <span class="avatar" id="avatar" aria-hidden="true"></span>
+                    <span class="usuario-texto"><span id="usuario-nome"></span><small>Meus dados</small></span>
+                </a>
                 <button type="button" class="btn btn-secundario btn-pequeno" id="btn-sair">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M15 12H4M8 8l-4 4 4 4"/></svg>
                     Sair
@@ -58,6 +62,25 @@
             </div>
         </main>
     </div>
+
+    <!-- Contas anteriores aos termos, ou termos atualizados: novo aceite antes da prova -->
+    <dialog class="dialogo" id="dialogo-termos" aria-labelledby="titulo-dialogo-termos">
+        <form id="form-termos" novalidate>
+            <h2 id="titulo-dialogo-termos">Termos atualizados</h2>
+            <p>Para continuar a certificação, leia e aceite os Termos de Uso e a Política de Privacidade. Eles explicam quais dados guardamos, para quê, e como você pode ver, corrigir ou apagar seus dados.</p>
+            <div class="campo">
+                <label class="aceite" for="aceite-termos">
+                    <input type="checkbox" id="aceite-termos" aria-describedby="erro-aceite-termos" required>
+                    <span>Li e aceito os <a href="termos-de-uso.html" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="politica-de-privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</span>
+                </label>
+                <p class="campo-erro" id="erro-aceite-termos" aria-live="polite"></p>
+            </div>
+            <div class="dialogo-acoes">
+                <button type="submit" class="btn btn-primario btn-bloco" id="btn-aceitar-termos">Aceitar e continuar</button>
+                <a class="btn btn-secundario btn-bloco" href="meus-dados.html">Não aceito: ver ou excluir meus dados</a>
+            </div>
+        </form>
+    </dialog>
 
     <script src="../Scripts/comum.js"></script>
     <script src="../Scripts/menu.js"></script>

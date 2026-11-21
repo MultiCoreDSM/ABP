@@ -526,6 +526,101 @@ button {
     display: block;
 }
 
+/* Caixa de aceite (termos no cadastro e no menu, confirmação de exclusão) */
+.aceite {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--texto-suave);
+    cursor: pointer;
+}
+
+.aceite input {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    accent-color: var(--azul-2);
+    cursor: pointer;
+}
+
+.aceite a {
+    font-weight: 600;
+}
+
+.campo.invalido .aceite input {
+    outline: 2px solid var(--vermelho);
+    outline-offset: 2px;
+}
+
+/* Links dos Termos de Uso e da Política de Privacidade no rodapé */
+.links-legais {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    font-size: 13px;
+}
+
+.links-legais a {
+    color: var(--texto-suave);
+    text-decoration: none;
+}
+
+.links-legais a:hover {
+    color: var(--texto);
+    text-decoration: underline;
+}
+
+/* Diálogo modal (<dialog>) */
+.dialogo {
+    width: min(480px, calc(100% - 32px));
+    margin: auto;
+    padding: 32px;
+    border: 1px solid var(--card-borda-forte);
+    border-radius: var(--raio);
+    background: linear-gradient(160deg, #10214f 0%, #08112c 100%);
+    color: var(--texto);
+    box-shadow: var(--sombra);
+}
+
+.dialogo::backdrop {
+    background: rgba(2, 5, 15, 0.75);
+    backdrop-filter: blur(3px);
+}
+
+.dialogo h2 {
+    font-family: var(--fonte-titulo);
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.dialogo p {
+    margin-top: 10px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--texto-suave);
+}
+
+.dialogo .aceite {
+    margin-top: 20px;
+}
+
+.dialogo-acoes {
+    display: grid;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+@media (max-width: 600px) {
+    .dialogo {
+        padding: 24px 20px;
+    }
+}
+
 /* Avisos (erro da API, sessão expirada...) */
 .aviso {
     padding: 12px 14px;

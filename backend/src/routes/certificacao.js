@@ -8,11 +8,28 @@ import {
   resultadoCandidatoService,
   respostasCandidatoService,
 } from "../services/certificacao.js";
+import { situacaoTermosService } from "../services/candidatos.js";
 
 const rotas = Router();
 
 // Todas as rotas da prova exigem token (RNF-03); o candidato vem sempre do token
 rotas.use(autenticacao);
+
+// Rotas que gravam respostas: só com os termos vigentes aceitos (LGPD, art. 8º).
+// Também barra um token emitido antes de a conta ser excluída.
+const exigirTermos = capturar(async function (req, res, next) {
+  const situacao = await situacaoTermosService(req.candidatoId);
+  if (!situacao) {
+    return res.status(401).json({ erro: "Conta não encontrada." });
+  }
+  if (situacao.pendentes) {
+    return res.status(403).json({
+      erro: "Aceite os Termos de Uso e a Política de Privacidade para continuar.",
+      termos_pendentes: true,
+    });
+  }
+  next();
+});
 
 /*
 curl http://localhost:3001/api/certificacao/temas \
@@ -26,7 +43,7 @@ rotas.get("/temas", capturar(async function (req, res) {
 curl http://localhost:3001/api/certificacao/temas/1/questao \
 -H "Authorization: Bearer SEU_TOKEN"
 */
-rotas.get("/temas/:id/questao", capturar(async function (req, res) {
+rotas.get("/temas/:id/questao", exigirTermos, capturar(async function (req, res) {
   const temaId = idPositivo(req.params.id);
   if (temaId == null) {
     return res.status(400).json({ erro: "Id de tema inválido." });
@@ -50,7 +67,7 @@ curl -X POST http://localhost:3001/api/certificacao/questoes/8/resposta \
 -H "Authorization: Bearer SEU_TOKEN" \
 -d '{"letra":"C"}'
 */
-rotas.post("/questoes/:id/resposta", capturar(async function (req, res) {
+rotas.post("/questoes/:id/resposta", exigirTermos, capturar(async function (req, res) {
   const questaoId = idPositivo(req.params.id);
   if (questaoId == null) {
     return res.status(400).json({ erro: "Id de questão inválido." });

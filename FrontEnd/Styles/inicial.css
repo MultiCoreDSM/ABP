@@ -296,3 +296,10 @@
         grid-template-columns: minmax(0, 1fr);
     }
 }
+
+/* Rodapé com os documentos legais */
+.rodape-inicial {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--card-borda);
+}

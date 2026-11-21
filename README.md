@@ -15,7 +15,7 @@ Na certificação, o sistema sorteia uma das quatro questões de cada tema. Cada
 | Funcionalidade | Situação | Onde |
 |---|---|---|
 | Tela inicial com "Como funciona" | ✅ | `inicial.html` |
-| Cadastro com validação no servidor (CPF, e-mail, senha) | ✅ | `cadastro.html` · `POST /api/candidatos` |
+| Cadastro com validação no servidor (CPF, e-mail, senha) e aceite obrigatório dos termos | ✅ | `cadastro.html` · `POST /api/candidatos` |
 | Login com JWT e limite de tentativas | ✅ | `login.html` · `POST /api/login` |
 | Menu principal com o nome do candidato e o progresso | ✅ | `menu.html` |
 | Área de estudos, com o material em PDF de cada tema | ✅ | `area-estudos.html` |
@@ -26,6 +26,8 @@ Na certificação, o sistema sorteia uma das quatro questões de cada tema. Cada
 | Revisão das respostas com a alternativa correta | ✅ | `respostas.html` · `GET /api/certificacao/respostas` |
 | Certificado com nome, CPF, e-mail, data e hora, nota e percentual (RF18), PDF e link de validação | ✅ | `certificado.html` · `/api/candidatos/certificado` |
 | Validação pública só pelo código, com os dados da RN-09 (BL-21) | ✅ | `validacao.html` · `GET /api/certificados/:codigo` |
+| LGPD: Termos de Uso, Política de Privacidade e registro do aceite | ✅ | `termos-de-uso.html` · `politica-de-privacidade.html` |
+| LGPD: ver, corrigir, baixar (JSON) e excluir os próprios dados | ✅ | `meus-dados.html` · `/api/candidatos/me` |
 | Histórico do candidato (BL-22) | ✅ | `historico.html` |
 | QR Code no certificado (BL-20) | ⬜ | O link de validação já existe; falta gerar o QR Code |
 | Explicação de cada questão | ⬜ | O banco ainda não tem o texto das explicações |
@@ -113,7 +115,7 @@ O front-end é servido pela própria aplicação, na mesma origem da API. Por is
 | `cadastro.html` | Criação de conta. Depois do cadastro, o candidato já entra e pode iniciar a prova ou ir ao menu. | Não |
 | `login.html` | Acesso com CPF e senha. Leva ao menu. | Não |
 | `esqueci-senha.html` | Formulário de recuperação. Por enquanto, avisa que a recuperação por e-mail ainda não está disponível. | Não |
-| `menu.html` | Saudação, Exames (começar, continuar ou ver resultado), Área de Estudos, Histórico e Certificados. | Sim |
+| `menu.html` | Saudação com acesso a Meus dados, Exames (começar, continuar ou ver resultado), Área de Estudos, Histórico e Certificados. Pede um novo aceite se os termos mudaram. | Sim |
 | `area-estudos.html` | Só estudo: os 12 temas, cada um com o material em PDF. O exame fica separado, em Exames, no menu. | Não |
 | `questao.html` | Prova com cronômetro, confirmação da resposta, correção, pausa e retomada. | Sim |
 | `resultado.html` | Nota, aprovação, situação do certificado e o resultado de cada tema. | Sim |
@@ -121,6 +123,8 @@ O front-end é servido pela própria aplicação, na mesma origem da API. Por is
 | `certificado.html` | Certificado para baixar em PDF (pela impressão do navegador), copiar o link e validar. | Sim |
 | `validacao.html` | Validação pública pelo código do certificado. | Não |
 | `historico.html` | Estatísticas e linha do tempo de atividades. | Sim |
+| `meus-dados.html` | Direitos do titular (LGPD, art. 18): ver e corrigir nome e e-mail, baixar os dados em JSON e excluir a conta com confirmação de senha. | Sim |
+| `termos-de-uso.html` · `politica-de-privacidade.html` | Documentos que o candidato aceita no cadastro. | Não |
 
 Os protótipos estão em [`Design/`](Design) e no [Figma](https://www.figma.com/design/ViL8tpfr58iVLNzIGPkpj1/abp?node-id=8-2). O visual comum das telas fica em `FrontEnd/Styles/base.css`, e as funções compartilhadas (sessão e chamadas à API) ficam em `FrontEnd/Scripts/comum.js`.
 
@@ -130,13 +134,17 @@ Todas as rotas ficam sob `http://localhost:3001/api`. As rotas protegidas exigem
 
 | Método | Rota | Token | Descrição |
 |---|---|---|---|
-| `POST` | `/candidatos` | — | Cadastra um candidato |
+| `POST` | `/candidatos` | — | Cadastra um candidato. Exige `"aceite_termos": true` e grava a versão aceita. |
 | `POST` | `/login` | — | Autentica e devolve o token (expira em 1 h). Bloqueia por 15 min após 5 falhas no mesmo CPF. |
-| `GET` | `/candidatos/me` | ✅ | Nome e data de cadastro do próprio candidato |
+| `GET` | `/candidatos/me` | ✅ | Nome, data de cadastro e `termos_pendentes` do próprio candidato |
+| `GET` | `/candidatos/me/dados` | ✅ | Todos os dados do candidato em JSON, menos o hash da senha (acesso e portabilidade) |
+| `PATCH` | `/candidatos/me` | ✅ | Corrige `nome` e/ou `email`. O nome não muda depois da emissão do certificado (409). |
+| `POST` | `/candidatos/me/termos` | ✅ | Registra o aceite da versão vigente dos termos |
+| `DELETE` | `/candidatos/me` | ✅ | Exclui cadastro, respostas e certificado. Exige `{ "senha": "..." }` e bloqueia após 5 senhas erradas. |
 | `GET` | `/temas` | — | Lista os 12 temas |
 | `GET` | `/temas/proximo` | ✅ | Próximo tema ainda não respondido |
 | `GET` | `/certificacao/temas` | ✅ | Temas com `respondido` e `em_andamento` do candidato |
-| `GET` | `/certificacao/temas/:id/questao` | ✅ | Sorteia ou retoma a questão do tema. Responde 409 se outra questão estiver aberta. |
+| `GET` | `/certificacao/temas/:id/questao` | ✅ | Sorteia ou retoma a questão do tema. Responde 409 se outra questão estiver aberta e 403 se os termos vigentes não foram aceitos. |
 | `POST` | `/certificacao/questoes/:id/resposta` | ✅ | Registra a resposta (`{ "letra": "A" }` ou `null`) e devolve a correção |
 | `GET` | `/certificacao/resultado` | ✅ | Acertos, total e situação de cada tema |
 | `GET` | `/certificacao/respostas` | ✅ | Respostas e correções, só dos temas já encerrados |
@@ -149,7 +157,7 @@ Todas as rotas ficam sob `http://localhost:3001/api`. As rotas protegidas exigem
 
 Há exemplos de `curl` em comentários em cada arquivo de [`backend/src/routes/`](backend/src/routes).
 
-> **Banco criado antes desta versão:** o certificado passou a gravar a data e a nota em três colunas novas de `candidatos`. O `schemas.sql` cria essas colunas com `ADD COLUMN IF NOT EXISTS`, então basta rodar o script de novo no banco existente. Outra opção é recriar o volume com `docker compose down -v && docker compose up -d`, mas isso apaga os dados.
+> **Banco criado antes desta versão:** o certificado passou a gravar a data e a nota em três colunas novas de `candidatos`, e o aceite dos termos em mais duas (`termos_versao`, `termos_aceitos_em`). Contas antigas ficam sem aceite e recebem o pedido no menu. O `schemas.sql` cria essas colunas com `ADD COLUMN IF NOT EXISTS`, então basta rodar o script de novo no banco existente. Outra opção é recriar o volume com `docker compose down -v && docker compose up -d`, mas isso apaga os dados.
 
 ## Segurança e dados pessoais
 
@@ -159,6 +167,8 @@ A revisão de proteção de dados pessoais (QA-08) está no [relatório](docs/qu
 - **Nota:** acerto e prazo são decididos no servidor, e o gabarito não vai para o navegador antes da resposta.
 - **Erros:** as respostas não expõem detalhes do banco, e os logs não registram CPF, senha ou o corpo das requisições.
 - **Login:** tem limite de tentativas, e o tempo de resposta não revela se um CPF está cadastrado.
+- **LGPD:** o cadastro exige o aceite dos [Termos de Uso](FrontEnd/Pages/termos-de-uso.html) e da [Política de Privacidade](FrontEnd/Pages/politica-de-privacidade.html). O banco guarda só a versão aceita e o horário, sem IP nem dados do navegador. Sem o aceite da versão vigente, o servidor não abre questões nem grava respostas. Em **Meus dados**, o candidato vê, corrige, baixa e exclui os próprios dados. A exclusão apaga cadastro, respostas e certificado numa transação.
+- **Nova versão dos termos:** ao mudar o texto, troque `TERMOS_VERSAO` em [`backend/src/utils/termos.js`](backend/src/utils/termos.js) e a data nas duas páginas. Todos precisarão aceitar de novo.
 
 **Atenção:** o repositório é público e o `seed.sql` contém o gabarito das questões. O PO aceitou esse risco por ser um projeto acadêmico ([DP-03](docs/backlog/README.md#decisões-do-po)).
 
