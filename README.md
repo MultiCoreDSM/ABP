@@ -53,7 +53,7 @@ A aplicação inteira roda em containers (RNF07 e RP05): o banco PostgreSQL 16 e
 
 **Requisitos:** Docker Desktop. Para desenvolver sem container, também é preciso Node.js 20.11 ou superior.
 
-**1. Variáveis de ambiente.** Crie um arquivo `.env` na **raiz** do repositório. Ele está no `.gitignore` e nunca deve ser commitado.
+**1. Variáveis de ambiente.** Copie [`.env.example`](.env.example) para `.env` na **raiz** do repositório e preencha os valores locais. O `.env` está no `.gitignore` e nunca deve ser commitado. Variáveis obrigatórias (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` e `JWT_SECRET`) são validadas automaticamente na inicialização em [`backend/src/config/env.js`](backend/src/config/env.js), sem expor segredos em logs. Para rotacionar `JWT_SECRET`, gere uma nova chave no `.env` e reinicie o serviço `app` (invalida sessões antigas imediatamente); para `POSTGRES_PASSWORD`, atualize com `ALTER USER` no PostgreSQL, troque no `.env` e recrie o container `app`. Para URLs públicas no QR Code do PDF em produção, defina `APP_URL`.
 
 ```bash
 POSTGRES_HOST=localhost
@@ -135,7 +135,8 @@ Todas as rotas ficam sob `http://localhost:3001/api`. As rotas protegidas exigem
 | Método | Rota | Token | Descrição |
 |---|---|---|---|
 | `POST` | `/candidatos` | — | Cadastra um candidato. Exige `"aceite_termos": true` e grava a versão aceita. |
-| `POST` | `/login` | — | Autentica e devolve o token (expira em 1 h). Bloqueia por 15 min após 5 falhas no mesmo CPF. |
+| `POST` | `/login` | — | Autentica (com normalização de CPF) e devolve o token JWT (expira em `JWT_EXPIRES_IN`, padrão 1 h). Bloqueia por 15 min após 5 falhas no mesmo CPF. |
+| `POST` | `/login/logout` · `DELETE /login` | ✅ | Encerra a sessão no servidor revogando o token atual (impede reuso após saída) |
 | `GET` | `/candidatos/me` | ✅ | Nome, data de cadastro e `termos_pendentes` do próprio candidato |
 | `GET` | `/candidatos/me/dados` | ✅ | Todos os dados do candidato em JSON, menos o hash da senha (acesso e portabilidade) |
 | `PATCH` | `/candidatos/me` | ✅ | Corrige `nome` e/ou `email`. O nome não muda depois da emissão do certificado (409). |
@@ -144,6 +145,7 @@ Todas as rotas ficam sob `http://localhost:3001/api`. As rotas protegidas exigem
 | `GET` | `/temas` | — | Lista os 12 temas |
 | `GET` | `/temas/proximo` | ✅ | Próximo tema ainda não respondido |
 | `GET` | `/certificacao/temas` | ✅ | Temas com `respondido` e `em_andamento` do candidato |
+| `GET` | `/certificacao/progresso` | ✅ | Temas concluídos, pendentes, estado (`nao_iniciada`, `em_andamento`, `pausada`, `concluida`) e percentual de andamento sem expor gabaritos (API-13) |
 | `GET` | `/certificacao/temas/:id/questao` | ✅ | Sorteia ou retoma a questão do tema. Responde 409 se outra questão estiver aberta e 403 se os termos vigentes não foram aceitos. |
 | `POST` | `/certificacao/questoes/:id/resposta` | ✅ | Registra a resposta (`{ "letra": "A" }` ou `null`) e devolve a correção |
 | `GET` | `/certificacao/resultado` | ✅ | Acertos, total e situação de cada tema |
@@ -179,7 +181,7 @@ A revisão de proteção de dados pessoais (QA-08) está no [relatório](docs/qu
 | [Backlog do produto](docs/backlog/README.md) | Requisitos funcionais, não funcionais, regras de negócio e decisões do PO |
 | [Rastreabilidade](docs/rastreabilidade.md) | Requisito → issue → artefato → commit, e a situação de cada requisito |
 | [Definition of Done](docs/processo/definition-of-done.md) | Checklist de qualidade que toda entrega precisa cumprir |
-| [Banco de dados](docs/banco/README.md) | Versão suportada, criação e carga do banco |
+| [Banco de dados](docs/banco/README.md) | Versão suportada, criação, migrações/índices (DB-11) e regras de resultado/nota (DB-09) |
 | [Modelo conceitual (DER)](docs/banco/modelo-conceitual.md) | Entidades, atributos e cardinalidades |
 | [Modelo lógico](docs/banco/modelo-logico.md) | Relações, normalização até a 3FN e dicionário de dados |
 | [QA-08: proteção de dados pessoais](docs/qualidade/qa-08-revisao-dados-pessoais.md) | Mapa de dados pessoais, riscos, correções e testes |
