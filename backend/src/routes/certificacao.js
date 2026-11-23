@@ -7,6 +7,7 @@ import {
   responderQuestaoCandidatoService,
   resultadoCandidatoService,
   respostasCandidatoService,
+  progressoCandidatoService,
 } from "../services/certificacao.js";
 import { situacaoTermosService } from "../services/candidatos.js";
 
@@ -37,6 +38,15 @@ curl http://localhost:3001/api/certificacao/temas \
 */
 rotas.get("/temas", capturar(async function (req, res) {
   res.json(await listarTemasCandidatoService(req.candidatoId));
+}));
+
+/*
+curl http://localhost:3001/api/certificacao/progresso \
+-H "Authorization: Bearer SEU_TOKEN"
+-> temas concluidos e pendentes, percentual de andamento e estado sem expor gabaritos (API-13)
+*/
+rotas.get("/progresso", capturar(async function (req, res) {
+  res.json(await progressoCandidatoService(req.candidatoId));
 }));
 
 /*
@@ -91,7 +101,7 @@ rotas.post("/questoes/:id/resposta", exigirTermos, capturar(async function (req,
 
 /*
 curl http://localhost:3001/api/certificacao/resultado -H "Authorization: Bearer SEU_TOKEN"
--> { total, respondidos, acertos, concluida, temas: [{ id, nome, ordem, respondido, acertou }] }
+-> { total, respondidos, pendentes, acertos, concluida, nota, percentual, aprovado, situacao, temas }
 */
 rotas.get("/resultado", capturar(async function (req, res) {
   res.json(await resultadoCandidatoService(req.candidatoId));

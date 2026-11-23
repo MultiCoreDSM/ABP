@@ -329,6 +329,36 @@ export async function resultadoCandidatoService(candidatoId) {
   };
 }
 
+// Acompanhamento de progresso sem expor gabaritos nem questões futuras (API-13 / BL-15)
+export async function progressoCandidatoService(candidatoId) {
+  const temas = await listarTemasCandidatoService(candidatoId);
+  const detalhados = temas.map((t) => ({
+    id: t.id,
+    nome: t.nome,
+    ordem: t.ordem,
+    status: t.respondido ? "concluido" : (t.em_andamento ? "em_andamento" : "pendente"),
+  }));
+  const totalTemas = detalhados.length;
+  const concluidos = detalhados.filter((t) => t.status === "concluido").length;
+  const emAndamento = detalhados.filter((t) => t.status === "em_andamento").length;
+  const pendentes = totalTemas - concluidos;
+  const percentualAndamento = totalTemas > 0 ? Math.round((concluidos / totalTemas) * 100) : 0;
+
+  let estado = "em_andamento";
+  if (totalTemas > 0 && concluidos === totalTemas) estado = "concluida";
+  else if (concluidos === 0 && emAndamento === 0) estado = "nao_iniciada";
+  else if (emAndamento === 0) estado = "pausada";
+
+  return {
+    estado,
+    total_temas: totalTemas,
+    concluidos,
+    pendentes,
+    percentual_andamento: percentualAndamento,
+    temas: detalhados,
+  };
+}
+
 // Respostas e correções dos temas já encerrados (BL-11, BL-22).
 // Temas em andamento ou não iniciados ficam de fora: o gabarito deles não sai do servidor.
 export async function respostasCandidatoService(candidatoId) {
