@@ -1,4 +1,6 @@
-// Testes automatizados de modelagem e regras de negocio do Banco de Dados
+// Testes automatizados de modelagem e regras de negocio do Banco de Dados (DB-05)
+import fs from 'node:fs';
+import path from 'node:path';
 import pool from '../src/config/database.js';
 
 // Gerador de CPF valido com 11 digitos numericos
@@ -23,38 +25,10 @@ describe('Sprint 2 — Modelagem de Banco de Dados (Tentativas de Certificacao)'
   const questoesIds = [];
 
   beforeAll(async () => {
-    // Garante que o schema de tentativas e tentativa_questoes esteja criado no banco
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS tentativas (
-          id SERIAL PRIMARY KEY,
-          candidato_id INT NOT NULL REFERENCES candidatos(id) ON DELETE CASCADE,
-          estado VARCHAR(20) NOT NULL DEFAULT 'em_andamento'
-              CHECK (estado IN ('em_andamento', 'pausada', 'concluida', 'expirada', 'cancelada')),
-          iniciado_em TIMESTAMPTZ NOT NULL DEFAULT now(),
-          atualizado_em TIMESTAMPTZ NOT NULL DEFAULT now(),
-          pausado_em TIMESTAMPTZ NULL,
-          concluido_em TIMESTAMPTZ NULL,
-          total_questoes INT NOT NULL DEFAULT 12 CHECK (total_questoes = 12),
-          acertos INT NULL CHECK (acertos >= 0 AND acertos <= total_questoes),
-          nota NUMERIC(5,2) NULL CHECK (nota >= 0 AND nota <= 100)
-      );
-
-      CREATE UNIQUE INDEX IF NOT EXISTS idx_tentativa_ativa_candidato
-          ON tentativas (candidato_id)
-          WHERE estado IN ('em_andamento', 'pausada');
-
-      CREATE TABLE IF NOT EXISTS tentativa_questoes (
-          tentativa_id INT NOT NULL REFERENCES tentativas(id) ON DELETE CASCADE,
-          questao_id INT NOT NULL REFERENCES questoes(id),
-          ordem_tema INT NOT NULL CHECK (ordem_tema BETWEEN 1 AND 12),
-          letra_resposta CHAR(1) NULL CHECK (letra_resposta IN ('A','B','C','D')),
-          data_horario_inicio TIMESTAMPTZ NULL,
-          data_horario_resposta TIMESTAMPTZ NULL,
-          acertou BOOLEAN NULL,
-          PRIMARY KEY (tentativa_id, questao_id),
-          UNIQUE (tentativa_id, ordem_tema)
-      );
-    `);
+    // Aplica o proprio schemas.sql (idempotente) para validar o arquivo real do projeto
+    const schemaPath = path.resolve(process.cwd(), 'database', 'schemas.sql');
+    const schemaSql = fs.readFileSync(schemaPath, 'utf8');
+    await pool.query(schemaSql);
 
     // Cria um candidato exclusivo para esta suite
     const resCand = await pool.query(
@@ -65,8 +39,10 @@ describe('Sprint 2 — Modelagem de Banco de Dados (Tentativas de Certificacao)'
     );
     candidatoId = resCand.rows[0].id;
 
-    // Obtem 12 questoes (1 de cada tema ou disponiveis) para testes de vinculo
-    const resQ = await pool.query(`SELECT id FROM questoes LIMIT 12`);
+    // Obtem 12 questoes (1 de cada tema) para testes de vinculo
+    const resQ = await pool.query(
+      `SELECT DISTINCT ON (tema_id) id FROM questoes ORDER BY tema_id, id LIMIT 12`
+    );
     for (const row of resQ.rows) {
       questoesIds.push(row.id);
     }
@@ -94,6 +70,12 @@ describe('Sprint 2 — Modelagem de Banco de Dados (Tentativas de Certificacao)'
     expect(res.rows.length).toBe(1);
     expect(res.rows[0].candidato_id).toBe(candidatoId);
     expect(res.rows[0].total_questoes).toBe(12);
+
+    // Encerra a tentativa criada neste teste para nao interferir nos cenarios seguintes
+    await pool.query(
+      `UPDATE tentativas SET estado = 'concluida', concluido_em = now() WHERE id = $1`,
+      [res.rows[0].id]
+    );
 
     // Tentativa com candidato inexistente deve falhar por Foreign Key
     let erroFk = null;
@@ -123,17 +105,17 @@ describe('Sprint 2 — Modelagem de Banco de Dados (Tentativas de Certificacao)'
   });
 
   test('Atividade 3 e Criterio 4: Datas e transicoes permitem reconstruir o ciclo de vida da tentativa', async () => {
-    // 1. Criar tentativa
+    // 1. Iniciar tentativa em_andamento
     const novaTentativa = await pool.query(
       `INSERT INTO tentativas (candidato_id, estado, iniciado_em)
-       VALUES ($1, 'concluida', now() - INTERVAL '30 minutes')
+       VALUES ($1, 'em_andamento', now() - INTERVAL '30 minutes')
        RETURNING id, iniciado_em`,
       [candidatoId]
     );
     const tentativaId = novaTentativa.rows[0].id;
     const iniciadoEm = new Date(novaTentativa.rows[0].iniciado_em);
 
-    // 2. Simular pausa
+    // 2. Transicao valida: em_andamento -> pausada
     await pool.query(
       `UPDATE tentativas
        SET estado = 'pausada', pausado_em = now() - INTERVAL '15 minutes', atualizado_em = now()
@@ -141,7 +123,7 @@ describe('Sprint 2 — Modelagem de Banco de Dados (Tentativas de Certificacao)'
       [tentativaId]
     );
 
-    // 3. Simular conclusao
+    // 3. Transicao valida: pausada -> concluida
     await pool.query(
       `UPDATE tentativas
        SET estado = 'concluida', concluido_em = now(), acertos = 10, nota = 83.33, atualizado_em = now()
@@ -150,7 +132,7 @@ describe('Sprint 2 — Modelagem de Banco de Dados (Tentativas de Certificacao)'
     );
 
     const consulta = await pool.query(
-      `SELECT id, estado, iniciado_em, pausado_em, concluido_em, acertos, nota
+      `SELECT id, estado, iniciado_em, atualizado_em, pausado_em, concluido_em, acertos, nota
        FROM tentativas WHERE id = $1`,
       [tentativaId]
     );
@@ -158,16 +140,22 @@ describe('Sprint 2 — Modelagem de Banco de Dados (Tentativas de Certificacao)'
     const row = consulta.rows[0];
     expect(row.estado).toBe('concluida');
     expect(row.iniciado_em).toBeDefined();
+    expect(row.atualizado_em).toBeDefined();
     expect(row.pausado_em).toBeDefined();
     expect(row.concluido_em).toBeDefined();
     expect(Number(row.acertos)).toBe(10);
     expect(Number(row.nota)).toBe(83.33);
 
-    // Garante que concluido_em > iniciado_em
-    expect(new Date(row.concluido_em).getTime()).toBeGreaterThan(iniciadoEm.getTime());
+    // Garante ordem cronologica: iniciado_em < pausado_em < concluido_em
+    const pausadoEm = new Date(row.pausado_em);
+    const concluidoEm = new Date(row.concluido_em);
+    expect(pausadoEm.getTime()).toBeGreaterThan(iniciadoEm.getTime());
+    expect(concluidoEm.getTime()).toBeGreaterThan(pausadoEm.getTime());
   });
 
   test('Atividade 4 e Criterio 2: Vinculo imutavel com as 12 questoes sorteadas na tentativa', async () => {
+    expect(questoesIds.length).toBe(12);
+
     const criacao = await pool.query(
       `INSERT INTO tentativas (candidato_id, estado)
        VALUES ($1, 'expirada')
@@ -176,8 +164,8 @@ describe('Sprint 2 — Modelagem de Banco de Dados (Tentativas de Certificacao)'
     );
     const tentativaId = criacao.rows[0].id;
 
-    // Vincula questoes para as 12 posicoes de tema
-    for (let ordem = 1; ordem <= Math.min(12, questoesIds.length); ordem++) {
+    // Vincula as 12 questoes sorteadas (1 por tema)
+    for (let ordem = 1; ordem <= 12; ordem++) {
       const qId = questoesIds[ordem - 1];
       await pool.query(
         `INSERT INTO tentativa_questoes (tentativa_id, questao_id, ordem_tema)
@@ -192,7 +180,7 @@ describe('Sprint 2 — Modelagem de Banco de Dados (Tentativas de Certificacao)'
        WHERE tentativa_id = $1`,
       [tentativaId]
     );
-    expect(rows[0].total).toBe(Math.min(12, questoesIds.length));
+    expect(rows[0].total).toBe(12);
 
     // Rejeita questao repetida na mesma tentativa (chave primaria composta)
     let erroPk = null;

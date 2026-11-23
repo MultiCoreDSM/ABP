@@ -126,14 +126,14 @@ describe('Sprint 2 — Fluxo Integrado QA-01 (Cadastro, Login, Sessao e Seguranc
 
   // Atividade 4: Testar acesso a rota protegida sem sessao
   test('Atividade 4: Rejeitar acesso a rota protegida quando nenhum token e enviado', async () => {
-    const res = await request(app).get('/api/temas');
+    const res = await request(app).get('/api/certificacao/temas');
     expect(res.status).toBe(401);
     expect(res.body).toHaveProperty('erro', 'Token obrigatório');
   });
 
   test('Atividade 4: Rejeitar acesso a rota protegida com formato Authorization invalido', async () => {
     const res = await request(app)
-      .get('/api/temas')
+      .get('/api/certificacao/temas')
       .set('Authorization', 'Basic 123456');
     expect(res.status).toBe(401);
     expect(res.body).toHaveProperty('erro', 'Use Authorization: Bearer TOKEN');
@@ -141,7 +141,7 @@ describe('Sprint 2 — Fluxo Integrado QA-01 (Cadastro, Login, Sessao e Seguranc
 
   test('Atividade 4: Permitir acesso a rota protegida quando token valido for informado', async () => {
     const res = await request(app)
-      .get('/api/temas')
+      .get('/api/certificacao/temas')
       .set('Authorization', `Bearer ${tokenValido}`);
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -164,7 +164,7 @@ describe('Sprint 2 — Fluxo Integrado QA-01 (Cadastro, Login, Sessao e Seguranc
     );
 
     const res = await request(app)
-      .get('/api/temas')
+      .get('/api/certificacao/temas')
       .set('Authorization', `Bearer ${tokenExpirado}`);
 
     expect(res.status).toBe(401);
@@ -177,7 +177,7 @@ describe('Sprint 2 — Fluxo Integrado QA-01 (Cadastro, Login, Sessao e Seguranc
     // Qualquer requisicao subsequente sem o token e barrada pela API.
     const tokenDescartado = '';
     const res = await request(app)
-      .get('/api/temas')
+      .get('/api/certificacao/temas')
       .set('Authorization', tokenDescartado);
 
     expect(res.status).toBe(401);
