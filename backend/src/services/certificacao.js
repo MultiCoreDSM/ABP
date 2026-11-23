@@ -197,23 +197,77 @@ export async function abrirQuestaoTemaService(candidatoId, temaId) {
 }
 
 // Registra a resposta (letra ou null quando o tempo acabou sem alternativa marcada).
-// Idempotente: se a questão já foi encerrada, devolve a correção registrada.
+// Idempotente e transacional com bloqueio de linha (FOR UPDATE) para concorrencia (API-08).
 export async function responderQuestaoCandidatoService(candidatoId, questaoId, letra) {
-  await pool.query(
-    `
-    UPDATE respostas
-    SET letra_resposta = $3,
-        data_horario_resposta = clock_timestamp(),
-        acertou = COALESCE(
-          (SELECT a.correta FROM alternativas a WHERE a.questao_id = $2 AND a.letra = $3),
-          false)
-    WHERE candidato_id = $1 AND questao_id = $2 AND data_horario_resposta IS NULL
-    `,
-    [candidatoId, questaoId, letra],
-  );
+  const cliente = await pool.connect();
+  let jaRegistrada = false;
+  let motivoEncerramento = null;
+  try {
+    await cliente.query("BEGIN");
+
+    const existente = await cliente.query(
+      `SELECT letra_resposta, data_horario_inicio, data_horario_resposta, valida,
+              (clock_timestamp() - data_horario_inicio > ${PRAZO}) AS prazo_vencido
+       FROM respostas
+       WHERE candidato_id = $1 AND questao_id = $2
+       FOR UPDATE`,
+      [candidatoId, questaoId],
+    );
+
+    if (existente.rows.length === 0) {
+      await cliente.query("ROLLBACK");
+      return null;
+    }
+
+    let alternativaCorreta = false;
+    if (letra !== null) {
+      const alt = await cliente.query(
+        `SELECT correta FROM alternativas WHERE questao_id = $1 AND letra = $2`,
+        [questaoId, letra],
+      );
+      if (alt.rows.length === 0) {
+        await cliente.query("ROLLBACK");
+        return { invalido: true, erro: "Alternativa não pertence à questão informada." };
+      }
+      alternativaCorreta = alt.rows[0].correta === true;
+    }
+
+    const linha = existente.rows[0];
+    if (linha.data_horario_resposta !== null) {
+      jaRegistrada = true;
+      motivoEncerramento = linha.valida !== true
+        ? "tempo_esgotado"
+        : (linha.letra_resposta == null ? "sem_resposta" : "respondida");
+    } else {
+      const expirou = linha.prazo_vencido === true;
+      motivoEncerramento = expirou ? "tempo_esgotado" : (letra === null ? "sem_resposta" : "respondida");
+      const acertou = !expirou && letra !== null && alternativaCorreta;
+
+      await cliente.query(
+        `UPDATE respostas
+         SET letra_resposta = $3,
+             data_horario_resposta = clock_timestamp(),
+             acertou = $4
+         WHERE candidato_id = $1 AND questao_id = $2 AND data_horario_resposta IS NULL`,
+        [candidatoId, questaoId, letra, acertou],
+      );
+    }
+
+    await cliente.query("COMMIT");
+  } catch (err) {
+    await cliente.query("ROLLBACK").catch(() => {});
+    throw err;
+  } finally {
+    cliente.release();
+  }
 
   const situacao = await situacaoResposta(candidatoId, questaoId);
-  return situacao ? situacao.correcao : null;
+  if (!situacao || !situacao.correcao) return null;
+  return {
+    ...situacao.correcao,
+    motivo_encerramento: motivoEncerramento,
+    ja_registrada: jaRegistrada,
+  };
 }
 
 // Questão encerrada: respondida, ou com o prazo vencido sem resposta (conta como incorreta)

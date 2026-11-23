@@ -83,6 +83,9 @@ rotas.post("/questoes/:id/resposta", exigirTermos, capturar(async function (req,
   if (!correcao) {
     return res.status(404).json({ erro: "Questão não sorteada para este candidato." });
   }
+  if (correcao.invalido) {
+    return res.status(400).json({ erro: correcao.erro });
+  }
   res.json(correcao);
 }));
 
