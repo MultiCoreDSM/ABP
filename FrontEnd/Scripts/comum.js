@@ -12,6 +12,15 @@ const MultiCore = (() => {
     const salvarToken = (valor) => sessionStorage.setItem(CHAVE_TOKEN, valor);
 
     function sair(destino = "inicial.html") {
+        const atual = token();
+        if (atual) {
+            // Revoga o token no servidor com keepalive para concluir mesmo durante o redirecionamento
+            fetch("/api/login/logout", {
+                method: "POST",
+                headers: { Authorization: `Bearer ${atual}` },
+                keepalive: true,
+            }).catch(() => {});
+        }
         sessionStorage.removeItem(CHAVE_TOKEN);
         location.href = destino;
     }

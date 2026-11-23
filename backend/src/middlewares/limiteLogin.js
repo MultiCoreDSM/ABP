@@ -23,7 +23,8 @@ function bloqueadoPor(chave, limite, agora) {
 }
 
 function chaves(req) {
-  const cpf = typeof req.body?.cpf === "string" ? req.body.cpf : "";
+  const cpfBruto = typeof req.body?.cpf === "string" ? req.body.cpf : "";
+  const cpf = cpfBruto.replace(/\D/g, "");
   return { ip: `ip:${req.ip}`, cpf: `cpf:${cpf}` };
 }
 
