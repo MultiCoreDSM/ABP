@@ -75,7 +75,6 @@ export function carregarConfiguracao({ exigirJwt = false, envSource = process.en
       };
 
   return {
-    nodeEnv: envSource.NODE_ENV || "development",
     appPort: parsePorta(envSource.APP_PORT, 3001, "APP_PORT"),
     appUrl: normalizarUrlPublica(envSource.APP_URL),
     postgres,
