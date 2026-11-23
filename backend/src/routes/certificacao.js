@@ -52,6 +52,9 @@ rotas.get("/temas/:id/questao", exigirTermos, capturar(async function (req, res)
   if (!questao) {
     return res.status(404).json({ erro: "Tema não encontrado." });
   }
+  if (questao.invalido) {
+    return res.status(422).json({ erro: questao.erro });
+  }
   if (questao.bloqueado) {
     return res.status(409).json({
       erro: "Conclua a questão em andamento antes de abrir outro tema.",

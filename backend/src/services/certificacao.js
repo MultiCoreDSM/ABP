@@ -1,6 +1,8 @@
 import pool from "../config/database.js";
 import { buscarQuestaoService } from "./questoes.js";
 
+const QUESTOES_VALIDAS_POR_TEMA = 4;
+
 // Rotas usadas pela página da prova (FrontEnd/Pages/questao.html).
 // Regras: 1 questão sorteada por tema (RN-03), 150 s por questão contados no
 // servidor (RN-04, RNF-05), resposta fora do prazo ou sem alternativa conta como
@@ -115,12 +117,41 @@ export async function abrirQuestaoTemaService(candidatoId, temaId) {
         return { bloqueado: { tema_id: aberta.rows[0].tema_id } };
       }
 
+      // Garante que o tema existe e possui 4 questoes validas (4 alternativas e 1 correta) (API-06)
+      const integridade = await cliente.query(
+        `
+        SELECT t.id,
+               COUNT(q.id) FILTER (
+                 WHERE (SELECT COUNT(*) FROM alternativas a WHERE a.questao_id = q.id) = 4
+                   AND (SELECT COUNT(*) FROM alternativas a WHERE a.questao_id = q.id AND a.correta) = 1
+               )::int AS validas
+        FROM temas t
+        LEFT JOIN questoes q ON q.tema_id = t.id
+        WHERE t.id = $1
+        GROUP BY t.id
+        `,
+        [temaId],
+      );
+      if (integridade.rows.length === 0) {
+        await cliente.query("ROLLBACK");
+        return null;
+      }
+      if (integridade.rows[0].validas < QUESTOES_VALIDAS_POR_TEMA) {
+        await cliente.query("ROLLBACK");
+        return {
+          invalido: true,
+          erro: "Tema indisponível: são necessárias 4 questões válidas para realizar o sorteio.",
+        };
+      }
+
       const sorteio = await cliente.query(
         `
         INSERT INTO respostas (candidato_id, questao_id, data_horario_inicio)
         SELECT $1, q.id, clock_timestamp()
         FROM questoes q
         WHERE q.tema_id = $2
+          AND (SELECT COUNT(*) FROM alternativas a WHERE a.questao_id = q.id) = 4
+          AND (SELECT COUNT(*) FROM alternativas a WHERE a.questao_id = q.id AND a.correta) = 1
         ORDER BY random()
         LIMIT 1
         RETURNING questao_id
