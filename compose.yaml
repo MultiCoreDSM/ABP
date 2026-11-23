@@ -35,7 +35,10 @@ services:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET no .env}
+            JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1h}
             APP_PORT: "3001"
+            APP_URL: ${APP_URL:-}
+            NODE_ENV: ${NODE_ENV:-production}
         ports:
             - "${APP_PORT:-3001}:3001"
         depends_on:

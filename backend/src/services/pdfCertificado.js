@@ -1,10 +1,12 @@
 
 import PDFDocument from "pdfkit";
 import QRCode from "qrcode";
+import { config } from "../config/env.js";
 
 export async function gerarPdfCertificado(certificado, baseUrl) {
+    const origem = (config.appUrl || baseUrl || "").replace(/\/+$/, "");
     const urlValidacao =
-        `${baseUrl}/FrontEnd/Pages/validar-certificado.html?codigo=${encodeURIComponent(certificado.codigo)}`;
+        `${origem}/FrontEnd/Pages/validacao.html?codigo=${encodeURIComponent(certificado.codigo)}`;
 
     const qrCode = await QRCode.toBuffer(urlValidacao, {
         type: "png",
