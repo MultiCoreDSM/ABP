@@ -11,13 +11,16 @@
   "scripts": {
     "test": "node --env-file=../.env --experimental-vm-modules ./node_modules/jest/bin/jest.js --reporters=default --reporters=./tests/markdown-reporter.js",
     "start": "node --env-file=../.env src/server.js",
-    "dev": "node --watch --env-file=../.env src/server.js"
+    "dev": "node --watch --env-file=../.env src/server.js",
+    "qa:integridade": "node --env-file=../.env scripts/qa-integridade.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "pg": "^8.13.1"
+    "pdfkit": "^0.21.0",
+    "pg": "^8.13.1",
+    "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "jest": "^30.5.2",

@@ -522,6 +522,65 @@ svg {
     color: var(--verde);
 }
 
+/* ===== Pergunta depois de cada resposta: prosseguir ou encerrar a sessão ===== */
+/* Com a pergunta, o rodapé deixa de ficar preso à base da tela para não cobrir a correção */
+.rodape.rodape-solto {
+    position: static;
+}
+
+.decisao {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 24px;
+    width: 100%;
+    padding: 18px 20px;
+    border: 1px solid var(--selecao-borda);
+    border-radius: 16px;
+    background: var(--fundo-vidro);
+    box-shadow: 0 -12px 32px rgba(3, 9, 25, 0.6);
+    animation: decisao-entrada 0.35s var(--saida);
+}
+
+.decisao-texto {
+    flex: 1 1 280px;
+    min-width: 0;
+}
+
+.decisao h3 {
+    font-family: "Sora", sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--titulo);
+    outline: none;
+}
+
+.decisao p {
+    margin-top: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--texto-suave);
+}
+
+.decisao-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.decisao-acoes .btn-principal {
+    margin-left: 0;
+}
+
+@keyframes decisao-entrada {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
 /* ===== Carregamento e erro ===== */
 .estado {
     margin-top: 8px;
@@ -837,6 +896,19 @@ a.btn-secundario {
         width: 100%;
     }
 
+    .decisao {
+        padding: 16px;
+    }
+
+    .decisao-acoes {
+        width: 100%;
+        flex-direction: column-reverse;
+    }
+
+    .decisao-acoes button {
+        width: 100%;
+    }
+
     .confirmacao {
         padding: 20px;
     }
@@ -848,6 +920,10 @@ a.btn-secundario {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .decisao {
+        animation: none;
+    }
+
     .btn-voltar,
     .cronometro,
     .alternativa,

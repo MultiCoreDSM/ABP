@@ -1,0 +1,127 @@
+/* Termos de Uso e Política de Privacidade. Base visual em base.css */
+
+.documento {
+    max-width: 820px;
+    margin: 36px auto 0;
+    padding: 40px 48px;
+}
+
+.documento h1 {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(30px, 4vw, 42px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.documento-versao {
+    margin-top: 10px;
+    font-family: var(--fonte-mono);
+    font-size: 13px;
+    color: var(--texto-apagado);
+}
+
+.documento-resumo {
+    margin-top: 24px;
+}
+
+.documento h2 {
+    margin-top: 36px;
+    font-family: var(--fonte-titulo);
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    scroll-margin-top: 24px;
+}
+
+.documento p,
+.documento li {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #cfd9ee;
+}
+
+.documento p {
+    margin-top: 12px;
+}
+
+.documento ul,
+.documento ol {
+    display: grid;
+    gap: 6px;
+    margin-top: 12px;
+    padding-left: 22px;
+}
+
+.documento strong {
+    color: var(--texto);
+}
+
+/* Sumário */
+.sumario {
+    margin-top: 28px;
+    padding: 18px 22px;
+    border: 1px solid var(--card-borda);
+    border-radius: 12px;
+    background: rgba(4, 9, 26, 0.5);
+}
+
+.sumario strong {
+    font-size: 14px;
+}
+
+.sumario ol {
+    margin-top: 8px;
+    gap: 2px;
+}
+
+.sumario a {
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.sumario a:hover {
+    text-decoration: underline;
+}
+
+/* Tabela de dados tratados */
+.tabela-rolagem {
+    overflow-x: auto;
+    margin-top: 14px;
+}
+
+.documento table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.documento th,
+.documento td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--card-borda);
+    text-align: left;
+    vertical-align: top;
+    line-height: 1.5;
+    color: #cfd9ee;
+}
+
+.documento th {
+    font-weight: 600;
+    color: var(--texto);
+    background: rgba(37, 99, 235, 0.1);
+}
+
+.documento-rodape {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--card-borda);
+}
+
+@media (max-width: 600px) {
+    .documento {
+        margin-top: 20px;
+        padding: 26px 20px;
+    }
+}

@@ -197,6 +197,10 @@
     text-decoration: none;
 }
 
+.rodape-legal {
+    margin-top: 22px;
+}
+
 /* ===== Card centralizado (esqueci a senha, cadastro concluído) ===== */
 .acesso-centro {
     position: relative;

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro | MultiCore</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo-icone.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -72,6 +73,15 @@
                         </div>
                     </fieldset>
 
+                    <!-- Aceite obrigatório (LGPD): começa desmarcado e o servidor também exige -->
+                    <div class="campo">
+                        <label class="aceite" for="aceite-termos">
+                            <input type="checkbox" id="aceite-termos" name="aceite_termos" aria-describedby="erro-aceite-termos" required>
+                            <span>Li e aceito os <a href="termos-de-uso.html" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="politica-de-privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>, e entendo como meus dados serão usados.</span>
+                        </label>
+                        <p class="campo-erro" id="erro-aceite-termos" aria-live="polite"></p>
+                    </div>
+
                     <!-- Erro devolvido pela API (ex.: CPF já cadastrado) -->
                     <p id="erro-cadastro" class="aviso" role="alert" hidden></p>
 
@@ -79,6 +89,10 @@
                 </form>
 
                 <p class="rodape-form">Já possui uma conta? <a href="login.html">Entrar</a></p>
+                <nav class="links-legais rodape-legal" aria-label="Documentos legais">
+                    <a href="termos-de-uso.html" target="_blank" rel="noopener">Termos de Uso</a>
+                    <a href="politica-de-privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>
+                </nav>
             </section>
         </main>
     </div>

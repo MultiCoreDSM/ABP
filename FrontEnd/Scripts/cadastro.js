@@ -5,6 +5,7 @@ const inputCpf = document.getElementById("cpf");
 const inputNome = document.getElementById("nome");
 const inputEmail = document.getElementById("email");
 const inputSenha = document.getElementById("senha");
+const inputAceite = document.getElementById("aceite-termos");
 const btnOlho = document.getElementById("btn-olho");
 const btnCadastrar = document.getElementById("btn-cadastrar");
 const btnIniciar = document.getElementById("btn-iniciar");
@@ -24,6 +25,7 @@ inputCpf.addEventListener("input", () => {
 for (const input of [inputCpf, inputNome, inputEmail, inputSenha]) {
     input.addEventListener("input", () => limparErro(input));
 }
+inputAceite.addEventListener("change", () => limparErro(inputAceite));
 
 // Mostrar / ocultar senha
 btnOlho.addEventListener("click", () => {
@@ -80,6 +82,10 @@ function validar() {
         mostrarErro(inputSenha, `A senha deve ter pelo menos ${SENHA_MINIMA} caracteres.`);
         valido = false;
     }
+    if (!inputAceite.checked) {
+        mostrarErro(inputAceite, "Para criar a conta, aceite os Termos de Uso e a Política de Privacidade.");
+        valido = false;
+    }
     return valido;
 }
 
@@ -110,7 +116,13 @@ form.addEventListener("submit", async (evento) => {
     btnCadastrar.disabled = true;
     try {
         await MultiCore.api("/candidatos", {
-            corpo: { cpf, nome: inputNome.value.trim(), email: inputEmail.value.trim(), senha },
+            corpo: {
+                cpf,
+                nome: inputNome.value.trim(),
+                email: inputEmail.value.trim(),
+                senha,
+                aceite_termos: inputAceite.checked,
+            },
             semRedirecionar: true,
         });
         await entrarAutomaticamente(cpf, senha);

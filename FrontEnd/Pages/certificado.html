@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificado | MultiCore</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo-icone.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -40,13 +41,18 @@
                     <p class="folha-identificacao">CPF <strong id="folha-cpf"></strong> · E-mail <strong id="folha-email"></strong></p>
                     <p class="folha-texto">concluiu a <strong>Certificação em Metodologias Ágeis</strong> da plataforma MultiCore, com nota final <strong id="folha-nota"></strong> e percentual de acertos de <strong id="folha-percentual"></strong>.</p>
 
+                    <div class="folha-selo" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg>
+                    </div>
+
                     <div class="folha-rodape">
                         <div class="folha-campo">
                             <strong id="folha-data"></strong>
                             <span>Data e hora de emissão</span>
                         </div>
-                        <div class="folha-selo" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg>
+                        <div class="folha-qr">
+                            <img id="folha-qr" alt="QR Code para validar o certificado">
+                            <span>Escaneie para validar</span>
                         </div>
                         <div class="folha-campo">
                             <strong class="folha-codigo" id="folha-codigo"></strong>
@@ -86,6 +92,7 @@
     </div>
 
     <script src="../Scripts/comum.js"></script>
+    <script src="../Scripts/qrcode.js"></script>  
     <script src="../Scripts/certificado.js"></script>
 </body>
 </html>

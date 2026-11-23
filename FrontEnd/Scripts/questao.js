@@ -38,6 +38,10 @@ async function requisitar(caminho, opcoes = {}) {
         const erro = new Error(`A API respondeu com status ${resposta.status}`);
         erro.status = resposta.status;
         erro.corpo = await resposta.json().catch(() => ({}));
+        // Termos novos (ou conta anterior a eles): o aceite é pedido no menu
+        if (resposta.status === 403 && erro.corpo.termos_pendentes) {
+            location.replace("menu.html");
+        }
         throw erro;
     }
     return resposta.json();
@@ -72,7 +76,12 @@ const elementos = {
     imagemErro: $("imagem-erro"),
     alternativas: $("alternativas"),
     avisoErro: $("aviso-erro"),
-    btnPausar: $("btn-pausar"),
+    decisao: $("decisao"),
+    decisaoPergunta: $("decisao-pergunta"),
+    decisaoDetalhe: $("decisao-detalhe"),
+    btnEncerrar: $("btn-encerrar"),
+    btnProsseguir: $("btn-prosseguir"),
+    btnProsseguirTexto: $("btn-prosseguir-texto"),
     btnVoltar: $("btn-voltar"),
     temasDica: $("temas-dica"),
     dialogoSair: $("dialogo-sair"),
@@ -199,21 +208,38 @@ function atualizarControles() {
     elementos.alternativas.disabled =
         etapa === "enviando" || etapa === "corrigida" || (etapa === "erro" && tempoEsgotado);
     elementos.avisoErro.hidden = etapa !== "erro";
-    // A pausa só existe entre questões; depois do último tema, o botão leva ao resultado
-    elementos.btnPausar.hidden = etapa !== "corrigida";
-    elementos.btnPausar.textContent = proximo ? "Pausar certificação" : "Ver resultado";
 
     const textos = {
         respondendo: "Enviar resposta",
         enviando: "Enviando...",
         erro: "Tentar novamente",
-        corrigida: "Próxima questão",
     };
-    elementos.btnPrincipalTexto.textContent = textos[etapa];
-    elementos.btnPrincipal.hidden = etapa === "corrigida" && !proximo;
+    // Respondida a questão, o botão de envio dá lugar à pergunta: prosseguir ou encerrar
+    elementos.btnPrincipal.hidden = etapa === "corrigida";
+    elementos.btnPrincipalTexto.textContent = textos[etapa] ?? "";
     elementos.btnPrincipal.disabled = etapa === "enviando" || (etapa === "respondendo" && !selecionada);
+    atualizarDecisao(etapa === "corrigida", proximo);
 
     renderizarTemas();
+}
+
+// Depois de cada resposta (inclusive por tempo esgotado), o candidato escolhe:
+// seguir já para o próximo tema ou encerrar a sessão com o progresso salvo (BL-10, BL-12, BL-14)
+function atualizarDecisao(visivel, proximo) {
+    elementos.decisao.hidden = !visivel;
+    elementos.decisao.parentElement.classList.toggle("rodape-solto", visivel);
+    if (!visivel) return;
+
+    if (proximo) {
+        elementos.decisaoPergunta.textContent = "Deseja prosseguir para o próximo tema ou encerrar a sessão?";
+        elementos.decisaoDetalhe.textContent =
+            `Próximo: tema ${formatarNumero(proximo.ordem)}, ${proximo.nome}. Se encerrar, seu progresso fica salvo e você continua depois de onde parou.`;
+        elementos.btnProsseguirTexto.textContent = "Prosseguir para o próximo tema";
+    } else {
+        elementos.decisaoPergunta.textContent = "Você respondeu todos os temas!";
+        elementos.decisaoDetalhe.textContent = "Veja agora sua nota e, se for aprovado, emita o certificado.";
+        elementos.btnProsseguirTexto.textContent = "Ver resultado";
+    }
 }
 
 function definirEtapa(etapa) {
@@ -342,7 +368,11 @@ async function enviarResposta() {
         aplicarCorrecao(validarCorrecao(await api.responder(tela.questao.id, tela.selecionada)));
         tela.temaAtual.respondido = true;
         atualizarControles();
-        elementos.alternativas.querySelector(".correta").scrollIntoView({ block: "nearest" });
+        // Rola até a pergunta; a alternativa correta fica logo acima dela
+        elementos.decisao.scrollIntoView({ block: "nearest" });
+        // O foco vai para a pergunta: o leitor de tela anuncia a escolha logo após a correção
+        elementos.decisaoPergunta.focus({ preventScroll: true });
+        return;
     } catch (erro) {
         console.error("Erro ao enviar a resposta:", erro);
         definirEtapa("erro");
@@ -395,8 +425,16 @@ function aplicarCorrecao(correcao) {
 elementos.btnPrincipal.addEventListener("click", () => {
     if (tela.etapa === "respondendo") abrirConfirmacao();
     else if (tela.etapa === "erro") enviarResposta();
-    else if (tela.etapa === "corrigida") abrirTema(proximoTema());
 });
+
+elementos.btnProsseguir.addEventListener("click", () => {
+    const proximo = proximoTema();
+    if (proximo) abrirTema(proximo);
+    else location.href = "resultado.html";
+});
+
+// A resposta já está registrada: encerrar não perde nada, por isso não pede outra confirmação
+elementos.btnEncerrar.addEventListener("click", () => irParaInicio());
 
 /* ===== Pausa e saída (BL-12, BL-13) ===== */
 // O prazo de cada questão corre no servidor, então não dá para pausar no meio de uma:
@@ -447,11 +485,6 @@ async function confirmarSaida() {
 elementos.btnVoltar.addEventListener("click", (evento) => {
     evento.preventDefault();
     pedirSaida();
-});
-
-elementos.btnPausar.addEventListener("click", () => {
-    if (proximoTema()) pedirSaida();
-    else location.href = "resultado.html";
 });
 
 elementos.btnSairCancelar.addEventListener("click", () => elementos.dialogoSair.close());

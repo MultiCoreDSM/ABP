@@ -33,6 +33,8 @@ O backlog pode ser atualizado ao longo do desenvolvimento conforme novas necessi
 | BL-21 | Certificado | Validação pública | Disponibilizar um sistema público de validação do certificado acessível pelo QR Code, exibindo somente os dados aprovados em DP-01 (RN-09). | Alto |
 | BL-22 | Histórico | Histórico de certificação | Registrar os temas respondidos, as questões sorteadas, as respostas escolhidas, as respostas corretas e a data e o horário de cada resposta. |Médio |
 | BL-23 | Interface | Responsividade | Adaptar a interface a diferentes tamanhos de tela. | Baixa |
+| BL-24 | LGPD | Termos e consentimento | Exigir no cadastro o aceite dos Termos de Uso e da Política de Privacidade, registrar a versão aceita e a data, e pedir novo aceite quando os documentos mudarem. |Alto |
+| BL-25 | LGPD | Direitos do titular | Permitir ao candidato ver, corrigir, baixar (JSON) e excluir os próprios dados (LGPD, art. 18). |Alto |
 
 ## Requisitos não funcionais
 
@@ -41,11 +43,12 @@ O backlog pode ser atualizado ao longo do desenvolvimento conforme novas necessi
 | RNF-01 | Tecnologia | Front-end em HTML, CSS e JavaScript; back-end em Node.js com Express; banco PostgreSQL 16 | Versões declaradas no README e no `package.json` | Alto |
 | RNF-02 | Segurança | Senhas armazenadas apenas como hash (bcrypt) | Nenhuma coluna guarda a senha em texto; login compara via `bcrypt.compare` | Alto |
 | RNF-03 | Segurança | Rotas da prova exigem autenticação por token | Requisição sem token em `/api/questoes/*` retorna 401 | Alto |
-| RNF-04 | Reprodutibilidade | O projeto roda a partir de um clone limpo seguindo só o README | `docker compose up` + `npm install` + `npm start` sem passos extras | Alto |
+| RNF-04 | Reprodutibilidade | O projeto roda a partir de um clone Jlimpo seguindo só o README | `docker compose up` + `npm install` + `npm start` sem passos extras | Alto |
 | RNF-05 | Integridade | O horário de início e resposta é registrado pelo servidor, não pelo navegador | Colunas de data/hora preenchidas pelo banco (`clock_timestamp()`) | Alto |
 | RNF-06 | Usabilidade | Interface legível e utilizável em celular | Telas funcionam a partir de 360 px de largura | Média |
 | RNF-07 | Privacidade | A validação pública não expõe CPF completo nem e-mail | Página de validação mostra no máximo CPF mascarado | Média |
 | RNF-08 | Execução | Aplicação executável em contêiner | Serviços sobem com `docker compose up` | Média |
+| RNF-09 | Privacidade | Coleta mínima de dados pessoais (LGPD, art. 6º, III) | O banco não guarda IP, navegador nem localização; o aceite grava só versão e horário | Alto |
 
 ## Regras de negócio
 
@@ -60,6 +63,8 @@ O backlog pode ser atualizado ao longo do desenvolvimento conforme novas necessi
 | RN-07 | O certificado só é emitido com aproveitamento ≥ 65% | BL-18 |
 | RN-08 | Cada certificado tem um código único, usado no QR Code e na validação pública | BL-20, BL-21 |
 | RN-09 | A validação pública busca só pelo código do certificado e exibe somente nome completo, CPF mascarado (`***.456.789-**`), data de emissão, situação e percentual de acertos. Nunca exibe e-mail nem CPF completo | BL-21 |
+| RN-10 | Não existe conta sem aceite dos termos vigentes. Sem o aceite, o servidor não abre questões nem grava respostas | BL-24 |
+| RN-11 | A exclusão da conta é definitiva e apaga cadastro, respostas e certificado; o nome não pode ser corrigido depois da emissão do certificado | BL-25 |
 
 ## Decisões do PO
 

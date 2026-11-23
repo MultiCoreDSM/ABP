@@ -8,7 +8,30 @@ const formatarCpf = (cpf) => cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.
 if (MultiCore.exigirLogin()) carregar();
 
 function linkValidacao(codigo) {
-    return new URL(`validacao.html?codigo=${codigo}`, location.href).href;
+    return new URL(
+        `validacao.html?codigo=${encodeURIComponent(codigo)}`,
+        location.href
+    ).href;
+}
+
+async function gerarQrCode(link) {
+    const imagem = $("folha-qr");
+
+    if (!window.QRLocal || typeof QRLocal.desenhar !== "function") {
+        throw new Error("Biblioteca local de QR Code não encontrada.");
+    }
+
+    // Cria um container temporário para gerar o QR Code
+    const container = document.createElement("div");
+
+    const canvas = QRLocal.desenhar(container, link, {
+        tamanho: 180,
+        margem: 2,
+        nivel: "H"
+    });
+
+    // Converte o canvas em imagem
+    imagem.src = canvas.toDataURL("image/png");
 }
 
 function mostrarEstado(mensagem, comAcao = false) {
@@ -43,6 +66,9 @@ async function carregar() {
         $("painel-codigo").title = certificado.codigo.toUpperCase();
 
         const link = linkValidacao(certificado.codigo);
+
+        await gerarQrCode(link);
+
         $("btn-validar").href = link;
         $("btn-compartilhar").addEventListener("click", () => compartilhar(link));
 

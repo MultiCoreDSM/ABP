@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus dados | MultiCore</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo-icone.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../Styles/base.css">
+    <link rel="stylesheet" href="../Styles/meus-dados.css">
+</head>
+<body class="sem-circuitos">
+    <div class="pagina">
+        <header class="topo">
+            <a class="marca" href="menu.html"><img src="../../assets/logo-icone.svg" alt=""><span class="marca-texto">Multi<span>Core</span></span></a>
+            <a class="btn btn-secundario btn-pequeno" href="menu.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+                Voltar ao menu
+            </a>
+        </header>
+
+        <main class="conteudo">
+            <h1 class="titulo-pagina titulo">Meus <span class="destaque">dados</span></h1>
+            <p class="texto-suave subtitulo">Veja, corrija, baixe ou apague os dados que o portal guarda sobre você (LGPD, art. 18).</p>
+
+            <p class="estado card" id="estado">Carregando seus dados...</p>
+
+            <div id="secoes" hidden>
+                <!-- Acesso e correção -->
+                <section class="card secao" aria-labelledby="titulo-cadastro">
+                    <h2 id="titulo-cadastro">Dados do cadastro</h2>
+                    <form id="form-dados" class="form-dados" novalidate>
+                        <div class="campo">
+                            <label for="cpf">CPF</label>
+                            <div class="campo-entrada">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14.5 10h4M14.5 13.5h3"/></svg>
+                                <input type="text" id="cpf" readonly aria-describedby="ajuda-cpf">
+                            </div>
+                            <p class="campo-ajuda" id="ajuda-cpf">O CPF identifica a conta e não pode ser alterado.</p>
+                        </div>
+                        <div class="campo">
+                            <label for="nome">Nome completo</label>
+                            <div class="campo-entrada">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+                                <input type="text" id="nome" maxlength="100" autocomplete="name" aria-describedby="erro-nome ajuda-nome" required>
+                            </div>
+                            <p class="campo-erro" id="erro-nome" aria-live="polite"></p>
+                            <p class="campo-ajuda" id="ajuda-nome" hidden>O nome não pode ser alterado depois da emissão do certificado.</p>
+                        </div>
+                        <div class="campo">
+                            <label for="email">E-mail</label>
+                            <div class="campo-entrada">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg>
+                                <input type="email" id="email" maxlength="100" autocomplete="email" aria-describedby="erro-email" required>
+                            </div>
+                            <p class="campo-erro" id="erro-email" aria-live="polite"></p>
+                        </div>
+
+                        <p class="aviso" id="aviso-dados" role="status" hidden></p>
+                        <button type="submit" class="btn btn-primario" id="btn-salvar">Salvar alterações</button>
+                    </form>
+
+                    <dl class="registros">
+                        <div><dt>Conta criada em</dt><dd id="criado-em"></dd></div>
+                        <div><dt>Termos e Política aceitos em</dt><dd id="termos-aceitos"></dd></div>
+                        <div><dt>Temas respondidos</dt><dd id="respostas"></dd></div>
+                        <div><dt>Certificado</dt><dd id="certificado"></dd></div>
+                    </dl>
+                </section>
+
+                <!-- Portabilidade -->
+                <section class="card secao secao-linha" aria-labelledby="titulo-baixar">
+                    <span class="icone-caixa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></span>
+                    <div class="secao-texto">
+                        <h2 id="titulo-baixar">Baixar meus dados</h2>
+                        <p>Um arquivo JSON com o cadastro, o aceite dos termos, as respostas da prova e o certificado. A senha não vai no arquivo.</p>
+                    </div>
+                    <button type="button" class="btn btn-secundario" id="btn-baixar">Baixar arquivo</button>
+                </section>
+
+                <!-- Eliminação -->
+                <section class="card secao secao-linha secao-perigo" aria-labelledby="titulo-excluir">
+                    <span class="icone-caixa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></span>
+                    <div class="secao-texto">
+                        <h2 id="titulo-excluir">Excluir minha conta</h2>
+                        <p>Apaga o cadastro, as respostas e o certificado de forma definitiva. O código do certificado deixa de ser válido.</p>
+                    </div>
+                    <button type="button" class="btn btn-perigo" id="btn-excluir">Excluir conta</button>
+                </section>
+
+                <nav class="links-legais rodape-legal" aria-label="Documentos legais">
+                    <a href="termos-de-uso.html">Termos de Uso</a>
+                    <a href="politica-de-privacidade.html">Política de Privacidade</a>
+                </nav>
+            </div>
+        </main>
+    </div>
+
+    <dialog class="dialogo" id="dialogo-excluir" aria-labelledby="titulo-dialogo-excluir">
+        <form id="form-excluir" novalidate>
+            <h2 id="titulo-dialogo-excluir">Excluir a conta?</h2>
+            <p>Esta ação não pode ser desfeita. Seu cadastro, suas respostas e seu certificado serão apagados agora. Se quiser uma cópia, baixe seus dados antes.</p>
+
+            <div class="campo campo-dialogo">
+                <label for="senha-excluir">Confirme com a sua senha</label>
+                <div class="campo-entrada">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.2" fill="currentColor"/></svg>
+                    <input type="password" id="senha-excluir" autocomplete="current-password" aria-describedby="erro-senha-excluir" required>
+                </div>
+                <p class="campo-erro" id="erro-senha-excluir" aria-live="polite"></p>
+            </div>
+
+            <div class="campo">
+                <label class="aceite" for="confirma-excluir">
+                    <input type="checkbox" id="confirma-excluir" aria-describedby="erro-confirma-excluir" required>
+                    <span>Entendo que a exclusão é definitiva.</span>
+                </label>
+                <p class="campo-erro" id="erro-confirma-excluir" aria-live="polite"></p>
+            </div>
+
+            <div class="dialogo-acoes">
+                <button type="submit" class="btn btn-perigo btn-bloco" id="btn-confirmar-excluir">Excluir definitivamente</button>
+                <button type="button" class="btn btn-secundario btn-bloco" id="btn-cancelar-excluir">Cancelar</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script src="../Scripts/comum.js"></script>
+    <script src="../Scripts/meus-dados.js"></script>
+</body>
+</html>

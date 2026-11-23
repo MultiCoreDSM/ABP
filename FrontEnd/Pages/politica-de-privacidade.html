@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidade | MultiCore</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo-icone.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../Styles/base.css">
+    <link rel="stylesheet" href="../Styles/legal.css">
+</head>
+<body class="sem-circuitos">
+    <div class="pagina">
+        <header class="topo">
+            <a class="marca" href="inicial.html"><img src="../../assets/logo-icone.svg" alt=""><span class="marca-texto">Multi<span>Core</span></span></a>
+            <a class="btn btn-secundario btn-pequeno" href="inicial.html" id="btn-voltar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+                Voltar
+            </a>
+        </header>
+
+        <!-- Ao mudar este texto, atualize TERMOS_VERSAO em backend/src/utils/termos.js
+             e a data abaixo: quem aceitou a versão anterior precisará aceitar de novo. -->
+        <main class="card documento">
+            <p class="sobretitulo">LGPD · Lei nº 13.709/2018</p>
+            <h1>Política de <span class="destaque">Privacidade</span></h1>
+            <p class="documento-versao">Versão de 13/11/2026</p>
+
+            <p class="aviso aviso-info documento-resumo"><strong>Em resumo:</strong> coletamos só o necessário para aplicar a certificação e emitir o certificado. Sua senha é guardada de forma irreversível, nada é vendido ou repassado, e você pode ver, corrigir, baixar ou apagar seus dados a qualquer momento em <strong>Meus dados</strong>.</p>
+
+            <nav class="sumario" aria-label="Sumário">
+                <strong>Nesta página</strong>
+                <ol>
+                    <li><a href="#controlador">Quem cuida dos seus dados</a></li>
+                    <li><a href="#dados">Quais dados tratamos e por quê</a></li>
+                    <li><a href="#nao-coletamos">O que não coletamos</a></li>
+                    <li><a href="#compartilhamento">Com quem os dados são compartilhados</a></li>
+                    <li><a href="#retencao">Por quanto tempo guardamos</a></li>
+                    <li><a href="#seguranca">Como protegemos</a></li>
+                    <li><a href="#direitos">Seus direitos</a></li>
+                    <li><a href="#alteracoes">Alterações desta política</a></li>
+                </ol>
+            </nav>
+
+            <h2 id="controlador">1. Quem cuida dos seus dados</h2>
+            <p>O portal MultiCore é um projeto acadêmico da equipe MultiCore, do curso de Desenvolvimento de Software Multiplataforma (DSM) da FATEC Jacareí. A equipe é a <strong>controladora</strong> dos dados pessoais tratados no portal, nos termos da Lei Geral de Proteção de Dados (LGPD).</p>
+            <!-- TODO(equipe): definir o canal de contato do encarregado (art. 41 da LGPD) -->
+            <p>Você exerce a maior parte dos seus direitos sozinho, na página <strong>Meus dados</strong>. Para outras solicitações sobre privacidade, fale com a equipe MultiCore pelo canal de contato do projeto (a definir pela equipe).</p>
+
+            <h2 id="dados">2. Quais dados tratamos e por quê</h2>
+            <div class="tabela-rolagem">
+                <table>
+                    <thead>
+                        <tr><th scope="col">Dado</th><th scope="col">Para quê</th><th scope="col">Base legal (LGPD)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>CPF</td><td>Identificar você de forma única, entrar na conta e constar no certificado</td><td>Execução do serviço que você solicitou (art. 7º, V)</td></tr>
+                        <tr><td>Nome completo</td><td>Saudação no portal, certificado e validação pública</td><td>Execução do serviço (art. 7º, V)</td></tr>
+                        <tr><td>E-mail</td><td>Constar no certificado, como exige o regulamento da certificação</td><td>Execução do serviço (art. 7º, V)</td></tr>
+                        <tr><td>Senha</td><td>Proteger o acesso à sua conta. Guardamos apenas um resumo criptográfico (hash bcrypt), do qual não é possível recuperar a senha</td><td>Execução do serviço (art. 7º, V)</td></tr>
+                        <tr><td>Respostas da prova</td><td>Alternativa escolhida, horário de início e de resposta (marcados pelo servidor), se a resposta valeu dentro do prazo e se acertou. Servem para corrigir a prova e calcular a nota</td><td>Execução do serviço (art. 7º, V)</td></tr>
+                        <tr><td>Certificado</td><td>Código de validação, data de emissão e número de acertos, para emitir e validar o certificado</td><td>Execução do serviço (art. 7º, V)</td></tr>
+                        <tr><td>Aceite destes documentos</td><td>Versão dos Termos e desta Política que você aceitou e a data e hora do aceite, para comprovar o consentimento</td><td>Consentimento (art. 7º, I, e art. 8º)</td></tr>
+                        <tr><td>Contagem de tentativas de login erradas</td><td>Bloquear temporariamente quem tenta adivinhar senhas. Fica só na memória do servidor, por até 15 minutos, associada ao CPF digitado e ao endereço IP, e nunca vai para o banco de dados</td><td>Legítimo interesse em proteger as contas (art. 7º, IX)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="nao-coletamos">3. O que não coletamos</h2>
+            <ul>
+                <li>Não guardamos endereço IP, localização, dados do navegador ou do dispositivo no banco de dados.</li>
+                <li>Não usamos cookies, ferramentas de análise, publicidade ou rastreamento.</li>
+                <li>No seu navegador fica só o token de acesso, no armazenamento da aba (<code>sessionStorage</code>). Ele expira em 1 hora e é apagado quando você fecha a aba ou sai.</li>
+                <li>Não pedimos dados sensíveis (art. 5º, II), como origem racial, saúde, religião ou biometria.</li>
+            </ul>
+
+            <h2 id="compartilhamento">4. Com quem os dados são compartilhados</h2>
+            <p>Não vendemos, alugamos ou repassamos seus dados. Eles só aparecem para outras pessoas nestes casos:</p>
+            <ul>
+                <li><strong>Validação pública do certificado:</strong> quem tiver o código de validação (impresso no certificado e no QR Code) vê apenas seu nome completo, o CPF mascarado (<code>***.456.789-**</code>), a data de emissão, a situação e o percentual de acertos. O e-mail e o CPF completo nunca aparecem. Só compartilhe o código com quem você quiser que confira o certificado.</li>
+                <li><strong>Fontes do Google:</strong> as páginas carregam fontes do Google Fonts. Para entregá-las, o Google recebe o endereço IP do seu navegador, como acontece em qualquer site que usa esse serviço. Nenhum dado do seu cadastro é enviado ao Google.</li>
+                <li><strong>Obrigação legal:</strong> se uma autoridade competente exigir, nos limites da lei.</li>
+            </ul>
+
+            <h2 id="retencao">5. Por quanto tempo guardamos</h2>
+            <p>Seus dados ficam guardados enquanto a sua conta existir. Quando você exclui a conta em <strong>Meus dados</strong>, o cadastro, as respostas e o certificado são apagados do banco na mesma hora, e o código do certificado deixa de ser válido na validação pública.</p>
+
+            <h2 id="seguranca">6. Como protegemos</h2>
+            <ul>
+                <li>Senhas guardadas só como hash bcrypt. A senha nunca é registrada nem devolvida pela API.</li>
+                <li>Cada candidato só acessa os próprios dados: a identificação vem do token de acesso, nunca de um número na página.</li>
+                <li>Limite de tentativas de login e confirmação de senha para excluir a conta.</li>
+                <li>Os registros (logs) do servidor não guardam CPF, senha nem o conteúdo das requisições.</li>
+                <li>A nota é calculada no servidor, e os horários da prova são marcados pelo servidor.</li>
+                <li>Em uma publicação fora do ambiente acadêmico, o acesso deve ser feito somente por HTTPS.</li>
+            </ul>
+
+            <h2 id="direitos">7. Seus direitos</h2>
+            <p>A LGPD (art. 18) garante a você os direitos abaixo. Os principais estão disponíveis em <strong>Meus dados</strong>, depois de entrar na conta:</p>
+            <ul>
+                <li><strong>Confirmação e acesso:</strong> ver todos os dados guardados sobre você.</li>
+                <li><strong>Correção:</strong> alterar nome e e-mail. Depois que o certificado é emitido, o nome não pode mais ser alterado, para não modificar um documento já emitido.</li>
+                <li><strong>Portabilidade:</strong> baixar seus dados em um arquivo JSON.</li>
+                <li><strong>Eliminação e revogação do consentimento:</strong> excluir a conta e todos os dados a qualquer momento.</li>
+                <li><strong>Informação:</strong> saber com quem os dados são compartilhados (seção 4) e as consequências de não aceitar estes documentos: sem o aceite não é possível criar a conta nem fazer a prova.</li>
+                <li><strong>Reclamação:</strong> se achar que seus direitos não foram respeitados, você pode procurar a Autoridade Nacional de Proteção de Dados (ANPD).</li>
+            </ul>
+
+            <h2 id="alteracoes">8. Alterações desta política</h2>
+            <p>Se esta política mudar, a nova versão será publicada nesta página com a nova data, e o portal pedirá um novo aceite antes de você continuar a prova.</p>
+
+            <div class="documento-rodape">
+                <nav class="links-legais" aria-label="Documentos legais">
+                    <a href="termos-de-uso.html">Termos de Uso</a>
+                    <a href="inicial.html">Página inicial</a>
+                </nav>
+            </div>
+        </main>
+    </div>
+
+    <script src="../Scripts/comum.js"></script>
+    <script src="../Scripts/legal.js"></script>
+</body>
+</html>
