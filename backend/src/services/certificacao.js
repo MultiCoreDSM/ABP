@@ -1,6 +1,7 @@
 import pool from "../config/database.js";
 import { buscarQuestaoService } from "./questoes.js";
 
+const PERCENTUAL_MINIMO = 65;
 const QUESTOES_VALIDAS_POR_TEMA = 4;
 
 // Rotas usadas pela página da prova (FrontEnd/Pages/questao.html).
@@ -275,7 +276,7 @@ const ENCERRADA = `(r.data_horario_resposta IS NOT NULL OR clock_timestamp() - r
 // Acerto só vale dentro do prazo (RN-05)
 const ACERTOU = `(r.acertou IS TRUE AND r.valida IS TRUE)`;
 
-// Resultado da certificação: situação de cada tema e o total de acertos (BL-15, BL-16, BL-17)
+// Resultado da certificação: situação de cada tema, acertos, nota e situação oficial (BL-15, BL-16, BL-17, DB-09)
 export async function resultadoCandidatoService(candidatoId) {
   const { rows } = await pool.query(
     `
@@ -299,14 +300,31 @@ export async function resultadoCandidatoService(candidatoId) {
     porTema.set(linha.id, atual);
   }
   const temas = [...porTema.values()].sort((a, b) => a.ordem - b.ordem);
+  const total = temas.length;
   const respondidos = temas.filter((t) => t.respondido).length;
+  const pendentes = Math.max(0, total - respondidos);
   const acertos = temas.filter((t) => t.acertou).length;
+  const concluida = total > 0 && respondidos === total;
+
+  // DB-09: nota, percentual e aprovacao so existem apos concluir todos os temas;
+  // resultado incompleto nunca e classificado como "reprovado".
+  const nota = concluida ? Number(((acertos / total) * 100).toFixed(2)) : null;
+  const percentual = concluida ? Math.round((acertos / total) * 100) : null;
+  const aprovado = concluida ? nota >= PERCENTUAL_MINIMO : null;
+  const situacao = concluida
+    ? (aprovado ? "aprovado" : "reprovado")
+    : (respondidos === 0 ? "nao_iniciada" : "em_andamento");
 
   return {
-    total: temas.length,
+    total,
     respondidos,
+    pendentes,
     acertos,
-    concluida: respondidos === temas.length && temas.length > 0,
+    concluida,
+    nota,
+    percentual,
+    aprovado,
+    situacao,
     temas,
   };
 }

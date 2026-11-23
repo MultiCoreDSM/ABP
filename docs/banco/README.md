@@ -91,3 +91,10 @@ node --env-file=../.env database/migrate.js down --all  # reverte todas (uso em 
 - **Identificador público:** `idx_candidatos_certificado_hash_unico` (`UNIQUE` parcial em `candidatos(certificado_hash)` quando não nulo).
 
 Restrições adicionais (`002_indices_e_restricoes`): ordem de tema entre 1 e 12, coerência de datas (`data_horario_resposta >= data_horario_inicio`), integridade do código e contadores do certificado e regras de consistência de resultado final.
+
+## Regras de resultado e nota final (DB-09)
+
+- **Fonte oficial de acertos:** questões oficialmente encerradas (respondidas ou com prazo de 150 s vencido) com `acertou IS TRUE AND valida IS TRUE`.
+- **Fórmula e arredondamento:** com $A$ acertos em $T = 12$ temas, a **nota final** (escala `0.00` a `100.00`) é `ROUND((A / T) * 100, 2)` (ex.: `8/12 = 66.67`, `7/12 = 58.33`) e o **percentual de exibição** é `ROUND((A / T) * 100)` (`67%` / `58%`).
+- **Aprovação:** `nota >= 65` resulta em `aprovado`; abaixo de `65` resulta em `reprovado`.
+- **Resultado incompleto:** antes do encerramento dos 12 temas, `nota`, `percentual` e `aprovado` permanecem `null` e `situacao` fica em `nao_iniciada` ou `em_andamento` — nunca `reprovado`. As constraints `chk_tentativas_resultado_so_concluida`, `chk_tentativas_situacao_limiar` e `chk_tentativas_formula_nota` reforçam essas regras no banco.
