@@ -11,7 +11,8 @@ import {
 } from "../services/candidatos.js";
 import autenticacao from "../middlewares/autenticacao.js";
 import { capturar } from "../middlewares/erros.js";
-
+import { confirmacaoBloqueada, registrarFalhaConfirmacao } from "../middlewares/limiteLogin.js";
+import { gerarPdfCertificado } from "../services/pdfCertificado.js";
 import { cpfValido, emailValido, senhaValida, SENHA_MINIMA, SENHA_MAXIMA } from "../utils/validacao.js";
 const rotas = Router();
 

@@ -1,0 +1,9 @@
+-- Migracao 001 (DOWN): Remove as tabelas base em ordem segura
+
+DROP TABLE IF EXISTS tentativa_questoes CASCADE;
+DROP TABLE IF EXISTS tentativas CASCADE;
+DROP TABLE IF EXISTS respostas CASCADE;
+DROP TABLE IF EXISTS alternativas CASCADE;
+DROP TABLE IF EXISTS questoes CASCADE;
+DROP TABLE IF EXISTS temas CASCADE;
+DROP TABLE IF EXISTS candidatos CASCADE;

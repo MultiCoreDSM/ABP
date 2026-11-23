@@ -70,3 +70,31 @@ psql -U postgres -d abp_multicore -tAc "SELECT imagem_url FROM questoes" \
 ```
 
 Sem saída significa que todos existem.
+
+## Migrações, índices e restrições (DB-11)
+
+Além do `schemas.sql`, o diretório [`backend/database/migrations/`](../../backend/database/migrations/) traz migrações SQL versionadas e reversíveis (`001_estrutura_base` e `002_indices_e_restricoes`), executadas de forma idempotente pelo script [`backend/database/migrate.js`](../../backend/database/migrate.js):
+
+```bash
+cd backend
+node --env-file=../.env database/migrate.js status      # lista aplicadas e pendentes
+node --env-file=../.env database/migrate.js up          # cria banco vazio ou atualiza versão anterior
+node --env-file=../.env database/migrate.js down        # reverte a última migração
+node --env-file=../.env database/migrate.js down --all  # reverte todas (uso em ambiente de teste)
+```
+
+Índices garantidos pelas migrações:
+- **CPF:** `candidatos_cpf_key` (`UNIQUE` em `candidatos.cpf`).
+- **Temas:** `idx_temas_ordem` em `temas(ordem)` e `idx_questoes_tema_id` em `questoes(tema_id)`.
+- **Tentativas:** `idx_tentativa_ativa_candidato` (`UNIQUE` parcial em `tentativas(candidato_id)` para estados ativos), `idx_tentativas_candidato_iniciado` e `idx_tentativa_questoes_tentativa_ordem`.
+- **Histórico:** `idx_respostas_candidato_inicio` em `respostas(candidato_id, data_horario_inicio DESC)` e `idx_respostas_questao_id`.
+- **Identificador público:** `idx_candidatos_certificado_hash_unico` (`UNIQUE` parcial em `candidatos(certificado_hash)` quando não nulo).
+
+Restrições adicionais (`002_indices_e_restricoes`): ordem de tema entre 1 e 12, coerência de datas (`data_horario_resposta >= data_horario_inicio`), integridade do código e contadores do certificado e regras de consistência de resultado final.
+
+## Regras de resultado e nota final (DB-09)
+
+- **Fonte oficial de acertos:** questões oficialmente encerradas (respondidas ou com prazo de 150 s vencido) com `acertou IS TRUE AND valida IS TRUE`.
+- **Fórmula e arredondamento:** com $A$ acertos em $T = 12$ temas, a **nota final** (escala `0.00` a `100.00`) é `ROUND((A / T) * 100, 2)` (ex.: `8/12 = 66.67`, `7/12 = 58.33`) e o **percentual de exibição** é `ROUND((A / T) * 100)` (`67%` / `58%`).
+- **Aprovação:** `nota >= 65` resulta em `aprovado`; abaixo de `65` resulta em `reprovado`.
+- **Resultado incompleto:** antes do encerramento dos 12 temas, `nota`, `percentual` e `aprovado` permanecem `null` e `situacao` fica em `nao_iniciada` ou `em_andamento` — nunca `reprovado`. As constraints `chk_tentativas_resultado_so_concluida`, `chk_tentativas_situacao_limiar` e `chk_tentativas_formula_nota` reforçam essas regras no banco.

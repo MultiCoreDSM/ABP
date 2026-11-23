@@ -1,7 +1,11 @@
 import jwt from "jsonwebtoken";
+import { validarVariaveisJwt } from "../config/env.js";
+import { sessaoRevogada } from "../services/sessao.js";
+
+// Valida JWT_SECRET e JWT_EXPIRES_IN logo na inicializacao do servidor (OPS-04)
+const jwtConfig = validarVariaveisJwt();
 
 export default function autenticacao(req, res, next) {
-  const segredo = process.env.JWT_SECRET;
   const autorizacao = req.get("Authorization");
   if (!autorizacao) {
     return res.status(401).json({ erro: "Token obrigatório" });
@@ -11,24 +15,31 @@ export default function autenticacao(req, res, next) {
   const tipo = partes[0];
   const token = partes[1];
   if (tipo.toLowerCase() !== "bearer" || !token) {
-    res.status(401).json({ erro: "Use Authorization: Bearer TOKEN" });
-  } else {
-    try {
-      const dados = jwt.verify(token, segredo, {
-        algorithms: ["HS256"],
-        issuer: "portal-certificacao-api",
-        audience: "portal-certificacao",
-      });
-      const candidatoId = Number(dados.sub);
-      if (!Number.isSafeInteger(candidatoId)) {
-        return res.status(401).json({ erro: "Candidato inválido" });
-      }
-      req.candidatoId = candidatoId;
+    return res.status(401).json({ erro: "Use Authorization: Bearer TOKEN" });
+  }
 
-      next();
-    } catch (err) {
-      return res.status(401).json({ erro: "Token inválido ou expirado" });
+  try {
+    const dados = jwt.verify(token, jwtConfig.secret, {
+      algorithms: ["HS256"],
+      issuer: "portal-certificacao-api",
+      audience: "portal-certificacao",
+    });
+    const candidatoId = Number(dados.sub);
+    if (!Number.isSafeInteger(candidatoId)) {
+      return res.status(401).json({ erro: "Candidato inválido" });
     }
+
+    if (sessaoRevogada({ jti: dados.jti, tokenBruto: token })) {
+      return res.status(401).json({ erro: "Sessão encerrada ou token inválido" });
+    }
+
+    req.candidatoId = candidatoId;
+    req.tokenJti = dados.jti ?? null;
+    req.tokenExp = dados.exp;
+    req.tokenBruto = token;
+
+    next();
+  } catch (err) {
+    return res.status(401).json({ erro: "Token inválido ou expirado" });
   }
 }
-

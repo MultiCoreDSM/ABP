@@ -1,11 +1,12 @@
 import pg from "pg";
+import { config } from "./env.js";
 
 const pool = new pg.Pool({
-    host: process.env.POSTGRES_HOST || "localhost",
-    port: process.env.POSTGRES_PORT,
-    database: process.env.POSTGRES_DB,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD
+  host: config.postgres.host,
+  port: config.postgres.port,
+  database: config.postgres.database,
+  user: config.postgres.user,
+  password: config.postgres.password,
 });
 
 export default pool;

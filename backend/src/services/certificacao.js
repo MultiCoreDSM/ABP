@@ -1,6 +1,9 @@
 import pool from "../config/database.js";
 import { buscarQuestaoService } from "./questoes.js";
 
+const PERCENTUAL_MINIMO = 65;
+const QUESTOES_VALIDAS_POR_TEMA = 4;
+
 // Rotas usadas pela página da prova (FrontEnd/Pages/questao.html).
 // Regras: 1 questão sorteada por tema (RN-03), 150 s por questão contados no
 // servidor (RN-04, RNF-05), resposta fora do prazo ou sem alternativa conta como
@@ -115,12 +118,41 @@ export async function abrirQuestaoTemaService(candidatoId, temaId) {
         return { bloqueado: { tema_id: aberta.rows[0].tema_id } };
       }
 
+      // Garante que o tema existe e possui 4 questoes validas (4 alternativas e 1 correta) (API-06)
+      const integridade = await cliente.query(
+        `
+        SELECT t.id,
+               COUNT(q.id) FILTER (
+                 WHERE (SELECT COUNT(*) FROM alternativas a WHERE a.questao_id = q.id) = 4
+                   AND (SELECT COUNT(*) FROM alternativas a WHERE a.questao_id = q.id AND a.correta) = 1
+               )::int AS validas
+        FROM temas t
+        LEFT JOIN questoes q ON q.tema_id = t.id
+        WHERE t.id = $1
+        GROUP BY t.id
+        `,
+        [temaId],
+      );
+      if (integridade.rows.length === 0) {
+        await cliente.query("ROLLBACK");
+        return null;
+      }
+      if (integridade.rows[0].validas < QUESTOES_VALIDAS_POR_TEMA) {
+        await cliente.query("ROLLBACK");
+        return {
+          invalido: true,
+          erro: "Tema indisponível: são necessárias 4 questões válidas para realizar o sorteio.",
+        };
+      }
+
       const sorteio = await cliente.query(
         `
         INSERT INTO respostas (candidato_id, questao_id, data_horario_inicio)
         SELECT $1, q.id, clock_timestamp()
         FROM questoes q
         WHERE q.tema_id = $2
+          AND (SELECT COUNT(*) FROM alternativas a WHERE a.questao_id = q.id) = 4
+          AND (SELECT COUNT(*) FROM alternativas a WHERE a.questao_id = q.id AND a.correta) = 1
         ORDER BY random()
         LIMIT 1
         RETURNING questao_id
@@ -166,23 +198,77 @@ export async function abrirQuestaoTemaService(candidatoId, temaId) {
 }
 
 // Registra a resposta (letra ou null quando o tempo acabou sem alternativa marcada).
-// Idempotente: se a questão já foi encerrada, devolve a correção registrada.
+// Idempotente e transacional com bloqueio de linha (FOR UPDATE) para concorrencia (API-08).
 export async function responderQuestaoCandidatoService(candidatoId, questaoId, letra) {
-  await pool.query(
-    `
-    UPDATE respostas
-    SET letra_resposta = $3,
-        data_horario_resposta = clock_timestamp(),
-        acertou = COALESCE(
-          (SELECT a.correta FROM alternativas a WHERE a.questao_id = $2 AND a.letra = $3),
-          false)
-    WHERE candidato_id = $1 AND questao_id = $2 AND data_horario_resposta IS NULL
-    `,
-    [candidatoId, questaoId, letra],
-  );
+  const cliente = await pool.connect();
+  let jaRegistrada = false;
+  let motivoEncerramento = null;
+  try {
+    await cliente.query("BEGIN");
+
+    const existente = await cliente.query(
+      `SELECT letra_resposta, data_horario_inicio, data_horario_resposta, valida,
+              (clock_timestamp() - data_horario_inicio > ${PRAZO}) AS prazo_vencido
+       FROM respostas
+       WHERE candidato_id = $1 AND questao_id = $2
+       FOR UPDATE`,
+      [candidatoId, questaoId],
+    );
+
+    if (existente.rows.length === 0) {
+      await cliente.query("ROLLBACK");
+      return null;
+    }
+
+    let alternativaCorreta = false;
+    if (letra !== null) {
+      const alt = await cliente.query(
+        `SELECT correta FROM alternativas WHERE questao_id = $1 AND letra = $2`,
+        [questaoId, letra],
+      );
+      if (alt.rows.length === 0) {
+        await cliente.query("ROLLBACK");
+        return { invalido: true, erro: "Alternativa não pertence à questão informada." };
+      }
+      alternativaCorreta = alt.rows[0].correta === true;
+    }
+
+    const linha = existente.rows[0];
+    if (linha.data_horario_resposta !== null) {
+      jaRegistrada = true;
+      motivoEncerramento = linha.valida !== true
+        ? "tempo_esgotado"
+        : (linha.letra_resposta == null ? "sem_resposta" : "respondida");
+    } else {
+      const expirou = linha.prazo_vencido === true;
+      motivoEncerramento = expirou ? "tempo_esgotado" : (letra === null ? "sem_resposta" : "respondida");
+      const acertou = !expirou && letra !== null && alternativaCorreta;
+
+      await cliente.query(
+        `UPDATE respostas
+         SET letra_resposta = $3,
+             data_horario_resposta = clock_timestamp(),
+             acertou = $4
+         WHERE candidato_id = $1 AND questao_id = $2 AND data_horario_resposta IS NULL`,
+        [candidatoId, questaoId, letra, acertou],
+      );
+    }
+
+    await cliente.query("COMMIT");
+  } catch (err) {
+    await cliente.query("ROLLBACK").catch(() => {});
+    throw err;
+  } finally {
+    cliente.release();
+  }
 
   const situacao = await situacaoResposta(candidatoId, questaoId);
-  return situacao ? situacao.correcao : null;
+  if (!situacao || !situacao.correcao) return null;
+  return {
+    ...situacao.correcao,
+    motivo_encerramento: motivoEncerramento,
+    ja_registrada: jaRegistrada,
+  };
 }
 
 // Questão encerrada: respondida, ou com o prazo vencido sem resposta (conta como incorreta)
@@ -190,7 +276,7 @@ const ENCERRADA = `(r.data_horario_resposta IS NOT NULL OR clock_timestamp() - r
 // Acerto só vale dentro do prazo (RN-05)
 const ACERTOU = `(r.acertou IS TRUE AND r.valida IS TRUE)`;
 
-// Resultado da certificação: situação de cada tema e o total de acertos (BL-15, BL-16, BL-17)
+// Resultado da certificação: situação de cada tema, acertos, nota e situação oficial (BL-15, BL-16, BL-17, DB-09)
 export async function resultadoCandidatoService(candidatoId) {
   const { rows } = await pool.query(
     `
@@ -214,15 +300,62 @@ export async function resultadoCandidatoService(candidatoId) {
     porTema.set(linha.id, atual);
   }
   const temas = [...porTema.values()].sort((a, b) => a.ordem - b.ordem);
+  const total = temas.length;
   const respondidos = temas.filter((t) => t.respondido).length;
+  const pendentes = Math.max(0, total - respondidos);
   const acertos = temas.filter((t) => t.acertou).length;
+  const concluida = total > 0 && respondidos === total;
+
+  // DB-09: nota, percentual e aprovacao so existem apos concluir todos os temas;
+  // resultado incompleto nunca e classificado como "reprovado".
+  const nota = concluida ? Number(((acertos / total) * 100).toFixed(2)) : null;
+  const percentual = concluida ? Math.round((acertos / total) * 100) : null;
+  const aprovado = concluida ? nota >= PERCENTUAL_MINIMO : null;
+  const situacao = concluida
+    ? (aprovado ? "aprovado" : "reprovado")
+    : (respondidos === 0 ? "nao_iniciada" : "em_andamento");
 
   return {
-    total: temas.length,
+    total,
     respondidos,
+    pendentes,
     acertos,
-    concluida: respondidos === temas.length && temas.length > 0,
+    concluida,
+    nota,
+    percentual,
+    aprovado,
+    situacao,
     temas,
+  };
+}
+
+// Acompanhamento de progresso sem expor gabaritos nem questões futuras (API-13 / BL-15)
+export async function progressoCandidatoService(candidatoId) {
+  const temas = await listarTemasCandidatoService(candidatoId);
+  const detalhados = temas.map((t) => ({
+    id: t.id,
+    nome: t.nome,
+    ordem: t.ordem,
+    status: t.respondido ? "concluido" : (t.em_andamento ? "em_andamento" : "pendente"),
+  }));
+  const totalTemas = detalhados.length;
+  const concluidos = detalhados.filter((t) => t.status === "concluido").length;
+  const emAndamento = detalhados.filter((t) => t.status === "em_andamento").length;
+  const pendentes = totalTemas - concluidos;
+  const percentualAndamento = totalTemas > 0 ? Math.round((concluidos / totalTemas) * 100) : 0;
+
+  let estado = "em_andamento";
+  if (totalTemas > 0 && concluidos === totalTemas) estado = "concluida";
+  else if (concluidos === 0 && emAndamento === 0) estado = "nao_iniciada";
+  else if (emAndamento === 0) estado = "pausada";
+
+  return {
+    estado,
+    total_temas: totalTemas,
+    concluidos,
+    pendentes,
+    percentual_andamento: percentualAndamento,
+    temas: detalhados,
   };
 }
 

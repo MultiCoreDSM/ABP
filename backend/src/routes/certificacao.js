@@ -7,6 +7,7 @@ import {
   responderQuestaoCandidatoService,
   resultadoCandidatoService,
   respostasCandidatoService,
+  progressoCandidatoService,
 } from "../services/certificacao.js";
 import { situacaoTermosService } from "../services/candidatos.js";
 
@@ -40,6 +41,15 @@ rotas.get("/temas", capturar(async function (req, res) {
 }));
 
 /*
+curl http://localhost:3001/api/certificacao/progresso \
+-H "Authorization: Bearer SEU_TOKEN"
+-> temas concluidos e pendentes, percentual de andamento e estado sem expor gabaritos (API-13)
+*/
+rotas.get("/progresso", capturar(async function (req, res) {
+  res.json(await progressoCandidatoService(req.candidatoId));
+}));
+
+/*
 curl http://localhost:3001/api/certificacao/temas/1/questao \
 -H "Authorization: Bearer SEU_TOKEN"
 */
@@ -51,6 +61,9 @@ rotas.get("/temas/:id/questao", exigirTermos, capturar(async function (req, res)
   const questao = await abrirQuestaoTemaService(req.candidatoId, temaId);
   if (!questao) {
     return res.status(404).json({ erro: "Tema não encontrado." });
+  }
+  if (questao.invalido) {
+    return res.status(422).json({ erro: questao.erro });
   }
   if (questao.bloqueado) {
     return res.status(409).json({
@@ -80,12 +93,15 @@ rotas.post("/questoes/:id/resposta", exigirTermos, capturar(async function (req,
   if (!correcao) {
     return res.status(404).json({ erro: "Questão não sorteada para este candidato." });
   }
+  if (correcao.invalido) {
+    return res.status(400).json({ erro: correcao.erro });
+  }
   res.json(correcao);
 }));
 
 /*
 curl http://localhost:3001/api/certificacao/resultado -H "Authorization: Bearer SEU_TOKEN"
--> { total, respondidos, acertos, concluida, temas: [{ id, nome, ordem, respondido, acertou }] }
+-> { total, respondidos, pendentes, acertos, concluida, nota, percentual, aprovado, situacao, temas }
 */
 rotas.get("/resultado", capturar(async function (req, res) {
   res.json(await resultadoCandidatoService(req.candidatoId));
