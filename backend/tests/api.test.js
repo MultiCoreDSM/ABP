@@ -46,6 +46,7 @@ describe('Sprint 2 — Fluxo Integrado QA-01 (Cadastro, Login, Sessao e Seguranc
         nome: 'Usuario Teste MultiCore',
         email: 'usuario.teste@exemplo.com',
         senha: testSenha,
+        aceite_termos: true,
       })
       .set('Accept', 'application/json');
 
@@ -68,6 +69,7 @@ describe('Sprint 2 — Fluxo Integrado QA-01 (Cadastro, Login, Sessao e Seguranc
         nome: 'Tentativa Duplicada',
         email: 'outro.email@exemplo.com',
         senha: testSenha,
+        aceite_termos: true,
       })
       .set('Accept', 'application/json');
 
