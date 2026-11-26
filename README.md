@@ -16,7 +16,7 @@ Na certificação, o sistema sorteia uma das quatro questões de cada tema. Cada
 | --- | --- | --- | --- |
 | [Sprint 1](docs/sprints/sprint-1/README.md) | 28/09 a 22/10/2026 | Protótipo, modelagem, banco de dados e conteúdos | ✅ Concluída (pendências da Review corrigidas, tag `sprint-1`) · [burndown](docs/burndown/burndown-sprint-1.png) |
 | Sprint 2 | 23/10 a 05/11/2026 | Correções da Review, front-end, rotas da API, integração e proteção de dados (QA-08) | ✅ Concluída · [burndown](docs/burndown/burndown-sprint-2.png) |
-| Sprint 3 | 06/11 a 25/11/2026 | Novo design das telas, resultado, certificado com QR Code, validação pública, histórico, LGPD e aplicação no Docker Compose | ✅ Concluída |
+| Sprint 3 | 06/11 a 25/11/2026 | Novo design das telas, resultado, certificado com QR Code, validação pública, histórico, LGPD e aplicação no Docker Compose | ✅ Concluída · [burndown](docs/burndown/burndown-sprint-3.png) |
 
 **Apresentação final:** 26/11/2026. As datas seguem o cronograma do documento oficial do desafio (kick off em 17/09/2026).
 
@@ -158,7 +158,7 @@ Resumo da revisão de proteção de dados pessoais (QA-08):
 | [Modelo conceitual (DER)](docs/banco/modelo-conceitual.md) | Entidades, atributos e cardinalidades |
 | [Modelo lógico](docs/banco/modelo-logico.md) | Relações, normalização até a 3FN e dicionário de dados |
 | [Sprint 1](docs/sprints/sprint-1/README.md) | Overview, [backlog](docs/sprints/sprint-1/BACKLOG.md) e [Review e Retrospectiva](docs/sprints/sprint-1/REVIEW-RETROSPECTIVA.md) |
-| [Burndown da Sprint 1](docs/burndown/burndown-sprint-1.png) e [da Sprint 2](docs/burndown/burndown-sprint-2.png) | Gráficos de burndown |
+| [Burndown da Sprint 1](docs/burndown/burndown-sprint-1.png), [da Sprint 2](docs/burndown/burndown-sprint-2.png) e [da Sprint 3](docs/burndown/burndown-sprint-3.png) | Gráficos de burndown |
 | [Issues](https://github.com/MultiCoreDSM/ABP/issues) e [Kanban ABP](https://github.com/users/MultiCoreDSM/projects/1) | Atividades cadastradas e a situação de cada uma no fluxo |
 | [Protótipo no Figma](https://www.figma.com/design/ViL8tpfr58iVLNzIGPkpj1/abp?node-id=8-2) | Telas e fluxo de navegação da plataforma |
 
