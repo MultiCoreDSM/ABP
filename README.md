@@ -182,13 +182,70 @@ ABP/
 
 ## Equipe
 
-**Grupo:** MultiCore
+<p align="center">
+  <img src="assets/logo-icone.svg" alt="Logo do MultiCore" width="64"><br>
+  <strong>MultiCore</strong> · DSM, FATEC Jacareí
+</p>
 
-- Enzo Miguel
-- Gabriel Henrique
-- Gustavo Monteiro
-- João Vitor
-- Julio Cesar Machado
-- Maria Eduarda
-- Rafael de Paula
-- Yan Rafael
+<table align="center">
+  <tr>
+    <td align="center" width="160">
+      <a href="https://github.com/Enzo2712">
+        <img src="https://github.com/Enzo2712.png?size=200" width="96" alt="Foto de Enzo Miguel"><br>
+        <strong>Enzo Miguel</strong>
+      </a><br>
+      <sub><a href="https://github.com/Enzo2712">@Enzo2712</a></sub>
+    </td>
+    <td align="center" width="160">
+      <a href="https://github.com/GabrielBechtlufft">
+        <img src="https://github.com/GabrielBechtlufft.png?size=200" width="96" alt="Foto de Gabriel Henrique"><br>
+        <strong>Gabriel Henrique</strong>
+      </a><br>
+      <sub><a href="https://github.com/GabrielBechtlufft">@GabrielBechtlufft</a></sub>
+    </td>
+    <td align="center" width="160">
+      <a href="https://github.com/GustavoMGreco">
+        <img src="https://github.com/GustavoMGreco.png?size=200" width="96" alt="Foto de Gustavo Monteiro"><br>
+        <strong>Gustavo Monteiro</strong>
+      </a><br>
+      <sub><a href="https://github.com/GustavoMGreco">@GustavoMGreco</a></sub>
+    </td>
+    <td align="center" width="160">
+      <a href="https://github.com/Araujojvl">
+        <img src="https://github.com/Araujojvl.png?size=200" width="96" alt="Foto de João Vitor"><br>
+        <strong>João Vitor</strong>
+      </a><br>
+      <sub><a href="https://github.com/Araujojvl">@Araujojvl</a></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="160">
+      <a href="https://github.com/Juliocms46">
+        <img src="https://github.com/Juliocms46.png?size=200" width="96" alt="Foto de Julio Cesar Machado"><br>
+        <strong>Julio Cesar Machado</strong>
+      </a><br>
+      <sub><a href="https://github.com/Juliocms46">@Juliocms46</a></sub>
+    </td>
+    <td align="center" width="160">
+      <a href="https://github.com/eduardasantosalves">
+        <img src="https://github.com/eduardasantosalves.png?size=200" width="96" alt="Foto de Maria Eduarda"><br>
+        <strong>Maria Eduarda</strong>
+      </a><br>
+      <sub><a href="https://github.com/eduardasantosalves">@eduardasantosalves</a></sub>
+    </td>
+    <td align="center" width="160">
+      <a href="https://github.com/Rafinbolis">
+        <img src="https://github.com/Rafinbolis.png?size=200" width="96" alt="Foto de Rafael de Paula"><br>
+        <strong>Rafael de Paula</strong>
+      </a><br>
+      <sub><a href="https://github.com/Rafinbolis">@Rafinbolis</a></sub>
+    </td>
+    <td align="center" width="160">
+      <a href="https://github.com/YanRafael2711">
+        <img src="https://github.com/YanRafael2711.png?size=200" width="96" alt="Foto de Yan Rafael"><br>
+        <strong>Yan Rafael</strong>
+      </a><br>
+      <sub><a href="https://github.com/YanRafael2711">@YanRafael2711</a></sub>
+    </td>
+  </tr>
+</table>
