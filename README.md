@@ -40,7 +40,13 @@ JWT_SECRET=                   # obrigatório; gere com o comando abaixo
 APP_PORT=3001                 # porta da aplicação na sua máquina
 ```
 
-Para gerar o `JWT_SECRET`, rode `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`. Sem ele, a aplicação não inicia.
+Para gerar o `JWT_SECRET`, rode `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`. Sem ele, a aplicação não inicia. Se você só tem o Docker, rode o mesmo comando dentro de um container:
+
+```bash
+docker run --rm node:22-alpine node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+```
+
+**Opcional:** `APP_URL` define o endereço que vai no QR Code do certificado em PDF (por exemplo, `APP_URL=https://certificacao.exemplo.com`). Sem ela, o sistema usa o endereço pelo qual a página foi acessada, o que basta para rodar localmente.
 
 **2. Subir tudo.** Com o Docker Desktop aberto, rode na raiz:
 
@@ -80,6 +86,7 @@ O front-end é servido pela própria aplicação, na mesma origem da API. Por is
 | `Defina JWT_SECRET no .env` ou `JWT_SECRET não definido` | O `.env` não está na raiz do repositório ou não tem `JWT_SECRET` |
 | `failed to connect to the docker API` | O Docker Desktop não está aberto |
 | `port is already allocated` ou `EADDRINUSE ... 3001` | Já existe outra aplicação na porta 3001 (por exemplo, um `npm start`) |
+| `port is already allocated` na porta 5433 | Já existe outro banco nessa porta (por exemplo, um PostgreSQL instalado na máquina). Troque `POSTGRES_PORT` no `.env` |
 | A página mostra "Erro interno" | O banco não está no ar: rode `docker compose ps` e `docker compose up -d` |
 
 ## Telas
@@ -133,6 +140,8 @@ Todas as rotas ficam sob `http://localhost:3001/api`. As rotas protegidas exigem
 Há exemplos de `curl` em comentários em cada arquivo de [`backend/src/routes/`](backend/src/routes).
 
 > **Banco criado antes desta versão:** o certificado passou a gravar a data e a nota em três colunas novas de `candidatos`, e o aceite dos termos em mais duas (`termos_versao`, `termos_aceitos_em`). Contas antigas ficam sem aceite e recebem o pedido no menu. O `schemas.sql` cria essas colunas com `ADD COLUMN IF NOT EXISTS`, então basta rodar o script de novo no banco existente. Outra opção é recriar o volume com `docker compose down -v && docker compose up -d`, mas isso apaga os dados.
+>
+> **Caminhos das imagens:** o `seed.sql` passou a gravar o caminho real de cada imagem já no `INSERT`. Ele atualiza as questões existentes (`ON CONFLICT ... DO UPDATE`), então basta rodar de novo no banco atual: `docker compose exec -T database psql -U abp -d abp_multicore -v ON_ERROR_STOP=1 < backend/database/seed.sql`.
 
 ## Segurança e dados pessoais
 
@@ -165,7 +174,7 @@ Resumo da revisão de proteção de dados pessoais (QA-08):
 ## Conteúdo
 
 - [Materiais de estudo](assets/materiais), um PDF por tema
-- [Imagens das questões](assets/imagens), no padrão `tema_T/questao_N.png`
+- [Imagens das questões](assets/imagens), no padrão `tema_T/temaTT_questao_N.png` (por exemplo, `tema_2/tema02_questao_1.png`), com `N` de 1 a 4 em cada tema
 
 Os 12 temas são:
 

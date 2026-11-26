@@ -5,7 +5,7 @@ import { capturar, idPositivo } from "../middlewares/erros.js";
 
 const rotas = Router();
 
-// imagem_url é gravado relativo à raiz do repositório (ex.: assets/imagens/tema_1/questao_1.png)
+// imagem_url é gravado relativo à raiz do repositório (ex.: assets/imagens/tema_1/tema01_questao_1.png)
 const RAIZ_PROJETO = path.resolve(import.meta.dirname, "../../..");
 
 /*

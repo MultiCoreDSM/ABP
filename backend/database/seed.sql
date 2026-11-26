@@ -18,54 +18,54 @@ ON CONFLICT (nome) DO UPDATE SET ordem = EXCLUDED.ordem;
 INSERT INTO questoes (tema_id, ordem, enunciado, imagem_url)
 SELECT t.id, v.ordem, v.enunciado, v.imagem_url
 FROM (VALUES
-(1, 1, 'Uma equipe quer reduzir o risco de construir a solução errada para o portal de certificação. Qual estratégia está mais alinhada à agilidade?', 'assets/imagens/tema_1/questao_1.png'),
-(1, 2, 'Qual é a diferença entre iterar e incrementar?', 'assets/imagens/tema_1/questao_2.png'),
-(1, 3, 'Uma equipe apresenta apenas uma tela isolada, sem funcionamento, e a chama de entrega. Qual é a avaliação mais adequada?', 'assets/imagens/tema_1/questao_3.png'),
-(1, 4, 'A Equipe A recebe feedback dos usuários apenas no quarto mês, na entrega final. A Equipe B recebe feedback a cada entrega. Qual é a principal vantagem da Equipe B?', 'assets/imagens/tema_1/questao_4.png'),
-(2, 1, 'A equipe precisa decidir entre escrever mais um documento extenso ou demonstrar o fluxo real da prova. O que o Manifesto Ágil orienta?', 'assets/imagens/tema_2/questao_5.png'),
-(2, 2, 'Nas últimas quatro semanas, a equipe trabalhou 42, 58, 63 e 61 horas, com horas extras recorrentes. Qual princípio do Manifesto Ágil está sendo desrespeitado?', 'assets/imagens/tema_2/questao_6.png'),
-(2, 3, 'A equipe e o responsável pela certificação analisam juntos o protótipo e anotam sugestões como melhorar a navegação e simplificar o fluxo. Qual valor do Manifesto Ágil essa prática representa?', 'assets/imagens/tema_2/questao_7.png'),
-(2, 4, 'Uma dúvida sobre a regra de tempo da prova gerou dezenas de mensagens entre vários integrantes, sem conclusão. Depois, duas pessoas resolveram o assunto em uma conversa direta. Qual valor do Manifesto Ágil explica esse resultado?', 'assets/imagens/tema_2/questao_8.png'),
-(3, 1, 'Qual alternativa descreve corretamente a relação entre os pilares do Scrum?', 'assets/imagens/tema_3/questao_9.png'),
-(3, 2, 'Uma função de certificado foi marcada como concluída, mas na demonstração o QR Code abre uma página vazia. Qual pilar do Scrum foi comprometido?', 'assets/imagens/tema_3/questao_10.png'),
-(3, 3, 'A equipe acompanha candidatos validando o certificado pelo QR Code para entender se o fluxo funciona como esperado. Qual pilar do Scrum está sendo aplicado principalmente?', 'assets/imagens/tema_3/questao_11.png'),
-(3, 4, 'Qual é a essência do empirismo no Scrum?', 'assets/imagens/tema_3/questao_12.png'),
-(4, 1, 'No portal, um professor pede para antecipar a emissão do certificado. Quem avalia a necessidade diante das demais prioridades e ordena o backlog?', 'assets/imagens/tema_4/questao_13.png'),
-(4, 2, 'O time está bloqueado por falta de acesso a um ambiente. Qual é a contribuição típica do Scrum Master?', 'assets/imagens/tema_4/questao_14.png'),
-(4, 3, 'Qual afirmação sobre os Developers no Scrum está correta?', 'assets/imagens/tema_4/questao_15.png'),
-(4, 4, 'Qual afirmação sobre a estrutura do Scrum Team está correta?', 'assets/imagens/tema_4/questao_16.png'),
-(5, 1, 'Ao final da Sprint, professores e equipe analisam a versão funcional do portal e sugerem melhorar a navegação e incluir relatórios. Qual evento do Scrum é esse?', 'assets/imagens/tema_5/questao_17.png'),
-(5, 2, 'Quais questões a Sprint Planning aborda?', 'assets/imagens/tema_5/questao_18.png'),
-(5, 3, 'Qual afirmação sobre a Daily Scrum está correta?', 'assets/imagens/tema_5/questao_19.png'),
-(5, 4, 'Em uma Sprint de um mês, qual é o limite de tempo da Sprint Retrospective?', 'assets/imagens/tema_5/questao_20.png'),
-(6, 1, 'Qual é o compromisso associado ao Incremento?', 'assets/imagens/tema_6/questao_21.png'),
-(6, 2, 'Quem mantém o Sprint Backlog e o que ele reúne?', 'assets/imagens/tema_6/questao_22.png'),
-(6, 3, 'Qual descrição do Product Backlog está correta?', 'assets/imagens/tema_6/questao_23.png'),
-(6, 4, 'Parte do fluxo do portal funciona, mas ainda não atende à Definition of Done ao final da Sprint. O que ocorre com essa parte?', 'assets/imagens/tema_6/questao_24.png'),
-(7, 1, 'Qual User Story está mais bem escrita?', 'assets/imagens/tema_7/questao_25.png'),
-(7, 2, 'Qual é a diferença entre critérios de aceitação e Definition of Done?', 'assets/imagens/tema_7/questao_26.png'),
-(7, 3, 'Qual critério de aceitação é verificável para a história de consultar o progresso?', 'assets/imagens/tema_7/questao_27.png'),
-(7, 4, 'Qual é o papel de uma User Story?', 'assets/imagens/tema_7/questao_28.png'),
-(8, 1, 'Um item antigo continua importante e um item recém-cadastrado é urgente. Como a ordem do Product Backlog deve ser definida?', 'assets/imagens/tema_8/questao_29.png'),
-(8, 2, 'Em testes com usuários, vários candidatos relataram dificuldade na navegação. O item Melhorar navegação estava em 4º lugar no Product Backlog. Qual é a atitude mais adequada?', 'assets/imagens/tema_8/questao_30.png'),
-(8, 3, 'O item realizar a prova inteira é grande demais para ser selecionado. Qual ação é adequada?', 'assets/imagens/tema_8/questao_31.png'),
-(8, 4, 'No Product Backlog, Consultar histórico depende de Registrar resposta, que depende de Identificar candidato. Qual ordem faz mais sentido?', 'assets/imagens/tema_8/questao_32.png'),
-(9, 1, 'O que é WIP em Kanban?', 'assets/imagens/tema_9/questao_33.png'),
-(9, 2, 'Em um quadro, Teste tem cinco itens e o limite de WIP é três, enquanto Desenvolvimento tem dois itens. Qual ação é mais coerente?', 'assets/imagens/tema_9/questao_34.png'),
-(9, 3, 'No quadro Kanban, a coluna Teste tem limite de WIP 2 e já está com 2 itens. Um item pronto para teste está aguardando. Em um sistema puxado, o que deve acontecer?', 'assets/imagens/tema_9/questao_35.png'),
-(9, 4, 'No quadro Kanban, um item em Desenvolvimento está marcado como bloqueado por falta de acesso ao ambiente. Qual é a atitude mais adequada?', 'assets/imagens/tema_9/questao_36.png'),
-(10, 1, 'Qual descrição de Story Points está correta?', 'assets/imagens/tema_10/questao_37.png'),
-(10, 2, 'Qual é o principal valor do Planning Poker?', 'assets/imagens/tema_10/questao_38.png'),
-(10, 3, 'Qual é a função de um roadmap no planejamento ágil?', 'assets/imagens/tema_10/questao_39.png'),
-(10, 4, 'Na Sprint Planning, dois integrantes terão dias de ausência e um dos itens envolve integração com um sistema externo, com risco técnico. Como isso deve influenciar a seleção do trabalho?', 'assets/imagens/tema_10/questao_40.png'),
-(11, 1, 'Uma Sprint teve itens de 2, 5 e 5 pontos concluídos e um item de 8 pontos incompleto. Qual velocity deve ser registrada?', 'assets/imagens/tema_11/questao_41.png'),
-(11, 2, 'Uma solicitação foi feita no dia 3, iniciada no dia 6 e concluída no dia 12. Usando diferenças de datas em dias corridos, quais são o Lead Time e o Cycle Time?', 'assets/imagens/tema_11/questao_42.png'),
-(11, 3, 'No Burndown Chart da Sprint, o trabalho restante ficou em 24 pontos entre o Dia 1 e o Dia 2. O que isso indica?', 'assets/imagens/tema_11/questao_43.png'),
-(11, 4, 'Em um Burnup, a linha de escopo total sobe enquanto o trabalho concluído permanece igual. O que isso indica?', 'assets/imagens/tema_11/questao_44.png'),
-(12, 1, 'Qual é um exemplo de teste de integração no portal de certificação?', 'assets/imagens/tema_12/questao_45.png'),
-(12, 2, 'O que é dívida técnica?', 'assets/imagens/tema_12/questao_46.png'),
-(12, 3, 'Qual situação caracteriza a integração contínua?', 'assets/imagens/tema_12/questao_47.png'),
-(12, 4, 'A equipe adiciona uma nova regra de negócio que altera a nota mínima de aprovação. Isso é refatoração?', 'assets/imagens/tema_12/questao_48.png')
+(1, 1, 'Uma equipe quer reduzir o risco de construir a solução errada para o portal de certificação. Qual estratégia está mais alinhada à agilidade?', 'assets/imagens/tema_1/tema01_questao_1.png'),
+(1, 2, 'Qual é a diferença entre iterar e incrementar?', 'assets/imagens/tema_1/tema01_questao_2.png'),
+(1, 3, 'Uma equipe apresenta apenas uma tela isolada, sem funcionamento, e a chama de entrega. Qual é a avaliação mais adequada?', 'assets/imagens/tema_1/tema01_questao_3.png'),
+(1, 4, 'A Equipe A recebe feedback dos usuários apenas no quarto mês, na entrega final. A Equipe B recebe feedback a cada entrega. Qual é a principal vantagem da Equipe B?', 'assets/imagens/tema_1/tema01_questao_4.png'),
+(2, 1, 'A equipe precisa decidir entre escrever mais um documento extenso ou demonstrar o fluxo real da prova. O que o Manifesto Ágil orienta?', 'assets/imagens/tema_2/tema02_questao_1.png'),
+(2, 2, 'Nas últimas quatro semanas, a equipe trabalhou 42, 58, 63 e 61 horas, com horas extras recorrentes. Qual princípio do Manifesto Ágil está sendo desrespeitado?', 'assets/imagens/tema_2/tema02_questao_2.png'),
+(2, 3, 'A equipe e o responsável pela certificação analisam juntos o protótipo e anotam sugestões como melhorar a navegação e simplificar o fluxo. Qual valor do Manifesto Ágil essa prática representa?', 'assets/imagens/tema_2/tema02_questao_3.png'),
+(2, 4, 'Uma dúvida sobre a regra de tempo da prova gerou dezenas de mensagens entre vários integrantes, sem conclusão. Depois, duas pessoas resolveram o assunto em uma conversa direta. Qual valor do Manifesto Ágil explica esse resultado?', 'assets/imagens/tema_2/tema02_questao_4.png'),
+(3, 1, 'Qual alternativa descreve corretamente a relação entre os pilares do Scrum?', 'assets/imagens/tema_3/tema03_questao_1.png'),
+(3, 2, 'Uma função de certificado foi marcada como concluída, mas na demonstração o QR Code abre uma página vazia. Qual pilar do Scrum foi comprometido?', 'assets/imagens/tema_3/tema03_questao_2.png'),
+(3, 3, 'A equipe acompanha candidatos validando o certificado pelo QR Code para entender se o fluxo funciona como esperado. Qual pilar do Scrum está sendo aplicado principalmente?', 'assets/imagens/tema_3/tema03_questao_3.png'),
+(3, 4, 'Qual é a essência do empirismo no Scrum?', 'assets/imagens/tema_3/tema03_questao_4.png'),
+(4, 1, 'No portal, um professor pede para antecipar a emissão do certificado. Quem avalia a necessidade diante das demais prioridades e ordena o backlog?', 'assets/imagens/tema_4/tema04_questao_1.png'),
+(4, 2, 'O time está bloqueado por falta de acesso a um ambiente. Qual é a contribuição típica do Scrum Master?', 'assets/imagens/tema_4/tema04_questao_2.png'),
+(4, 3, 'Qual afirmação sobre os Developers no Scrum está correta?', 'assets/imagens/tema_4/tema04_questao_3.png'),
+(4, 4, 'Qual afirmação sobre a estrutura do Scrum Team está correta?', 'assets/imagens/tema_4/tema04_questao_4.png'),
+(5, 1, 'Ao final da Sprint, professores e equipe analisam a versão funcional do portal e sugerem melhorar a navegação e incluir relatórios. Qual evento do Scrum é esse?', 'assets/imagens/tema_5/tema05_questao_1.png'),
+(5, 2, 'Quais questões a Sprint Planning aborda?', 'assets/imagens/tema_5/tema05_questao_2.png'),
+(5, 3, 'Qual afirmação sobre a Daily Scrum está correta?', 'assets/imagens/tema_5/tema05_questao_3.png'),
+(5, 4, 'Em uma Sprint de um mês, qual é o limite de tempo da Sprint Retrospective?', 'assets/imagens/tema_5/tema05_questao_4.png'),
+(6, 1, 'Qual é o compromisso associado ao Incremento?', 'assets/imagens/tema_6/tema06_questao_1.png'),
+(6, 2, 'Quem mantém o Sprint Backlog e o que ele reúne?', 'assets/imagens/tema_6/tema06_questao_2.png'),
+(6, 3, 'Qual descrição do Product Backlog está correta?', 'assets/imagens/tema_6/tema06_questao_3.png'),
+(6, 4, 'Parte do fluxo do portal funciona, mas ainda não atende à Definition of Done ao final da Sprint. O que ocorre com essa parte?', 'assets/imagens/tema_6/tema06_questao_4.png'),
+(7, 1, 'Qual User Story está mais bem escrita?', 'assets/imagens/tema_7/tema07_questao_1.png'),
+(7, 2, 'Qual é a diferença entre critérios de aceitação e Definition of Done?', 'assets/imagens/tema_7/tema07_questao_2.png'),
+(7, 3, 'Qual critério de aceitação é verificável para a história de consultar o progresso?', 'assets/imagens/tema_7/tema07_questao_3.png'),
+(7, 4, 'Qual é o papel de uma User Story?', 'assets/imagens/tema_7/tema07_questao_4.png'),
+(8, 1, 'Um item antigo continua importante e um item recém-cadastrado é urgente. Como a ordem do Product Backlog deve ser definida?', 'assets/imagens/tema_8/tema08_questao_1.png'),
+(8, 2, 'Em testes com usuários, vários candidatos relataram dificuldade na navegação. O item Melhorar navegação estava em 4º lugar no Product Backlog. Qual é a atitude mais adequada?', 'assets/imagens/tema_8/tema08_questao_2.png'),
+(8, 3, 'O item realizar a prova inteira é grande demais para ser selecionado. Qual ação é adequada?', 'assets/imagens/tema_8/tema08_questao_3.png'),
+(8, 4, 'No Product Backlog, Consultar histórico depende de Registrar resposta, que depende de Identificar candidato. Qual ordem faz mais sentido?', 'assets/imagens/tema_8/tema08_questao_4.png'),
+(9, 1, 'O que é WIP em Kanban?', 'assets/imagens/tema_9/tema09_questao_1.png'),
+(9, 2, 'Em um quadro, Teste tem cinco itens e o limite de WIP é três, enquanto Desenvolvimento tem dois itens. Qual ação é mais coerente?', 'assets/imagens/tema_9/tema09_questao_2.png'),
+(9, 3, 'No quadro Kanban, a coluna Teste tem limite de WIP 2 e já está com 2 itens. Um item pronto para teste está aguardando. Em um sistema puxado, o que deve acontecer?', 'assets/imagens/tema_9/tema09_questao_3.png'),
+(9, 4, 'No quadro Kanban, um item em Desenvolvimento está marcado como bloqueado por falta de acesso ao ambiente. Qual é a atitude mais adequada?', 'assets/imagens/tema_9/tema09_questao_4.png'),
+(10, 1, 'Qual descrição de Story Points está correta?', 'assets/imagens/tema_10/tema10_questao_1.png'),
+(10, 2, 'Qual é o principal valor do Planning Poker?', 'assets/imagens/tema_10/tema10_questao_2.png'),
+(10, 3, 'Qual é a função de um roadmap no planejamento ágil?', 'assets/imagens/tema_10/tema10_questao_3.png'),
+(10, 4, 'Na Sprint Planning, dois integrantes terão dias de ausência e um dos itens envolve integração com um sistema externo, com risco técnico. Como isso deve influenciar a seleção do trabalho?', 'assets/imagens/tema_10/tema10_questao_4.png'),
+(11, 1, 'Uma Sprint teve itens de 2, 5 e 5 pontos concluídos e um item de 8 pontos incompleto. Qual velocity deve ser registrada?', 'assets/imagens/tema_11/tema11_questao_1.png'),
+(11, 2, 'Uma solicitação foi feita no dia 3, iniciada no dia 6 e concluída no dia 12. Usando diferenças de datas em dias corridos, quais são o Lead Time e o Cycle Time?', 'assets/imagens/tema_11/tema11_questao_2.png'),
+(11, 3, 'No Burndown Chart da Sprint, o trabalho restante ficou em 24 pontos entre o Dia 1 e o Dia 2. O que isso indica?', 'assets/imagens/tema_11/tema11_questao_3.png'),
+(11, 4, 'Em um Burnup, a linha de escopo total sobe enquanto o trabalho concluído permanece igual. O que isso indica?', 'assets/imagens/tema_11/tema11_questao_4.png'),
+(12, 1, 'Qual é um exemplo de teste de integração no portal de certificação?', 'assets/imagens/tema_12/tema12_questao_1.png'),
+(12, 2, 'O que é dívida técnica?', 'assets/imagens/tema_12/tema12_questao_2.png'),
+(12, 3, 'Qual situação caracteriza a integração contínua?', 'assets/imagens/tema_12/tema12_questao_3.png'),
+(12, 4, 'A equipe adiciona uma nova regra de negócio que altera a nota mínima de aprovação. Isso é refatoração?', 'assets/imagens/tema_12/tema12_questao_4.png')
 ) AS v(tema_ordem, ordem, enunciado, imagem_url)
 JOIN temas t ON t.ordem = v.tema_ordem
 ON CONFLICT (tema_id, ordem) DO UPDATE 
@@ -276,56 +276,4 @@ ON CONFLICT (questao_id, letra) DO UPDATE
 SET texto = EXCLUDED.texto,
     correta = EXCLUDED.correta;
 
-COMMIT;
-
--- Atualiza imagem_url das 48 questões. Ajuste o prefixo do caminho conforme onde as imagens ficarão hospedadas.
-BEGIN;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_1/tema01_questao_1.png' WHERE tema_id = 1 AND ordem = 1;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_1/tema01_questao_2.png' WHERE tema_id = 1 AND ordem = 2;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_1/tema01_questao_3.png' WHERE tema_id = 1 AND ordem = 3;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_1/tema01_questao_4.png' WHERE tema_id = 1 AND ordem = 4;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_2/tema02_questao_1.png' WHERE tema_id = 2 AND ordem = 1;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_2/tema02_questao_2.png' WHERE tema_id = 2 AND ordem = 2;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_2/tema02_questao_3.png' WHERE tema_id = 2 AND ordem = 3;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_2/tema02_questao_4.png' WHERE tema_id = 2 AND ordem = 4;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_3/tema03_questao_1.png' WHERE tema_id = 3 AND ordem = 1;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_3/tema03_questao_2.png' WHERE tema_id = 3 AND ordem = 2;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_3/tema03_questao_3.png' WHERE tema_id = 3 AND ordem = 3;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_3/tema03_questao_4.png' WHERE tema_id = 3 AND ordem = 4;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_4/tema04_questao_1.png' WHERE tema_id = 4 AND ordem = 1;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_4/tema04_questao_2.png' WHERE tema_id = 4 AND ordem = 2;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_4/tema04_questao_3.png' WHERE tema_id = 4 AND ordem = 3;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_4/tema04_questao_4.png' WHERE tema_id = 4 AND ordem = 4;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_5/tema05_questao_1.png' WHERE tema_id = 5 AND ordem = 1;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_5/tema05_questao_2.png' WHERE tema_id = 5 AND ordem = 2;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_5/tema05_questao_3.png' WHERE tema_id = 5 AND ordem = 3;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_5/tema05_questao_4.png' WHERE tema_id = 5 AND ordem = 4;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_6/tema06_questao_1.png' WHERE tema_id = 6 AND ordem = 1;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_6/tema06_questao_2.png' WHERE tema_id = 6 AND ordem = 2;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_6/tema06_questao_3.png' WHERE tema_id = 6 AND ordem = 3;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_6/tema06_questao_4.png' WHERE tema_id = 6 AND ordem = 4;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_7/tema07_questao_1.png' WHERE tema_id = 7 AND ordem = 1;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_7/tema07_questao_2.png' WHERE tema_id = 7 AND ordem = 2;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_7/tema07_questao_3.png' WHERE tema_id = 7 AND ordem = 3;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_7/tema07_questao_4.png' WHERE tema_id = 7 AND ordem = 4;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_8/tema08_questao_1.png' WHERE tema_id = 8 AND ordem = 1;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_8/tema08_questao_2.png' WHERE tema_id = 8 AND ordem = 2;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_8/tema08_questao_3.png' WHERE tema_id = 8 AND ordem = 3;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_8/tema08_questao_4.png' WHERE tema_id = 8 AND ordem = 4;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_9/tema09_questao_1.png' WHERE tema_id = 9 AND ordem = 1;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_9/tema09_questao_2.png' WHERE tema_id = 9 AND ordem = 2;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_9/tema09_questao_3.png' WHERE tema_id = 9 AND ordem = 3;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_9/tema09_questao_4.png' WHERE tema_id = 9 AND ordem = 4;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_10/tema10_questao_1.png' WHERE tema_id = 10 AND ordem = 1;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_10/tema10_questao_2.png' WHERE tema_id = 10 AND ordem = 2;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_10/tema10_questao_3.png' WHERE tema_id = 10 AND ordem = 3;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_10/tema10_questao_4.png' WHERE tema_id = 10 AND ordem = 4;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_11/tema11_questao_1.png' WHERE tema_id = 11 AND ordem = 1;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_11/tema11_questao_2.png' WHERE tema_id = 11 AND ordem = 2;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_11/tema11_questao_3.png' WHERE tema_id = 11 AND ordem = 3;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_11/tema11_questao_4.png' WHERE tema_id = 11 AND ordem = 4;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_12/tema12_questao_1.png' WHERE tema_id = 12 AND ordem = 1;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_12/tema12_questao_2.png' WHERE tema_id = 12 AND ordem = 2;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_12/tema12_questao_3.png' WHERE tema_id = 12 AND ordem = 3;
-UPDATE questoes SET imagem_url = 'assets/imagens/tema_12/tema12_questao_4.png' WHERE tema_id = 12 AND ordem = 4;
 COMMIT;

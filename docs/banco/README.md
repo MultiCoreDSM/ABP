@@ -62,7 +62,7 @@ Resultado esperado: `12 | 48 | 192 | 48`.
 
 O detalhamento das colunas está no [modelo lógico](modelo-logico.md).
 
-As imagens das questões seguem o padrão `assets/imagens/tema_T/questao_N.png`, relativo à raiz do repositório. Para conferir se os 48 arquivos existem, rode na raiz:
+As imagens das questões seguem o padrão `assets/imagens/tema_T/temaTT_questao_N.png` (por exemplo, `assets/imagens/tema_2/tema02_questao_1.png`), relativo à raiz do repositório, com `N` de 1 a 4 em cada tema. Para conferir se os 48 arquivos existem, rode na raiz:
 
 ```bash
 psql -U postgres -d abp_multicore -tAc "SELECT imagem_url FROM questoes" \

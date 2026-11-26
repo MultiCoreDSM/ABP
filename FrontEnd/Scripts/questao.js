@@ -11,7 +11,7 @@
 // foi registrada no servidor, e o servidor decide acerto e prazo.
 const API_URL = "/api";
 const CHAVE_TOKEN = "multicore:token";
-// imagem_url vem do banco relativo à raiz do repositório (ex.: assets/imagens/tema_1/questao_1.png)
+// imagem_url vem do banco relativo à raiz do repositório (ex.: assets/imagens/tema_1/tema01_questao_1.png)
 const RAIZ_PROJETO = "../../";
 const TEMPO_LIMITE_MS = 15000;
 const AVISO_TEMPO_SEGUNDOS = 15;
