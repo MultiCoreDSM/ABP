@@ -14,9 +14,9 @@ Na certificação, o sistema sorteia uma das quatro questões de cada tema. Cada
 
 | Sprint | Período | Foco | Situação |
 | --- | --- | --- | --- |
-| [Sprint 1](docs/sprints/sprint-1/README.md) | 28/09 a 22/10/2026 | Protótipo, modelagem, banco de dados e conteúdos | ⚠️ Encerrada com pendências, corrigidas após a Review (tag `sprint-1`) |
-| Sprint 2 | 23/10 a 05/11/2026 | Correções da Review, front-end, rotas da API, integração e proteção de dados (QA-08) | Encerrada, com Review realizada · [burndown](docs/burndown/burndown-sprint-2.png) |
-| Sprint 3 | 06/11 a 25/11/2026 | Novo design das telas, resultado, certificado, validação pública, histórico, aplicação no Docker Compose e QR Code | 🚧 Em andamento |
+| [Sprint 1](docs/sprints/sprint-1/README.md) | 28/09 a 22/10/2026 | Protótipo, modelagem, banco de dados e conteúdos | ✅ Concluída (pendências da Review corrigidas, tag `sprint-1`) · [burndown](docs/burndown/burndown-sprint-1.png) |
+| Sprint 2 | 23/10 a 05/11/2026 | Correções da Review, front-end, rotas da API, integração e proteção de dados (QA-08) | ✅ Concluída · [burndown](docs/burndown/burndown-sprint-2.png) |
+| Sprint 3 | 06/11 a 25/11/2026 | Novo design das telas, resultado, certificado com QR Code, validação pública, histórico, LGPD e aplicação no Docker Compose | ✅ Concluída |
 
 **Apresentação final:** 26/11/2026. As datas seguem o cronograma do documento oficial do desafio (kick off em 17/09/2026).
 
