@@ -5,6 +5,7 @@ import {
   listarTemasCandidatoService,
   abrirQuestaoTemaService,
   responderQuestaoCandidatoService,
+  marcarAlternativaService,
   resultadoCandidatoService,
   respostasCandidatoService,
 } from "../services/certificacao.js";
@@ -81,6 +82,28 @@ rotas.post("/questoes/:id/resposta", exigirTermos, capturar(async function (req,
     return res.status(404).json({ erro: "Questão não sorteada para este candidato." });
   }
   res.json(correcao);
+}));
+
+/*
+curl -X POST http://localhost:3001/api/certificacao/questoes/8/marcacao \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer SEU_TOKEN" \
+-d '{"letra":"C"}'
+-> 204: alternativa guardada sem encerrar a questão (BL-13); 409 se a questão já foi encerrada
+*/
+rotas.post("/questoes/:id/marcacao", exigirTermos, capturar(async function (req, res) {
+  const questaoId = idPositivo(req.params.id);
+  if (questaoId == null) {
+    return res.status(400).json({ erro: "Id de questão inválido." });
+  }
+  const letra = req.body?.letra ?? null;
+  if (letra !== null && !["A", "B", "C", "D"].includes(letra)) {
+    return res.status(400).json({ erro: "letra deve ser A, B, C, D ou null." });
+  }
+  if (!(await marcarAlternativaService(req.candidatoId, questaoId, letra))) {
+    return res.status(409).json({ erro: "Questão encerrada ou não sorteada para este candidato." });
+  }
+  res.status(204).end();
 }));
 
 /*

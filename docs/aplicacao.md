@@ -14,7 +14,7 @@ Todas as páginas ficam em [`FrontEnd/Pages/`](../FrontEnd/Pages) e são servida
 | `esqueci-senha.html` | Formulário de recuperação. Valida CPF e e-mail, mas avisa que a recuperação por e-mail ainda não está disponível. Nada é enviado ao servidor. | Não |
 | `menu.html` | Saudação com acesso a Meus dados, Exames (começar, continuar ou ver resultado), Área de Estudos, Histórico e Certificados. Pede um novo aceite se os termos mudaram. | Sim |
 | `area-estudos.html` | Só estudo: os 12 temas, cada um com o material em PDF. O exame fica separado, em Exames, no menu. | Não |
-| `questao.html` | Prova com cronômetro, confirmação da resposta e correção logo depois. A pausa acontece entre questões: sair com uma questão aberta encerra essa questão, porque o prazo corre no servidor. Os outros temas ficam salvos para continuar depois. | Sim |
+| `questao.html` | Prova com cronômetro, confirmação da resposta e correção logo depois. A pausa acontece entre questões: sair com uma questão aberta encerra essa questão, porque o prazo corre no servidor. Os outros temas ficam salvos para continuar depois. Fechar ou recarregar a página com uma questão aberta pede confirmação e, se a pessoa sair, encerra a questão com a alternativa marcada. A alternativa marcada fica guardada no servidor desde o clique: se a conexão cair, ela reaparece ao voltar dentro do prazo, ou fica registrada quando o prazo vence. | Sim |
 | `resultado.html` | Nota, aprovação e o resultado de cada tema. Se o candidato foi aprovado, emite o certificado e mostra o link para ele. | Sim |
 | `respostas.html` | Resposta dada e alternativa correta de cada tema, com filtro por corretas e incorretas. | Sim |
 | `certificado.html` | Certificado com nome, CPF, e-mail, nota, data e QR Code. Permite baixar em PDF (pela impressão do navegador), copiar o link de validação e validar. | Sim |
@@ -53,7 +53,8 @@ Todas as rotas ficam sob `http://localhost:3001/api`. As rotas protegidas exigem
 | `GET` | `/temas` | — | Lista os 12 temas |
 | `GET` | `/temas/proximo` | ✅ | Próximo tema ainda não respondido |
 | `GET` | `/certificacao/temas` | ✅ | Temas com `respondido`, `em_andamento` e `acertou` do candidato. O acerto só aparece em temas já encerrados. |
-| `GET` | `/certificacao/temas/:id/questao` | ✅ | Sorteia ou retoma a questão do tema, com os segundos restantes. Responde 409 se outra questão estiver aberta e 403 se os termos vigentes não foram aceitos. |
+| `GET` | `/certificacao/temas/:id/questao` | ✅ | Sorteia ou retoma a questão do tema, com os segundos restantes e a alternativa já marcada (`letra_marcada`). Responde 409 se outra questão estiver aberta e 403 se os termos vigentes não foram aceitos. |
+| `POST` | `/certificacao/questoes/:id/marcacao` | ✅ | Guarda a alternativa marcada (`{ "letra": "B" }`) sem encerrar a questão. Se o prazo vencer sem resposta, ela fica registrada e conta como incorreta. Responde 409 se a questão já foi encerrada. |
 | `POST` | `/certificacao/questoes/:id/resposta` | ✅ | Registra a resposta (`{ "letra": "A" }` ou `null`) e devolve a correção. Também responde 403 sem o aceite dos termos vigentes. |
 | `GET` | `/certificacao/resultado` | ✅ | Acertos, total e situação de cada tema |
 | `GET` | `/certificacao/respostas` | ✅ | Respostas e correções, só dos temas já encerrados |

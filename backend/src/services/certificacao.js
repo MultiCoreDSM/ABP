@@ -74,6 +74,8 @@ async function situacaoResposta(candidatoId, questaoId) {
   const encerrada = linha.data_horario_resposta != null;
   return {
     segundos_restantes: encerrada ? 0 : linha.segundos_restantes,
+    // Alternativa marcada antes de uma queda ou do fechamento da página: volta selecionada
+    letra_marcada: !encerrada && linha.letra_resposta ? linha.letra_resposta.trim() : null,
     correcao: encerrada
       ? {
           letra_resposta: linha.letra_resposta ? linha.letra_resposta.trim() : null,
@@ -176,6 +178,23 @@ export async function abrirQuestaoTemaService(candidatoId, temaId) {
     alternativas: questao.alternativas.map(({ letra, texto }) => ({ letra: letra.trim(), texto })),
     ...situacao,
   };
+}
+
+// Guarda a alternativa marcada sem encerrar a questão (BL-13). Se a conexão cair ou o
+// navegador fechar sem conseguir avisar o servidor, a questão vence com esta alternativa
+// registrada e conta como incorreta (RN-05). Só vale dentro do prazo e antes da resposta.
+export async function marcarAlternativaService(candidatoId, questaoId, letra) {
+  const { rowCount } = await pool.query(
+    `
+    UPDATE respostas
+    SET letra_resposta = $3
+    WHERE candidato_id = $1 AND questao_id = $2
+      AND data_horario_resposta IS NULL
+      AND clock_timestamp() - data_horario_inicio <= ${PRAZO}
+    `,
+    [candidatoId, questaoId, letra],
+  );
+  return rowCount === 1;
 }
 
 // Registra a resposta (letra ou null quando o tempo acabou sem alternativa marcada).

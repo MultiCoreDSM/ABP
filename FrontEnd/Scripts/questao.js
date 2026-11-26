@@ -3,8 +3,11 @@
 //        -> [{ id, nome, ordem, respondido, em_andamento }]
 //   GET  /api/certificacao/temas/{id}/questao
 //        -> { id, enunciado, imagem_url, alternativas: [{ letra, texto }],
-//             segundos_restantes, correcao: Correcao | null }
+//             segundos_restantes, letra_marcada, correcao: Correcao | null }
 //        -> 409 { tema_id } se outra questão ainda está aberta (só abre outro tema depois de concluir)
+//        (segundos_restantes e letra_marcada valem só para a questão ainda aberta)
+//   POST /api/certificacao/questoes/{id}/marcacao   corpo: { letra }
+//        -> 204: guarda a alternativa marcada sem encerrar a questão (BL-13)
 //   POST /api/certificacao/questoes/{id}/resposta   corpo: { letra: "A" | ... | null }
 //        -> Correcao = { letra_resposta, letra_correta, acertou, tempo_esgotado }
 // O gabarito não fica no navegador: a alternativa correta só chega depois que a resposta
@@ -16,7 +19,12 @@ const RAIZ_PROJETO = "../../";
 const TEMPO_LIMITE_MS = 15000;
 const AVISO_TEMPO_SEGUNDOS = 15;
 
+// true quando a própria página navega (menu, login, termos): aí não há aviso de saída
+// nem encerramento automático, porque a questão já foi tratada ou a sessão acabou
+let saindo = false;
+
 function irParaLogin() {
+    saindo = true;
     sessionStorage.removeItem(CHAVE_TOKEN);
     location.replace("login.html?expired=true");
 }
@@ -40,6 +48,7 @@ async function requisitar(caminho, opcoes = {}) {
         erro.corpo = await resposta.json().catch(() => ({}));
         // Termos novos (ou conta anterior a eles): o aceite é pedido no menu
         if (resposta.status === 403 && erro.corpo.termos_pendentes) {
+            saindo = true;
             location.replace("menu.html");
         }
         throw erro;
@@ -56,6 +65,21 @@ const api = {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ letra }),
         }),
+    marcar: (questaoId, letra) =>
+        requisitar(`/certificacao/questoes/${questaoId}/marcacao`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ letra }),
+        }),
+    // Usado ao fechar a página: keepalive deixa a requisição terminar depois que a aba some.
+    // Não espera a resposta, porque a página já está sendo descarregada.
+    responderAoSair: (questaoId, letra) =>
+        fetch(`${API_URL}/certificacao/questoes/${questaoId}/resposta`, {
+            method: "POST",
+            keepalive: true,
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ letra }),
+        }).catch(() => {}),
 };
 
 const $ = (id) => document.getElementById(id);
@@ -263,6 +287,9 @@ function criarAlternativa({ letra, texto }) {
     entrada.addEventListener("change", () => {
         tela.selecionada = letra;
         definirEtapa("respondendo");
+        // Guarda a marcação no servidor já agora: se a conexão cair depois, ela não se perde (BL-13).
+        // Uma falha aqui não atrapalha a prova; o envio da resposta continua igual.
+        api.marcar(tela.questao.id, letra).catch((erro) => console.warn("Marcação não guardada:", erro.message));
     });
     return rotulo;
 }
@@ -323,6 +350,12 @@ async function abrirTema(tema) {
         if (questao.correcao) {
             aplicarCorrecao(questao.correcao);
         } else {
+            // Volta depois de uma queda ou de fechar a página: a alternativa marcada reaparece
+            const marcada = elementos.alternativas.querySelector(`input[value="${questao.letra_marcada}"]`);
+            if (questao.letra_marcada && marcada) {
+                marcada.checked = true;
+                tela.selecionada = questao.letra_marcada;
+            }
             atualizarControles();
             iniciarCronometro(questao.segundos_restantes);
         }
@@ -447,8 +480,23 @@ elementos.btnEncerrar.addEventListener("click", () => irParaInicio());
 // registrando a alternativa marcada (sem alternativa, conta como incorreta).
 
 function irParaInicio() {
+    saindo = true;
     location.href = "menu.html";
 }
+
+// Fechar a aba, recarregar ou sair por outro link com a questão aberta (BL-13): o navegador
+// pede confirmação, e, se a pessoa sair mesmo, a questão é encerrada com a alternativa
+// marcada (sem alternativa, conta como incorreta), como no botão Sair.
+window.addEventListener("beforeunload", (evento) => {
+    if (saindo || !questaoAberta()) return;
+    evento.preventDefault();
+    evento.returnValue = "";
+});
+
+window.addEventListener("pagehide", () => {
+    if (saindo || !questaoAberta()) return;
+    api.responderAoSair(tela.questao.id, tela.selecionada);
+});
 
 function pedirSaida() {
     // Sem questão na tela (carregando, erro ou prova concluída) não há o que pausar

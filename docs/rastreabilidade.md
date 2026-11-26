@@ -47,6 +47,7 @@ As issues da Sprint 2 de banco, API e QA-08 foram concluídas entre 09/11 e 16/1
 | Validação pública | #97 (FE-14), #105 (API-16) | BL-21, RN-09, RNF-07, DP-01 | `backend/src/routes/certificados.js`, `FrontEnd/Pages/validacao.html` | `99fdbf9` | #119 |
 | Histórico e respostas | #106 (API-17) | BL-11, BL-22 | `GET /api/certificacao/respostas`, `FrontEnd/Pages/historico.html`, `FrontEnd/Pages/respostas.html` | `99fdbf9` | #119 |
 | Imagens das questões | — | BL-05, BL-06 | `assets/imagens/tema_*/`, caminhos no `seed.sql` | `19058a0` a `9c837b6`, `3517877`, `a86b479` | #122 |
+| Alternativa marcada preservada em queda ou fechamento | — | BL-13, RN-05 | `backend/src/services/certificacao.js` (`marcarAlternativaService`), `backend/src/routes/certificacao.js`, `FrontEnd/Scripts/questao.js` | a commitar | — |
 | Termos, privacidade e Meus dados (LGPD) | — | BL-24, BL-25, RN-10, RN-11, RNF-09 | `FrontEnd/Pages/termos-de-uso.html`, `politica-de-privacidade.html`, `meus-dados.html`, `backend/src/utils/termos.js` | `90ff15e`, `494a0db` | — |
 | Auditoria de integridade do banco e do conteúdo | #112 (QA-06) | BL-06, RN-02 | `backend/scripts/qa-integridade.js` (`npm run qa:integridade`) | `a14a5d0` | — |
 | Desempenho e aceite final | #113 (QA-07), #114 (QA-09) | todos | Evidências registradas nas issues | — | — |
@@ -72,7 +73,7 @@ Status: ✅ implementado · 🟡 parcial · ⬜ não iniciado
 | BL-10 Confirmação para avançar | — | — | `questao.js` (janela de confirmação da resposta) | ✅ |
 | BL-11 Correção após resposta | `alternativas.correta` | `POST /api/certificacao/questoes/:id/resposta` (a correta só sai depois da resposta registrada) | `questao.js`, `respostas.html` | ✅ |
 | BL-12 Pausa e retomada | `respostas` | `GET /api/certificacao/temas` informa `em_andamento`; abrir outro tema com questão aberta responde 409 | `questao.js`: pausa entre questões e janela "Continuar de onde parou?" | ✅ |
-| BL-13 Perda de conexão ou navegador fechado | `respostas` | Ao reabrir, a questão com prazo vencido é encerrada como incorreta | Sair pelo botão registra a alternativa marcada. Ao fechar o navegador, a alternativa marcada não é enviada: a questão encerra sem resposta | 🟡 |
+| BL-13 Perda de conexão ou navegador fechado | `respostas.letra_resposta` (guardada antes da resposta) | `POST /api/certificacao/questoes/:id/marcacao` guarda a alternativa a cada clique; com o prazo vencido, a questão é encerrada com ela, como incorreta (RN-05) | `questao.js`: ao fechar ou recarregar, pede confirmação e encerra a questão com a alternativa marcada (`pagehide` com `keepalive`); ao voltar dentro do prazo, a alternativa reaparece | ✅ |
 | BL-14 Tempo esgotado | `respostas.valida` | `responderQuestaoCandidatoService` aceita `letra: null`; resposta fora do prazo conta como incorreta (RN-05) | `questao.js` registra a alternativa marcada ao zerar o cronômetro e mostra a correção | ✅ |
 | BL-15 Progresso | — | `GET /api/certificacao/temas`, `GET /api/certificacao/resultado` | `questao.html` (painel de temas, com X vermelho nos errados), `menu.html`, `resultado.html` | ✅ |
 | BL-16 / BL-17 Percentual e nota | `respostas.acertou`, `respostas.valida` | `resultadoCandidatoService` (nota só com os 12 temas, RN-06) | `resultado.html` | ✅ |
@@ -101,6 +102,5 @@ Status: ✅ implementado · 🟡 parcial · ⬜ não iniciado
 
 ## Pendências
 
-- **BL-13:** registrar a alternativa marcada quando o navegador fecha ou a conexão cai, por exemplo com `navigator.sendBeacon` no evento `pagehide`. Hoje ela só é registrada quando o candidato sai pelo botão ou quando o tempo acaba com a página aberta.
 - **Tags de versão:** as tags `sprint-1`, `sprint-2` e `sprint-3` não existem no repositório. Para marcar as versões, crie as tags nos commits da tabela do início.
 - **PRs abertos:** #121 e #124 (ver Sprint 3).
