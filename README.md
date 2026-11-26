@@ -89,70 +89,20 @@ O front-end é servido pela própria aplicação, na mesma origem da API. Por is
 | `port is already allocated` na porta 5433 | Já existe outro banco nessa porta (por exemplo, um PostgreSQL instalado na máquina). Troque `POSTGRES_PORT` no `.env` |
 | A página mostra "Erro interno" | O banco não está no ar: rode `docker compose ps` e `docker compose up -d` |
 
-## Telas
+**Atualizando um banco criado antes desta versão:**
+- O certificado passou a gravar a data e a nota em três colunas novas de `candidatos`, e o aceite dos termos em mais duas (`termos_versao`, `termos_aceitos_em`). Contas antigas ficam sem aceite e recebem o pedido no menu. O `schemas.sql` cria essas colunas com `ADD COLUMN IF NOT EXISTS`, então basta rodar o script de novo no banco existente.
+- O `seed.sql` passou a gravar o caminho real de cada imagem já no `INSERT`. Ele atualiza as questões existentes (`ON CONFLICT ... DO UPDATE`), então também basta rodar de novo.
 
-| Página | Descrição | Exige login |
-|---|---|---|
-| `inicial.html` | Apresentação da certificação e "Como funciona". | Não |
-| `cadastro.html` | Criação de conta. Depois do cadastro, o candidato já entra e pode iniciar a prova ou ir ao menu. | Não |
-| `login.html` | Acesso com CPF e senha. Leva ao menu. | Não |
-| `esqueci-senha.html` | Formulário de recuperação. Por enquanto, avisa que a recuperação por e-mail ainda não está disponível. | Não |
-| `menu.html` | Saudação com acesso a Meus dados, Exames (começar, continuar ou ver resultado), Área de Estudos, Histórico e Certificados. Pede um novo aceite se os termos mudaram. | Sim |
-| `area-estudos.html` | Só estudo: os 12 temas, cada um com o material em PDF. O exame fica separado, em Exames, no menu. | Não |
-| `questao.html` | Prova com cronômetro, confirmação da resposta, correção, pausa e retomada. | Sim |
-| `resultado.html` | Nota, aprovação, situação do certificado e o resultado de cada tema. | Sim |
-| `respostas.html` | Resposta dada e alternativa correta de cada tema, com filtro por corretas e incorretas. | Sim |
-| `certificado.html` | Certificado para baixar em PDF (pela impressão do navegador), copiar o link e validar. | Sim |
-| `validacao.html` | Validação pública pelo código do certificado. | Não |
-| `historico.html` | Estatísticas e linha do tempo de atividades. | Sim |
-| `meus-dados.html` | Direitos do titular (LGPD, art. 18): ver e corrigir nome e e-mail, baixar os dados em JSON e excluir a conta com confirmação de senha. | Sim |
-| `termos-de-uso.html` · `politica-de-privacidade.html` | Documentos que o candidato aceita no cadastro. | Não |
+```bash
+docker compose exec -T database psql -U abp -d abp_multicore -v ON_ERROR_STOP=1 < backend/database/schemas.sql
+docker compose exec -T database psql -U abp -d abp_multicore -v ON_ERROR_STOP=1 < backend/database/seed.sql
+```
 
-Os protótipos estão em [`Design/`](Design) e no [Figma](https://www.figma.com/design/ViL8tpfr58iVLNzIGPkpj1/abp?node-id=8-2). O visual comum das telas fica em `FrontEnd/Styles/base.css`, e as funções compartilhadas (sessão e chamadas à API) ficam em `FrontEnd/Scripts/comum.js`.
+Outra opção é recriar o volume com `docker compose down -v && docker compose up -d`, mas isso apaga os dados.
 
-## API
+## Telas, API e segurança
 
-Todas as rotas ficam sob `http://localhost:3001/api`. As rotas protegidas exigem o cabeçalho `Authorization: Bearer <token>`, e o token vem do login.
-
-| Método | Rota | Token | Descrição |
-|---|---|---|---|
-| `POST` | `/candidatos` | — | Cadastra um candidato. Exige `"aceite_termos": true` e grava a versão aceita. |
-| `POST` | `/login` | — | Autentica e devolve o token (expira em 1 h). Bloqueia por 15 min após 5 falhas no mesmo CPF. |
-| `GET` | `/candidatos/me` | ✅ | Nome, data de cadastro e `termos_pendentes` do próprio candidato |
-| `GET` | `/candidatos/me/dados` | ✅ | Todos os dados do candidato em JSON, menos o hash da senha (acesso e portabilidade) |
-| `PATCH` | `/candidatos/me` | ✅ | Corrige `nome` e/ou `email`. O nome não muda depois da emissão do certificado (409). |
-| `POST` | `/candidatos/me/termos` | ✅ | Registra o aceite da versão vigente dos termos |
-| `DELETE` | `/candidatos/me` | ✅ | Exclui cadastro, respostas e certificado. Exige `{ "senha": "..." }` e bloqueia após 5 senhas erradas. |
-| `GET` | `/temas` | — | Lista os 12 temas |
-| `GET` | `/temas/proximo` | ✅ | Próximo tema ainda não respondido |
-| `GET` | `/certificacao/temas` | ✅ | Temas com `respondido` e `em_andamento` do candidato |
-| `GET` | `/certificacao/temas/:id/questao` | ✅ | Sorteia ou retoma a questão do tema. Responde 409 se outra questão estiver aberta e 403 se os termos vigentes não foram aceitos. |
-| `POST` | `/certificacao/questoes/:id/resposta` | ✅ | Registra a resposta (`{ "letra": "A" }` ou `null`) e devolve a correção |
-| `GET` | `/certificacao/resultado` | ✅ | Acertos, total e situação de cada tema |
-| `GET` | `/certificacao/respostas` | ✅ | Respostas e correções, só dos temas já encerrados |
-| `POST` | `/candidatos/certificado` | ✅ | Depois dos 12 temas, emite o certificado se o candidato tiver 65% ou mais. Se já foi emitido, devolve o mesmo. |
-| `GET` | `/candidatos/certificado` | ✅ | Certificado já emitido (404 se não existe) |
-| `GET` | `/certificados/:codigo` | — | Validação pública: nome, CPF mascarado, data, percentual e situação (RN-09) |
-| `GET` | `/questoes/:id` | ✅ | Enunciado e alternativas, sem a correta |
-| `POST` | `/questoes/sortear` · `/questoes/:id/responder` | ✅ | Versão anterior da prova, mantida por compatibilidade |
-| `GET` | `/imagens/:id` | — | Imagem de uma questão |
-
-Há exemplos de `curl` em comentários em cada arquivo de [`backend/src/routes/`](backend/src/routes).
-
-> **Banco criado antes desta versão:** o certificado passou a gravar a data e a nota em três colunas novas de `candidatos`, e o aceite dos termos em mais duas (`termos_versao`, `termos_aceitos_em`). Contas antigas ficam sem aceite e recebem o pedido no menu. O `schemas.sql` cria essas colunas com `ADD COLUMN IF NOT EXISTS`, então basta rodar o script de novo no banco existente. Outra opção é recriar o volume com `docker compose down -v && docker compose up -d`, mas isso apaga os dados.
->
-> **Caminhos das imagens:** o `seed.sql` passou a gravar o caminho real de cada imagem já no `INSERT`. Ele atualiza as questões existentes (`ON CONFLICT ... DO UPDATE`), então basta rodar de novo no banco atual: `docker compose exec -T database psql -U abp -d abp_multicore -v ON_ERROR_STOP=1 < backend/database/seed.sql`.
-
-## Segurança e dados pessoais
-
-Resumo da revisão de proteção de dados pessoais (QA-08):
-- **Senhas:** guardadas com bcrypt e nunca devolvidas pela API.
-- **Dados do candidato:** cada candidato só acessa os próprios dados, porque o id vem do token.
-- **Nota:** acerto e prazo são decididos no servidor, e o gabarito não vai para o navegador antes da resposta.
-- **Erros:** as respostas não expõem detalhes do banco, e os logs não registram CPF, senha ou o corpo das requisições.
-- **Login:** tem limite de tentativas, e o tempo de resposta não revela se um CPF está cadastrado.
-- **LGPD:** o cadastro exige o aceite dos [Termos de Uso](FrontEnd/Pages/termos-de-uso.html) e da [Política de Privacidade](FrontEnd/Pages/politica-de-privacidade.html). O banco guarda só a versão aceita e o horário, sem IP nem dados do navegador. Sem o aceite da versão vigente, o servidor não abre questões nem grava respostas. Em **Meus dados**, o candidato vê, corrige, baixa e exclui os próprios dados. A exclusão apaga cadastro, respostas e certificado numa transação.
-- **Nova versão dos termos:** ao mudar o texto, troque `TERMOS_VERSAO` em [`backend/src/utils/termos.js`](backend/src/utils/termos.js) e a data nas duas páginas. Todos precisarão aceitar de novo.
+As páginas do front-end, as rotas da API e as proteções de dados pessoais (QA-08 e LGPD) estão documentadas em [docs/aplicacao.md](docs/aplicacao.md).
 
 **Atenção:** o repositório é público e o `seed.sql` contém o gabarito das questões. O PO aceitou esse risco por ser um projeto acadêmico ([DP-03](docs/backlog/README.md#decisões-do-po)).
 
@@ -160,6 +110,7 @@ Resumo da revisão de proteção de dados pessoais (QA-08):
 
 | Documento | Descrição |
 | --- | --- |
+| [Telas, API e segurança](docs/aplicacao.md) | Páginas do front-end, rotas da API e proteções de dados pessoais (QA-08 e LGPD) |
 | [Backlog do produto](docs/backlog/README.md) | Requisitos funcionais, não funcionais, regras de negócio e decisões do PO |
 | [Rastreabilidade](docs/rastreabilidade.md) | Requisito → issue → artefato → commit, e a situação de cada requisito |
 | [Definition of Done](docs/processo/definition-of-done.md) | Checklist de qualidade que toda entrega precisa cumprir |
@@ -207,11 +158,12 @@ ABP/
 │       ├── middlewares/  # Autenticação, tratamento de erros, limite de login
 │       ├── routes/       # Rotas da API
 │       ├── services/     # Regras de negócio e consultas SQL
-│       ├── utils/        # Validações (CPF, e-mail, senha)
+│       ├── utils/        # Validações (CPF, e-mail, senha) e versão dos termos
 │       └── server.js     # Inicia a API e serve o front-end
 ├── Design/               # Protótipos das telas (PNG e PDF)
 ├── Diagrama/             # Diagrama de casos de uso
 ├── docs/
+│   ├── aplicacao.md      # Telas, API e segurança
 │   ├── backlog/          # Backlog do produto e decisões do PO
 │   ├── banco/            # DER, modelo lógico, dicionário e roteiro do banco
 │   ├── burndown/         # Gráficos de burndown das sprints

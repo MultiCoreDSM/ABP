@@ -4,7 +4,7 @@ import QRCode from "qrcode";
 
 export async function gerarPdfCertificado(certificado, baseUrl) {
     const urlValidacao =
-        `${baseUrl}/FrontEnd/Pages/validar-certificado.html?codigo=${encodeURIComponent(certificado.codigo)}`;
+        `${baseUrl}/FrontEnd/Pages/validacao.html?codigo=${encodeURIComponent(certificado.codigo)}`;
 
     const qrCode = await QRCode.toBuffer(urlValidacao, {
         type: "png",
@@ -112,6 +112,10 @@ export async function gerarPdfCertificado(certificado, baseUrl) {
                     align: "center"
                 }
             );
+
+        // O rodapé fica abaixo da margem de 45 pt: sem zerar a margem inferior,
+        // o pdfkit joga esses textos para uma segunda página em branco.
+        doc.page.margins.bottom = 0;
 
         // QR Code
         doc.image(qrCode, largura - 155, altura - 155, {
