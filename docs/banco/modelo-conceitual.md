@@ -77,19 +77,20 @@ Candidato e Questão formam um relacionamento **N : M**, resolvido pela entidade
 - **Uma questão por tema por candidato** (BL-07, BL-08) é garantida pelo backend no sorteio, porque a chave de Resposta é (candidato, questão) e não (candidato, tema).
 - **Emissão do certificado só com ≥ 65%** (BL-18) é regra do backend.
 
-## Evolução prevista
+## Evolução implementada (Sprint 2 — DB-05)
 
-Hoje o certificado é um atributo de Candidato (`certificado_hash`), o que permite **uma única tentativa** por candidato. Para suportar várias tentativas e histórico completo (BL-22), a proposta para a Sprint 2 é separar duas entidades:
+Para suportar múltiplas tentativas e histórico completo (BL-22 / DB-05), o modelo foi evoluído para separar as entidades de tentativa e vinculação de questões:
 
 ```mermaid
 erDiagram
     CANDIDATO ||--o{ TENTATIVA : "realiza"
-    TENTATIVA ||--o{ RESPOSTA : "contém"
-    TENTATIVA ||--o| CERTIFICADO : "gera"
+    TENTATIVA ||--o{ TENTATIVA_QUESTOES : "contém"
+    QUESTAO   ||--o{ TENTATIVA_QUESTOES : "é vinculada em"
+    CANDIDATO ||--o{ RESPOSTA : "registra (legado v1)"
     QUESTAO   ||--o{ RESPOSTA : "é respondida em"
 ```
 
-Essa mudança afeta as rotas de sorteio, resposta e certificado. Por isso precisa ser planejada junto com o backend e não foi aplicada no schema desta correção.
+A estrutura permite registrar cada ciclo de prova, seus estados (`em_andamento`, `pausada`, `concluida`, `expirada`, `cancelada`), datas de início, pausa e conclusão, além de blindar contra tentativas ativas simultâneas.
 
 ---
 

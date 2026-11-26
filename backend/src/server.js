@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import temas from './routes/temas.js';
 import questoes from './routes/questoes.js';
 import imagens from './routes/imagens.js';
@@ -49,7 +50,11 @@ app.use((req, res) => {
 app.use(tratarErros);
 
 // Inicialização do servidor
-app.listen(porta, () => {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  app.listen(porta, () => {
     console.log(`Servidor rodando na porta ${porta}`);
     console.log(`Servidor rodando em http://localhost:${porta}`);
-});
+  });
+}
+
+export default app;
