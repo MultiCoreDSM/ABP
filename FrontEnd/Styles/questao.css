@@ -717,6 +717,31 @@ svg {
     transform: rotate(45deg) translate(-1px, -2px);
 }
 
+/* X vermelho dos temas respondidos errados */
+.tema-item.respondido.errado .tema-item-marca {
+    position: relative;
+    height: 14px;
+}
+
+.tema-item.respondido.errado .tema-item-marca::before,
+.tema-item.respondido.errado .tema-item-marca::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15px;
+    height: 2px;
+    margin: 0;
+    border: 0;
+    border-radius: 1px;
+    background: var(--vermelho);
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.tema-item.respondido.errado .tema-item-marca::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
 /* ===== Janela de confirmação ===== */
 .confirmacao {
     width: min(480px, calc(100% - 32px));

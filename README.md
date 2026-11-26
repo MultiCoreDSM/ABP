@@ -10,31 +10,6 @@ São 12 temas sobre agilidade, Scrum, Kanban, planejamento, métricas e qualidad
 
 Na certificação, o sistema sorteia uma das quatro questões de cada tema. Cada questão tem **150 segundos**, contados no servidor. A alternativa correta só aparece depois que a resposta é registrada, e o candidato precisa de **65%** de acertos para ser aprovado.
 
-## O que já funciona
-
-| Funcionalidade | Situação | Onde |
-|---|---|---|
-| Tela inicial com "Como funciona" | ✅ | `inicial.html` |
-| Cadastro com validação no servidor (CPF, e-mail, senha) e aceite obrigatório dos termos | ✅ | `cadastro.html` · `POST /api/candidatos` |
-| Login com JWT e limite de tentativas | ✅ | `login.html` · `POST /api/login` |
-| Menu principal com o nome do candidato e o progresso | ✅ | `menu.html` |
-| Área de estudos, com o material em PDF de cada tema | ✅ | `area-estudos.html` |
-| Prova: sorteio por tema, cronômetro de 150 s e correção após a resposta | ✅ | `questao.html` · `/api/certificacao` |
-| Pausa entre questões e retomada de onde parou | ✅ | `questao.html` |
-| Outro tema só abre depois de concluir a questão atual | ✅ | front-end e servidor (409) |
-| Resultado com nota, situação (≥ 65%) e detalhamento por tema | ✅ | `resultado.html` · `GET /api/certificacao/resultado` |
-| Revisão das respostas com a alternativa correta | ✅ | `respostas.html` · `GET /api/certificacao/respostas` |
-| Certificado com nome, CPF, e-mail, data e hora, nota e percentual (RF18), PDF e link de validação | ✅ | `certificado.html` · `/api/candidatos/certificado` |
-| Validação pública só pelo código, com os dados da RN-09 (BL-21) | ✅ | `validacao.html` · `GET /api/certificados/:codigo` |
-| LGPD: Termos de Uso, Política de Privacidade e registro do aceite | ✅ | `termos-de-uso.html` · `politica-de-privacidade.html` |
-| LGPD: ver, corrigir, baixar (JSON) e excluir os próprios dados | ✅ | `meus-dados.html` · `/api/candidatos/me` |
-| Histórico do candidato (BL-22) | ✅ | `historico.html` |
-| QR Code no certificado (BL-20) | ⬜ | O link de validação já existe; falta gerar o QR Code |
-| Explicação de cada questão | ⬜ | O banco ainda não tem o texto das explicações |
-| Recuperação de senha por e-mail | ⬜ | A tela existe, mas o projeto ainda não tem serviço de e-mail |
-
-A situação de cada requisito do backlog está na [matriz de rastreabilidade](docs/rastreabilidade.md).
-
 ## Andamento
 
 | Sprint | Período | Foco | Situação |
@@ -161,7 +136,7 @@ Há exemplos de `curl` em comentários em cada arquivo de [`backend/src/routes/`
 
 ## Segurança e dados pessoais
 
-A revisão de proteção de dados pessoais (QA-08) está no [relatório](docs/qualidade/qa-08-revisao-dados-pessoais.md). Em resumo:
+Resumo da revisão de proteção de dados pessoais (QA-08):
 - **Senhas:** guardadas com bcrypt e nunca devolvidas pela API.
 - **Dados do candidato:** cada candidato só acessa os próprios dados, porque o id vem do token.
 - **Nota:** acerto e prazo são decididos no servidor, e o gabarito não vai para o navegador antes da resposta.
@@ -182,8 +157,6 @@ A revisão de proteção de dados pessoais (QA-08) está no [relatório](docs/qu
 | [Banco de dados](docs/banco/README.md) | Versão suportada, criação e carga do banco |
 | [Modelo conceitual (DER)](docs/banco/modelo-conceitual.md) | Entidades, atributos e cardinalidades |
 | [Modelo lógico](docs/banco/modelo-logico.md) | Relações, normalização até a 3FN e dicionário de dados |
-| [QA-08: proteção de dados pessoais](docs/qualidade/qa-08-revisao-dados-pessoais.md) | Mapa de dados pessoais, riscos, correções e testes |
-| [QA-08: issues](docs/qualidade/qa-08-issues.md) | Situação de cada risco e texto da issue em aberto |
 | [Sprint 1](docs/sprints/sprint-1/README.md) | Overview, [backlog](docs/sprints/sprint-1/BACKLOG.md) e [Review e Retrospectiva](docs/sprints/sprint-1/REVIEW-RETROSPECTIVA.md) |
 | [Burndown da Sprint 1](docs/burndown/burndown-sprint-1.png) e [da Sprint 2](docs/burndown/burndown-sprint-2.png) | Gráficos de burndown |
 | [Issues](https://github.com/MultiCoreDSM/ABP/issues) e [Kanban ABP](https://github.com/users/MultiCoreDSM/projects/1) | Atividades cadastradas e a situação de cada uma no fluxo |
@@ -234,7 +207,6 @@ ABP/
 │   ├── banco/            # DER, modelo lógico, dicionário e roteiro do banco
 │   ├── burndown/         # Gráficos de burndown das sprints
 │   ├── processo/         # Definition of Done
-│   ├── qualidade/        # Revisões de qualidade (QA-08)
 │   ├── rastreabilidade.md
 │   └── sprints/
 │       └── sprint-1/     # Overview, backlog, Review e Retrospectiva

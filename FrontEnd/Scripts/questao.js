@@ -150,9 +150,12 @@ function renderizarTemas() {
 
             item.querySelector(".tema-item-numero").textContent = formatarNumero(tema.ordem);
             item.querySelector(".tema-item-nome").textContent = tema.nome;
-            item.querySelector(".tema-item-situacao").textContent = tema.respondido ? "(respondido)" : "";
+            item.querySelector(".tema-item-situacao").textContent = tema.respondido
+                ? tema.acertou ? "(respondido, correto)" : "(respondido, incorreto)"
+                : "";
             botao.classList.toggle("atual", atual);
             botao.classList.toggle("respondido", tema.respondido);
+            botao.classList.toggle("errado", tema.respondido && !tema.acertou);
             botao.disabled = enviando || (travado && !atual);
             if (atual) botao.setAttribute("aria-current", "true");
             botao.addEventListener("click", () => {
@@ -365,8 +368,10 @@ async function enviarResposta() {
     definirEtapa("enviando");
 
     try {
-        aplicarCorrecao(validarCorrecao(await api.responder(tela.questao.id, tela.selecionada)));
+        const correcao = validarCorrecao(await api.responder(tela.questao.id, tela.selecionada));
+        aplicarCorrecao(correcao);
         tela.temaAtual.respondido = true;
+        tela.temaAtual.acertou = correcao.acertou;
         atualizarControles();
         // Rola até a pergunta; a alternativa correta fica logo acima dela
         elementos.decisao.scrollIntoView({ block: "nearest" });

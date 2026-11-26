@@ -1,9 +1,9 @@
 // QA-06 — Verificação de integridade dos dados (BL-05, BL-06, BL-22).
 //
 // Roteiro reproduzível: confere conteúdo (temas, questões, alternativas, imagens e
-// materiais), tentativas e respostas, e resultados x certificados. Gera um relatório
-// em Markdown com contagens esperadas e encontradas e a identificação de cada
-// inconsistência.
+// materiais), tentativas e respostas, e resultados x certificados. Mostra no terminal
+// as contagens esperadas e encontradas; com --saida, grava também um relatório em
+// Markdown com a identificação de cada inconsistência.
 //
 // Uso (na pasta backend):
 //   npm run qa:integridade
@@ -20,7 +20,6 @@ import { execSync } from "node:child_process";
 import pool from "../src/config/database.js";
 
 const RAIZ = path.resolve(import.meta.dirname, "../..");
-const SAIDA_PADRAO = path.join(RAIZ, "docs/qualidade/qa-06-relatorio.md");
 const LIMITE_LINHAS = 50; // ocorrências listadas por verificação no relatório
 
 // Regras do backlog usadas nas verificações
@@ -390,7 +389,6 @@ function montarRelatorio(resultados, inicio) {
     "# QA-06 — Relatório de integridade dos dados",
     "",
     "> Gerado automaticamente por `backend/scripts/qa-integridade.js`. Não edite à mão: rode o roteiro de novo.",
-    "> Procedimento e critérios em [qa-06-integridade-dados.md](qa-06-integridade-dados.md).",
     "",
     "| | |",
     "|---|---|",
@@ -441,7 +439,7 @@ function montarRelatorio(resultados, inicio) {
 
 function argumentoSaida() {
   const i = process.argv.indexOf("--saida");
-  return i > -1 && process.argv[i + 1] ? path.resolve(process.argv[i + 1]) : SAIDA_PADRAO;
+  return i > -1 && process.argv[i + 1] ? path.resolve(process.argv[i + 1]) : null;
 }
 
 async function principal() {
@@ -460,14 +458,16 @@ async function principal() {
     await pool.end();
   }
 
-  const saida = argumentoSaida();
-  mkdirSync(path.dirname(saida), { recursive: true });
-  writeFileSync(saida, montarRelatorio(resultados, inicio), "utf8");
-
   for (const r of resultados) {
     console.log(`${situacao(r).padEnd(16)} ${r.id}  ${r.titulo} (esperado ${r.esperado}, encontrado ${r.encontrado})`);
   }
-  console.log(`\nRelatório: ${path.relative(process.cwd(), saida)}`);
+
+  const saida = argumentoSaida();
+  if (saida) {
+    mkdirSync(path.dirname(saida), { recursive: true });
+    writeFileSync(saida, montarRelatorio(resultados, inicio), "utf8");
+    console.log(`\nRelatório: ${path.relative(process.cwd(), saida)}`);
+  }
 
   const erros = resultados.filter((r) => !r.ok && r.severidade !== "aviso").length;
   process.exitCode = erros > 0 ? 1 : 0;

@@ -18,7 +18,7 @@ Liga cada requisito do [backlog](backlog/README.md) à issue, ao artefato e ao c
 
 | Entrega | Código | Requisitos atendidos | Artefato | Branch | Status |
 |---|---|---|---|---|---|
-| Revisão de proteção de dados pessoais | QA-08 | RNF03, RNF04, BL-01, BL-02, BL-11, BL-16 a BL-19, BL-21 | [docs/qualidade/qa-08-revisao-dados-pessoais.md](qualidade/qa-08-revisao-dados-pessoais.md), [docs/qualidade/qa-08-issues.md](qualidade/qa-08-issues.md), `backend/src/middlewares/erros.js`, `backend/src/middlewares/limiteLogin.js`, `backend/src/utils/validacao.js`, `backend/src/routes/certificacao.js` | `qa-08-dados-pessoais` | ✅ (decisões do PO em DP-01 a DP-03; validação pública implementada na BL-21) |
+| Revisão de proteção de dados pessoais | QA-08 | RNF03, RNF04, BL-01, BL-02, BL-11, BL-16 a BL-19, BL-21 | `backend/src/middlewares/erros.js`, `backend/src/middlewares/limiteLogin.js`, `backend/src/utils/validacao.js`, `backend/src/routes/certificacao.js` | `qa-08-dados-pessoais` | ✅ (decisões do PO em DP-01 a DP-03; validação pública implementada na BL-21) |
 
 
 ## Requisito → onde está implementado

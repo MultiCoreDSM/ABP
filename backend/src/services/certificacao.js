@@ -8,6 +8,9 @@ import { buscarQuestaoService } from "./questoes.js";
 // foi registrada (BL-11). O gabarito nunca vai para o navegador antes disso.
 
 const PRAZO = "INTERVAL '150 seconds'";
+const ENCERRADA = `(r.data_horario_resposta IS NOT NULL OR clock_timestamp() - r.data_horario_inicio > ${PRAZO})`;
+// Acerto só vale dentro do prazo (RN-05)
+const ACERTOU = `(r.acertou IS TRUE AND r.valida IS TRUE)`;
 
 export async function listarTemasCandidatoService(candidatoId) {
   const { rows } = await pool.query(
@@ -31,7 +34,17 @@ export async function listarTemasCandidatoService(candidatoId) {
                AND q.tema_id = t.id
                AND r.data_horario_resposta IS NULL
                AND clock_timestamp() - r.data_horario_inicio <= ${PRAZO}
-           ) AS em_andamento
+           ) AS em_andamento,
+           -- Só para questões já encerradas: antes disso a correção não sai do servidor
+           EXISTS (
+             SELECT 1
+             FROM respostas r
+             JOIN questoes q ON q.id = r.questao_id
+             WHERE r.candidato_id = $1
+               AND q.tema_id = t.id
+               AND ${ENCERRADA}
+               AND ${ACERTOU}
+           ) AS acertou
     FROM temas t
     WHERE EXISTS (SELECT 1 FROM questoes WHERE questoes.tema_id = t.id)
     ORDER BY t.ordem, t.id
@@ -186,9 +199,6 @@ export async function responderQuestaoCandidatoService(candidatoId, questaoId, l
 }
 
 // Questão encerrada: respondida, ou com o prazo vencido sem resposta (conta como incorreta)
-const ENCERRADA = `(r.data_horario_resposta IS NOT NULL OR clock_timestamp() - r.data_horario_inicio > ${PRAZO})`;
-// Acerto só vale dentro do prazo (RN-05)
-const ACERTOU = `(r.acertou IS TRUE AND r.valida IS TRUE)`;
 
 // Resultado da certificação: situação de cada tema e o total de acertos (BL-15, BL-16, BL-17)
 export async function resultadoCandidatoService(candidatoId) {
